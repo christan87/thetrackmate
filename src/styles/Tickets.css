@@ -1,0 +1,16 @@
+div .MuiToolbar-root.MuiToolbar-regular.MuiTablePagination-toolbar.MuiToolbar-gutters{
+
+}
+
+.MuiTablePagination-spacer{
+    display: none;
+}
+.makeStyles-root-20{
+    text-align: right;
+    float: right;
+
+}
+#mui-54542.MuiTypography-root.MuiTablePagination-caption.MuiTypography-body2.MuiTypography-colorInherit{
+    float: left;
+    color: red;
+}

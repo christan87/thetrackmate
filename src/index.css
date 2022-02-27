@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* always shows vertical scrollbar so taht the sreen doesnt offset on vertical expansion */
+  overflow-y: scroll;
 }
 
 code {
