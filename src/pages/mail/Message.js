@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import demoMessages from '../../services/demoMessages';
+// import demoMessages from '../../services/demoMessages';
+import { useUserData } from "../../contexts/UserDataContext";
 import { 
     Card,
     Form,
@@ -15,7 +16,8 @@ import EnlargeModal from '../analytics/EnlargeModal';
 export default function Message(){
 
     const { id } = useParams();
-    const message = demoMessages.find((message)=> message.id === id);
+    const { userData } = useUserData();
+    const message = userData.messages.find((message)=> message.id === id);
     const style={
         backgroundColor: "blue", 
         display: "flex",
@@ -64,7 +66,7 @@ export default function Message(){
                                 </Card.Body>
                             </Card>
                             <EnlargeModal show={modalShow} onHide={onHide}>
-                                <Reply onHide={onHide} />
+                                <Reply onHide={onHide} replyId={message.author.id}/>
                             </EnlargeModal>
                             <div className="w-100 text-center mt-2">
                                 <Link to="/mail">Inbox</Link>

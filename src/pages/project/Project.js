@@ -13,25 +13,27 @@ import demoTickets from '../../services/demoTickets'
 import demoProjectComments from '../../services/demoProjectComments';
 import Tickets from '../dashboard/Tickets'
 import { Link, useNavigate as useHistory, useParams } from 'react-router-dom';
+import { useUserData } from "../../contexts/UserDataContext";
 
 export default function Project(){
 
     const history = useHistory();
+    const { userData } = useUserData();
 
     function handleClick(){
         history(`/project/update/${id}`)
     }
 
     function findProject(id){
-        return demoProjects.find(project => project.id === id)
+        return userData.projectssAll.find(project => project.id === id)
     }
 
     const {id} = useParams();
     const project = findProject(id);
-    const projectTickets = demoTickets.filter((ticket)=>{
+    const projectTickets = userData.ticketsAll.filter((ticket)=>{
         return project.tickets.includes(ticket.id)
     });
-    const projectComments = demoProjectComments.filter((comment)=>{
+    const projectComments = userData.projectCommentsAll.filter((comment)=>{
         return project.comments.includes(comment.id)
     })
 

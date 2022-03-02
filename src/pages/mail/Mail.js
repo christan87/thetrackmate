@@ -22,7 +22,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 import {useDemoAuth} from "../../contexts/AuthDemoContext";
-import demoMessages from '../../services/demoMessages';
+// import demoMessages from '../../services/demoMessages';
+import { useUserData } from "../../contexts/UserDataContext";
 import { Link } from 'react-router-dom';
 
 function createData(name, calories, fat, carbs, protein) {
@@ -231,7 +232,9 @@ export default function Mail() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const {demoUser} = useDemoAuth();
-  const messages = demoMessages.filter((message)=>message.recipientId === demoUser._id);
+  const { userData } = useUserData();
+  // const messages = demoMessages.filter((message)=>message.recipientId === demoUser._id);
+  const messages = userData.messages;
   const rows = []
   messages.forEach((message)=>{
       const data = createData2(message.author.name, message.type, message.date, message.id)

@@ -11,7 +11,8 @@ import { Link, useNavigate as useHistory, useParams } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
 import demoTickets from '../../services/demoTickets';
-import demoProjects from '../../services/demoProjects';
+// import demoProjects from '../../services/demoProjects';
+import { useUserData } from "../../contexts/UserDataContext";
 
 
 export default function UpdateProject(){
@@ -27,6 +28,7 @@ export default function UpdateProject(){
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const priorities = ["Low", "Medium", "High"];
+    const { userData } = useUserData();
     const history = useHistory();
     
     function handleChange(){
@@ -35,7 +37,7 @@ export default function UpdateProject(){
     
     //demo
     useEffect(()=>{
-        const project = demoProjects.find((project)=> project.id === id)
+        const project = userData.projectssAll.find((project)=> project.id === id)
         setCurrentProject(project)
         console.log("currentProject: ", currentProject)
     },[]);
@@ -78,7 +80,7 @@ export default function UpdateProject(){
     
         setLoading(false)
     }
-
+    console.log("Users: ", userData.usersAll)
     return(
         <>
             <Container>
@@ -110,18 +112,18 @@ export default function UpdateProject(){
                                         {!currentProject?
                                             <Form.Select aria-label="User Assignment Select" ref={assignedRef} >
                                                 <option value="0"></option>
-                                                {users.map((user, index)=>{
+                                                {userData.usersAll.map((user, index)=>{
                                                     return <option value={index+1} key={`${user.userName}${index}`}>{user.userName}</option>
                                                 })}
                                             </Form.Select>
                                             :
                                             <Form.Select aria-label="User Assignment Select" ref={assignedRef} >
                                                 <option value="0"></option>
-                                                {users.map((user, index)=>{
-                                                    if(user.userName === currentProject.assigned.userName){
-                                                        return <option value={index+1} key={`${user.userName}${index}`} selected>{user.userName}</option>
+                                                {userData.usersAll.map((user, index)=>{
+                                                    if(user.name === currentProject.collaborators.find(u=> u.name === user.name)){
+                                                        return <option value={index+1} key={`${user.name}${index}`} selected>{user.name}</option>
                                                     }else{
-                                                        return <option value={index+1} key={`${user.userName}${index}`}>{user.userName}</option>
+                                                        return <option value={index+1} key={`${user.name}${index}`}>{user.name}</option>
                                                     }
                                                 })}
                                             </Form.Select>

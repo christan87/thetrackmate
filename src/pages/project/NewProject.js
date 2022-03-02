@@ -10,14 +10,15 @@ import {
 import { Link, useNavigate as useHistory } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
+import { useUserData } from "../../contexts/UserDataContext";
 //import axios from "axios";
-import demoUsers from '../../services/demoUsers';
+// import demoUsers from '../../services/demoUsers';
 
 export default function NewProject(props){
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-
+    const { userData } = useUserData();
     const nameRef = useRef();
     const assignedRef = useRef();
     const priorityRef = useRef();
@@ -55,7 +56,7 @@ export default function NewProject(props){
                                     <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
                                         <Form.Select aria-label="User Assignment Select" ref={assignedRef} >
                                             <option value="0"></option>
-                                            {demoUsers.map((user, index)=>{
+                                            {userData.usersAll.map((user, index)=>{
                                                 return <option value={index+1} key={`${user.name}${index}`}>{user.name}</option>
                                             })}
                                         </Form.Select>

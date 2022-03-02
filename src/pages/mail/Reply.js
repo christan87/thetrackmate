@@ -13,7 +13,7 @@ import { useDemoAuth } from "../../contexts/AuthDemoContext";
 import demoProjects from '../../services/demoProjects';
 import demoUsers from '../../services/demoUsers';
 
-export default function NewTicket(props){
+export default function Reply(props){
     const subjectRef = useRef();
     const messageRef = useRef();
     const { currentUser } = useAuth();
