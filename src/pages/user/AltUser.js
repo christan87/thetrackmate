@@ -9,19 +9,21 @@ import {
 import demoUsers from '../../services/demoUsers';
 import demoProjects from '../../services/demoProjects';
 import demoTickets from '../../services/demoTickets';
+import { useUserData } from "../../contexts/UserDataContext";
 
 export default function AltUser(){
 
     const { id } = useParams()
-    const user = demoUsers.find((user)=> user.id == id)
-    const projects = demoProjects.filter((project)=>{
+    const { userData } = useUserData();
+    const user = userData.usersAll.find((user)=> user.id == id)
+    const projects = userData.projectssAll.filter((project)=>{
         const found = project.collaborators.filter((user)=> user.id == id);
         if(found.length > 0){
             return project
         }
     })
 
-    const tickets = demoTickets.filter((ticket)=>{
+    const tickets = userData.ticketsAll.filter((ticket)=>{
         const found = ticket.assignedDevs.filter((user)=> user.id == id);
         if(found.length > 0){
             return ticket

@@ -8,7 +8,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import demoUsers from '../../services/demoUsers';
+// import demoUsers from '../../services/demoUsers';
+import { useUserData } from "../../contexts/UserDataContext";
 import { Link } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
@@ -54,7 +55,7 @@ function createData(name, email, id) {
 //   }
 
 let rows= [];
-const users = demoUsers.filter((user)=> user.private == false)
+const users = useUserData.userData.usersAll.filter((user)=> user.private == false)
 users.forEach((user)=>{
     rows.push(createData(user.name, user.email, user.id))
 })

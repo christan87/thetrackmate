@@ -9,7 +9,7 @@ import { useDemoAuth } from '../contexts/AuthDemoContext';
 import { useAuth } from '../contexts/AuthFirebaseContext';
 import { useUserData } from '../contexts/UserDataContext';
 /*
-    Finished in mail folder, project folder is next
+    change projectssALl to projectsAll
 */
 export default function LoadDemoData({children}){
     const { 
@@ -76,6 +76,24 @@ export default function LoadDemoData({children}){
         }
     }
 
+    function setDemoTicketCommentsAll(){
+        try{
+            const ticketCommentsAll = demoTicketComments;
+            data.ticketCommentsAll = ticketCommentsAll;
+        }catch(e){
+            console.log("LoadDemoData>setDemoTicketCommentsAll: ", e)
+        }
+    }
+
+    function setDemoUserId(){
+        try{
+            const id = demoUser._id;
+            data.id = id;
+        }catch(e){
+            console.log("LoadDemoData>setDemoUserId: ", e)
+        }
+    }
+
     useEffect(()=>{
         if(demoMode){
             console.log("User Account Type: Demo")
@@ -84,7 +102,9 @@ export default function LoadDemoData({children}){
             setDemoProjectsAll()
             setDemoUsersAll()
             setDemoProjectCommentsAll()
-            
+            setDemoTicketCommentsAll()
+            setDemoUserId()
+
         }else if(currentUser){
             console.log("User Account Type: Autheneticated")
         }else{

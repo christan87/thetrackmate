@@ -10,13 +10,15 @@ import {
 import { Link, useNavigate as useHistory, useParams } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
-import demoTickets from '../../services/demoTickets';
-import demoUsers from '../../services/demoUsers';
+// import demoTickets from '../../services/demoTickets';
+// import demoUsers from '../../services/demoUsers';
+import { useUserData } from "../../contexts/UserDataContext";
 // import axios from "axios";
 
 export default function UpdateTicket(){
     
     const { id } = useParams(); 
+    const { userData } = useUserData();
     const nameRef = useRef();
     const assignedRef = useRef();
     const priorityRef = useRef();
@@ -35,7 +37,7 @@ export default function UpdateTicket(){
     
     //demo
     useEffect(()=>{
-        const ticket = demoTickets.find((ticket)=> ticket.id === id)
+        const ticket = userData.ticketsAll.find((ticket)=> ticket.id === id)
         setCurrentTicket(ticket)
         console.log("currentTicket: ", currentTicket)
     },[]);

@@ -10,15 +10,17 @@ import {
     Form
 } from 'react-bootstrap';
 import UserList from '../../components/UserList';
-import demoTickets from '../../services/demoTickets';
-import demoTicketComments from '../../services/demoTicketComments';
+// import demoTickets from '../../services/demoTickets';
+// import demoTicketComments from '../../services/demoTicketComments';
 import {useNavigate as useHistory } from 'react-router-dom';
+import { useUserData } from "../../contexts/UserDataContext";
 
 export default function Ticket(){
 
     const { id } = useParams();
-    const ticket = demoTickets.find(element => element.id === id);
-    const comments = demoTicketComments.filter(element => element.ticketId === String(id));
+    const { userData } = useUserData();
+    const ticket = userData.ticketsAll.find(element => element.id === id);
+    const comments = userData.ticketCommentsAll.filter(element => element.ticketId === String(id));
     const commentRef = useRef();
     const [loading, setLoading] = useState(false) 
     const history = useHistory()

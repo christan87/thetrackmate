@@ -11,8 +11,9 @@ import { Link, useNavigate as useHistory } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
 //import axios from "axios";
-import demoProjects from '../../services/demoProjects';
-import demoUsers from '../../services/demoUsers';
+// import demoProjects from '../../services/demoProjects';
+// import demoUsers from '../../services/demoUsers';
+import { useUserData } from "../../contexts/UserDataContext";
 
 export default function NewTicket(props){
     const nameRef = useRef();
@@ -27,6 +28,7 @@ export default function NewTicket(props){
     const [users, setUsers] = useState([]);
     const [assignedProject, setProject] = useState({});
     const [loading, setLoading] = useState(false);
+    const { userData } = useUserData();
     const history = useHistory();
 
     async function handleSubmit(e){
@@ -36,7 +38,7 @@ export default function NewTicket(props){
 
         let newTicket = {
             name: nameRef.current.value,
-            id: demoUser._id,
+            id: userData.id,
             type: typeRef.current.value,
             description: descriptionRef.current.value,
             priority: priorityRef.current.value,
@@ -46,8 +48,8 @@ export default function NewTicket(props){
             date: "01/12/22",
             private: true,
             project:{
-                id: demoProjects[assignedProjectRef.current.value - 1].id,
-                name: demoProjects[assignedProjectRef.current.value - 1].projectName
+                id: userData.projectssAll[assignedProjectRef.current.value - 1].id,
+                name: userData.projectssAll[assignedProjectRef.current.value - 1].projectName
             } 
         }
         console.log("Ticket: ", newTicket)
@@ -127,7 +129,7 @@ export default function NewTicket(props){
                                     <FloatingLabel controlId="floatingUserAssignment" label="Assign to Project.." className="mb-3">
                                         <Form.Select aria-label="Project Assignment Select" ref={assignedProjectRef} >
                                             <option value="0"></option>
-                                            {demoProjects.map((project, index)=>{
+                                            {userData.projectssAll.map((project, index)=>{
                                                 return <option value={index+1} key={`${project.projectName}${index}`}>{project.projectName}</option>
                                             })}
                                         </Form.Select>
@@ -135,7 +137,7 @@ export default function NewTicket(props){
                                     <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
                                         <Form.Select aria-label="User Assignment Select" ref={assignedRef} >
                                             <option value="0"></option>
-                                            {demoUsers.map((user, index)=>{
+                                            {userData.usersAll.map((user, index)=>{
                                                 return <option value={index+1} key={`${user.name}${index}`}>{user.name}</option>
                                             })}
                                         </Form.Select>
