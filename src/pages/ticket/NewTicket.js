@@ -48,8 +48,8 @@ export default function NewTicket(props){
             date: "01/12/22",
             private: true,
             project:{
-                id: userData.projectssAll[assignedProjectRef.current.value - 1].id,
-                name: userData.projectssAll[assignedProjectRef.current.value - 1].projectName
+                id: userData.projectsAll[assignedProjectRef.current.value - 1].id,
+                name: userData.projectsAll[assignedProjectRef.current.value - 1].projectName
             } 
         }
         console.log("Ticket: ", newTicket)
@@ -129,7 +129,7 @@ export default function NewTicket(props){
                                     <FloatingLabel controlId="floatingUserAssignment" label="Assign to Project.." className="mb-3">
                                         <Form.Select aria-label="Project Assignment Select" ref={assignedProjectRef} >
                                             <option value="0"></option>
-                                            {userData.projectssAll.map((project, index)=>{
+                                            {userData.projectsAll&& userData.projectsAll.map((project, index)=>{
                                                 return <option value={index+1} key={`${project.projectName}${index}`}>{project.projectName}</option>
                                             })}
                                         </Form.Select>
@@ -137,7 +137,7 @@ export default function NewTicket(props){
                                     <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
                                         <Form.Select aria-label="User Assignment Select" ref={assignedRef} >
                                             <option value="0"></option>
-                                            {userData.usersAll.map((user, index)=>{
+                                            {userData.usersAll&& userData.usersAll.map((user, index)=>{
                                                 return <option value={index+1} key={`${user.name}${index}`}>{user.name}</option>
                                             })}
                                         </Form.Select>

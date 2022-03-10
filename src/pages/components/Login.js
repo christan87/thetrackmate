@@ -96,7 +96,7 @@ export default function Login(){
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" ref={passwordRef} required />
                                     </Form.Group>
-                                    <Button disabledd={loading} type="submit" className="w-100 mt-3">Log In</Button>
+                                    <Button disabled={loading} type="submit" className="w-100 mt-3">Log In</Button>
                                     <Button onClick={handleGoogleLogin} className="w-100">Google Log In</Button>
                                     <Button onClick={handleFacebookLogin} className="w-100">Facebook Log In</Button>
                                 </Form>

@@ -16,7 +16,7 @@ export default function AltUser(){
     const { id } = useParams()
     const { userData } = useUserData();
     const user = userData.usersAll.find((user)=> user.id == id)
-    const projects = userData.projectssAll.filter((project)=>{
+    const projects = userData.projectsAll.filter((project)=>{
         const found = project.collaborators.filter((user)=> user.id == id);
         if(found.length > 0){
             return project

@@ -37,7 +37,7 @@ export default function UpdateProject(){
     
     //demo
     useEffect(()=>{
-        const project = userData.projectssAll.find((project)=> project.id === id)
+        const project = userData.projectsAll.find((project)=> project.id === id)
         setCurrentProject(project)
         console.log("currentProject: ", currentProject)
     },[]);

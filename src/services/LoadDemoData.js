@@ -9,7 +9,7 @@ import { useDemoAuth } from '../contexts/AuthDemoContext';
 import { useAuth } from '../contexts/AuthFirebaseContext';
 import { useUserData } from '../contexts/UserDataContext';
 /*
-    change projectssALl to projectsAll
+    fix Users and Data Analytics
 */
 export default function LoadDemoData({children}){
     const { 
@@ -51,8 +51,8 @@ export default function LoadDemoData({children}){
 
     function setDemoProjectsAll(){
         try{
-            const projectssAll = demoProjects;
-            data.projectssAll = projectssAll;
+            const projectsAll = demoProjects;
+            data.projectsAll = projectsAll;
         }catch(e){
             console.log("LoadDemoData>setDemoProjectsAll: ", e)
         }

@@ -147,7 +147,7 @@ export default function CustomPaginationActionsTable({tickets, moreDetails}) {
         return ticket;
       }
     })
-  }else{
+  }else if(userData.ticketsAll){
     rows = userData.ticketsAll.filter((ticket)=>{
       if(searchTerm === ""){
         return ticket;
@@ -192,36 +192,36 @@ export default function CustomPaginationActionsTable({tickets, moreDetails}) {
                     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     : rows
                 ).map((row) => (
-                    <AccordianWrap description={row.description}>
-                    <TableRow key={row.name}>
-                        <TableCell className={`${classes.tableCell} text-start text-truncate`} style={{ minWidth: 160, maxWidth: 160 }}  component="th" scope="row">
-                            {row.name}
-                        </TableCell>
-                        <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
-                            {row.type}
-                        </TableCell>
-                        <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
-                            {row.priority}
-                        </TableCell>
-                        <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
-                            {row.status}
-                        </TableCell>
-                        <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
-                            {row.date}
-                        </TableCell>
-                        <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
-                            {row.private? "Private" : "Public"}
-                        </TableCell>
-                        <TableCell className={`${classes.tableCell} text-start text-truncate`} style={{ minWidth: 160, maxWidth: 160 }}  component="th" scope="row">
-                            {!moreDetails?
-                              <Link to={`/project/${row.project.id}`}><a>{row.project.name}</a></Link>
-                              :
-                              <Link to={`/ticket/${row.id}`}><a>More Details</a></Link>
-                            }
-                            
-                            
-                        </TableCell>
-                    </TableRow>
+                    <AccordianWrap description={row.description} key={row.id}>
+                      <TableRow>
+                          <TableCell className={`${classes.tableCell} text-start text-truncate`} style={{ minWidth: 160, maxWidth: 160 }}  component="th" scope="row">
+                              {row.name}
+                          </TableCell>
+                          <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
+                              {row.type}
+                          </TableCell>
+                          <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
+                              {row.priority}
+                          </TableCell>
+                          <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
+                              {row.status}
+                          </TableCell>
+                          <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
+                              {row.date}
+                          </TableCell>
+                          <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
+                              {row.private? "Private" : "Public"}
+                          </TableCell>
+                          <TableCell className={`${classes.tableCell} text-start text-truncate`} style={{ minWidth: 160, maxWidth: 160 }}  component="th" scope="row">
+                              {!moreDetails?
+                                <Link to={`/project/${row.project.id}`}>{row.project.name}</Link>
+                                :
+                                <Link to={`/ticket/${row.id}`}>More Details</Link>
+                              }
+                              
+                              
+                          </TableCell>
+                      </TableRow>
                     </AccordianWrap>
                 ))}
 

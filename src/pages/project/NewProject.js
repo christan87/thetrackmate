@@ -56,7 +56,7 @@ export default function NewProject(props){
                                     <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
                                         <Form.Select aria-label="User Assignment Select" ref={assignedRef} >
                                             <option value="0"></option>
-                                            {userData.usersAll.map((user, index)=>{
+                                            {userData.usersAll&& userData.usersAll.map((user, index)=>{
                                                 return <option value={index+1} key={`${user.name}${index}`}>{user.name}</option>
                                             })}
                                         </Form.Select>

@@ -54,11 +54,11 @@ function createData(name, email, id) {
 //     return { name, code, population, size, density };
 //   }
 
-let rows= [];
-const users = useUserData.userData.usersAll.filter((user)=> user.private == false)
-users.forEach((user)=>{
-    rows.push(createData(user.name, user.email, user.id))
-})
+// let rows= [];
+// const users = useUserData.userData.usersAll.filter((user)=> user.private == false)
+// users.forEach((user)=>{
+//     rows.push(createData(user.name, user.email, user.id))
+// })
 
 // const rows = [
 //   createData('India', 'IN', 1324171354, 3287263),
@@ -92,6 +92,13 @@ export default function Users() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchTerm, setSearchTerm] = useState("");
+  const { userData } = useUserData();
+  
+  let rows= [];
+  const users = userData.usersAll.filter((user)=> user.private == false)
+  users.forEach((user)=>{
+      rows.push(createData(user.name, user.email, user.id))
+  })
 
   function handleChange(event){
       setSearchTerm(event.target.value);

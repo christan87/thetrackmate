@@ -62,7 +62,7 @@ export default function PolarAreaChart(props) {
   const [modalShow, setModalShow] = useState(false);
   const { userData } = useUserData()
 
-  const processedData = dataProcess(userData.projectssAll);
+  const processedData = dataProcess(userData.projectsAll);
 
   function onHide(){
       setModalShow(false)

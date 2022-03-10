@@ -35,7 +35,7 @@ export default function Projects(){
                 <Card className="mt-0">
                     <Card.Body>
                         <Row>
-                            {userData.projectssAll.filter((project)=>{
+                            {userData.projectsAll&& userData.projectsAll.filter((project)=>{
                                 if(searchTerm === ""){
                                     return project;
                                 }else if(project.projectName.toLowerCase().includes(searchTerm.toLowerCase())) {
@@ -43,7 +43,7 @@ export default function Projects(){
                                 }
                             }).map((project)=>{
                                 return(
-                                    <Col xs={12} sm={6} md={4} lg={2} >
+                                    <Col xs={12} sm={6} md={4} lg={2} key={project.id} >
                                         <Link to={`project/${project.id}`} style={{textDecoration: "none", color:"black"}}>
                                             <span>
                                                 <Card className="mx-2">

@@ -234,7 +234,7 @@ export default function Mail() {
   const {demoUser} = useDemoAuth();
   const { userData } = useUserData();
   // const messages = demoMessages.filter((message)=>message.recipientId === demoUser._id);
-  const messages = userData.messages;
+  const messages = userData.messages || [];
   const rows = []
   messages.forEach((message)=>{
       const data = createData2(message.author.name, message.type, message.date, message.id)

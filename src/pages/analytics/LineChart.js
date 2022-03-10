@@ -119,7 +119,7 @@ export default function LineChart(props) {
   const [modalShow, setModalShow] = useState(false);
   const { userData } = useUserData()
 
-  const processedData = dataProcess(userData.projectssAll, userData.ticketsAll);
+  const processedData = dataProcess(userData.projectsAll, userData.ticketsAll);
 
   function onHide(){
       setModalShow(false)

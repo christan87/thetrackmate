@@ -6,10 +6,7 @@ import demoMessages from '../services/demoMessages';
 
 function AuthLoader({ children }){
     const { loading } = useAuth();
-    const { demoLoading, setMessageCount, demoUser } = useDemoAuth();
-    const messages = demoMessages.filter((message)=> message.recipientId === demoUser._id);
-    const count = messages.length
-    setMessageCount(count);
+    const { demoLoading } = useDemoAuth();
     
     return loading ? 
         <>
