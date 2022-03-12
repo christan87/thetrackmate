@@ -18,7 +18,7 @@ export default function User(){
 
     return(
         <div>
-            <UserProf />
+            <UserProf imgURL={currentUser.photoURL} />
         </div>
     )
 }

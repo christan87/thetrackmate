@@ -107,6 +107,17 @@ export default function LoadDemoData({children}){
 
         }else if(currentUser){
             console.log("User Account Type: Autheneticated")
+            data = {
+                messages: [],
+                count: 0,
+                ticketsAll: [],
+                projectsAll: [],
+                usersAll: [],
+                projectCommentsAll: [],
+                ticketCommentsAll: [],
+                id: currentUser.uid
+
+            }
         }else{
             console.log("User Account Type: No User Detected")
             data = {}
