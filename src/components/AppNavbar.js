@@ -6,6 +6,8 @@ import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import PersonIcon from '@material-ui/icons/Person'; //user
+import { useUserData } from '../contexts/UserDataContext';
+import Avatar from '@material-ui/core/Avatar';
 import Messages from './Messages';
 
 import { 
@@ -22,6 +24,7 @@ function AppNavbar(props){
     const { currentUser, logout, setCurrentUser, setAuthUser } = useAuth();
     const { demoMode, demoLogout, demoUser } = useDemoAuth();
     const { classes, open, handleDrawerOpen, count } = props;
+    const { userData } = useUserData();
     const history = useHistory();
 
     let useId = "";
@@ -98,7 +101,11 @@ function AppNavbar(props){
                 </Nav>
                 <Messages count={count} />
                 <IconButton onClick={handleUserAccount}>
-                    <PersonIcon style={{color: "grey"}} fontSize="large" />
+                    {currentUser?
+                        <Avatar alt="user IMG" src={userData.photoURL} />
+                        :
+                        <PersonIcon style={{color: "grey"}} fontSize="large" />
+                    }
                 </IconButton>
                 {(currentUser || demoMode) && <Button onClick={handleLogout} className="mx-2">Log Out</Button>}
                 </Navbar.Collapse>

@@ -94,6 +94,19 @@ export default function LoadDemoData({children}){
         }
     }
 
+    function setPhotoURL(){
+        try{
+            let photoURL = currentUser.photoURL;
+            if(photoURL.includes("facebook")){
+                const accessToken = window.localStorage.getItem("fbAccessToken")
+                photoURL = photoURL + `?access_token=${JSON.parse(accessToken).token}`;
+            }
+            data.photoURL = photoURL;
+        }catch(e){
+            console.log("LoadDemoData>setPhotoURL: ", e)
+        }
+    }
+
     useEffect(()=>{
         if(demoMode){
             console.log("User Account Type: Demo")
@@ -118,6 +131,7 @@ export default function LoadDemoData({children}){
                 id: currentUser.uid
 
             }
+            setPhotoURL();
         }else{
             console.log("User Account Type: No User Detected")
             data = {}
