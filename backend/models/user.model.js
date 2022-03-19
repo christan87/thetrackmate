@@ -12,7 +12,8 @@ const userSchema = new Schema({
         required: true
     },
     accessToken: {
-        type: String
+        type: String,
+        default: ""
     },
     private:{
         type: Boolean,

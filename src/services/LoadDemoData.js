@@ -8,6 +8,7 @@ import demoUsers from "./demoUsers"
 import { useDemoAuth } from '../contexts/AuthDemoContext';
 import { useAuth } from '../contexts/AuthFirebaseContext';
 import { useUserData } from '../contexts/UserDataContext';
+import axios from 'axios'
 /*
     fix Users and Data Analytics
 */
@@ -97,9 +98,15 @@ export default function LoadDemoData({children}){
     function setPhotoURL(){
         try{
             let photoURL = currentUser.photoURL;
+            const user = {
+                useremail: currentUser.email,
+                userAuthId: currentUser.uid
+            }
+            console.log("curr: ", currentUser)
+            axios.post("http://localhost:5000/users/add", user).then((response)=>{console.log("response: ", response.data)}).catch((error)=>{console.log("axios>lLoadDemoData>error: ", error)})
             if(photoURL.includes("facebook")){
-                const accessToken = window.localStorage.getItem("fbAccessToken")
-                photoURL = photoURL + `?access_token=${JSON.parse(accessToken).token}`;
+                const accessToken = currentUser.accessToken
+                photoURL = photoURL + `?access_token=${accessToken}`;
             }
             data.photoURL = photoURL;
         }catch(e){

@@ -20,4 +20,23 @@ router.route("/add").post((req, res)=>{
     )
 })
 
+//update specific user
+router.route("/update/:id").post((req, res)=>{
+
+    User.findById(req.params.id).then(
+        (user)=>{
+            user.email = req.body.useremail,
+            user.authId = req.body.userAuthId
+            user.accessToken = req.body.accessToken
+            user.save().then(
+                ()=> res.json("User updated!")
+            ).catch(
+                err => res.status(400).json("Error: " + err)
+            )
+        }
+    ).catch(
+        err => res.status(400).json("Error: " + err)
+    )
+})
+
 module.exports = router;
