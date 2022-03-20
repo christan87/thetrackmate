@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect} from "react";
 import axios from "axios";
 import { auth } from '../firebase';
 import { GoogleAuthProvider, FacebookAuthProvider, getAuth, signInWithPopup  } from "firebase/auth";
@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
         see the use effect instance for more...
     */
     const[loading, setLoading] = useState(true) 
+
     function googleSignIn(){
         return auth.signInWithPopup(provider);
     }
@@ -35,8 +36,7 @@ export function AuthProvider({ children }) {
             // This gives you a Facebook Access Token. You can use it to access the Facebook API.
             const credential = FacebookAuthProvider.credentialFromResult(result);
             const accessToken = credential.accessToken;
-            user.accessToken = accessToken; 
-            // window.localStorage.setItem("fbAccessToken", JSON.stringify({token: accessToken}))
+            window.localStorage.setItem("fbAccessToken", JSON.stringify({token: accessToken}))
         }).catch((error)=>{
                 // Handle Errors here.
                 const errorCode = error.code;

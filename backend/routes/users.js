@@ -20,14 +20,25 @@ router.route("/add").post((req, res)=>{
     )
 })
 
+//find authenticated user
+router.route("/auth/:uid").get((req, res)=>{
+    User.findOne({"authId": `${req.params.uid}`}).then(
+        user => res.json(user)
+    ).catch(
+        err => res.status(400).json("Error: " + err)
+    )
+})
+
 //update specific user
 router.route("/update/:id").post((req, res)=>{
 
     User.findById(req.params.id).then(
         (user)=>{
-            user.email = req.body.useremail,
-            user.authId = req.body.userAuthId
-            user.accessToken = req.body.accessToken
+            user.email = req.body.useremail;
+            user.authId = req.body.userAuthId;
+            if(req.body.accessToken){
+                user.accessToken = req.body.accessToken
+            }
             user.save().then(
                 ()=> res.json("User updated!")
             ).catch(

@@ -95,15 +95,55 @@ export default function LoadDemoData({children}){
         }
     }
 
+    async function findUserByUID(uid){
+        let user;
+        await axios.get(`http://localhost:5000/users/auth/${uid}`).then((response)=>{
+            user =  response.data
+        }).catch((error)=>{
+            console.log("LoadDemoData>findUserByUID>error: ", error)
+        });
+        return user;
+    }
+
+    async function addUserToDatabase(user){
+        await axios.post("http://localhost:5000/users/add", user).then((response)=>{
+            console.log("response: ", response.data)
+        }).catch((error)=>{
+            console.log("LoadDemoData>addUserToDatabase>error: ", error)
+        })
+    }
+
+    async function checkForUserBeforAddAndUpdate(uid, email){
+        let accessToken = JSON.parse(window.localStorage.getItem("fbAccessToken"))
+        if(accessToken !== null && accessToken !== undefined){
+            accessToken = accessToken.token
+        }
+        const foundUser = await findUserByUID(uid);
+        const newUser = {
+            useremail: email,
+            userAuthId: uid
+        }
+        console.log("found user: ", foundUser)
+        if(accessToken !== null && accessToken !== undefined){
+            newUser.accessToken = accessToken;
+            window.localStorage.removeItem("fbAccessToken")
+            if(foundUser !== null && foundUser !== undefined && foundUser.accessToken !== newUser.accessToken){
+                await axios.post(`http://localhost:5000/users/update/${foundUser._id}`, newUser).then((response)=>{
+                    console.log("response: ", response.data)
+                }).catch((error)=>{
+                    console.log("LoadDemoData>checkForUserBeforAdd>error: ", error)
+                })
+            }
+        }
+        if(foundUser === null || foundUser === undefined){
+            await addUserToDatabase(newUser)
+        }
+    }
+
     function setPhotoURL(){
         try{
             let photoURL = currentUser.photoURL;
-            const user = {
-                useremail: currentUser.email,
-                userAuthId: currentUser.uid
-            }
             console.log("curr: ", currentUser)
-            axios.post("http://localhost:5000/users/add", user).then((response)=>{console.log("response: ", response.data)}).catch((error)=>{console.log("axios>lLoadDemoData>error: ", error)})
             if(photoURL.includes("facebook")){
                 const accessToken = currentUser.accessToken
                 photoURL = photoURL + `?access_token=${accessToken}`;
@@ -114,7 +154,7 @@ export default function LoadDemoData({children}){
         }
     }
 
-    useEffect(()=>{
+    useEffect(async ()=>{
         if(demoMode){
             console.log("User Account Type: Demo")
             setTheDemoMessages()
@@ -127,6 +167,7 @@ export default function LoadDemoData({children}){
 
         }else if(currentUser){
             console.log("User Account Type: Autheneticated")
+            await checkForUserBeforAddAndUpdate(currentUser.uid, currentUser.email)
             data = {
                 messages: [],
                 count: 0,
