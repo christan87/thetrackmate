@@ -20,12 +20,12 @@ connection.once('open', ()=>{
 //routes begin
 
 const usersRouter = require("./routes/users");
-// const projectsRouter = require("./routes/projects");
+const projectsRouter = require("./routes/projects");
 // const ticketsRouter = require("./routes/tickets")
 // const commentsRouter = require("./routes/comments")
 
 app.use("/users", usersRouter);
-// app.use("/projects", projectsRouter);
+app.use("/projects", projectsRouter);
 // app.use("/tickets", ticketsRouter);
 // app.use("/comments", commentsRouter);
 

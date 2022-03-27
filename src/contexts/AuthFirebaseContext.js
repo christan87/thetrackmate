@@ -22,21 +22,72 @@ export function AuthProvider({ children }) {
         our AuthProvider is instantiated that last until the user is authenticated,
         see the use effect instance for more...
     */
-    const[loading, setLoading] = useState(true) 
+    const[loading, setLoading] = useState(true)
+    
+    async function findUserByUID(uid){
+        let user;
+        await axios.get(`http://localhost:5000/users/auth/${uid}`).then((response)=>{
+            user =  response.data
+        }).catch((error)=>{
+            console.log("LoadDemoData>findUserByUID>error: ", error)
+        });
+        return user;
+    }
+
+    async function addUserToDatabase(user){
+        await axios.post("http://localhost:5000/users/add", user).then((response)=>{
+            console.log("response: ", response.data)
+        }).catch((error)=>{
+            console.log("LoadDemoData>addUserToDatabase>error: ", error)
+        })
+    }
+
+    async function checkForUserBeforAddAndUpdate(uid, email, accessToken=""){
+
+        const foundUser = await findUserByUID(uid);
+        const newUser = {
+            useremail: email,
+            userAuthId: uid,
+        }
+        console.log("AuthFirebaseContext>found user: ", foundUser)
+        if(foundUser === null || foundUser === undefined){
+            await addUserToDatabase(newUser)
+            await checkForUserBeforAddAndUpdate(uid, email, accessToken)
+        }
+        if(accessToken !== null && accessToken !== undefined && accessToken !== ""){
+            newUser.accessToken = accessToken;
+            if(foundUser !== null && foundUser !== undefined && foundUser.accessToken !== newUser.accessToken){
+                await axios.post(`http://localhost:5000/users/update/${foundUser._id}`, newUser).then((response)=>{
+                    console.log("response: ", response.data)
+                }).catch((error)=>{
+                    console.log("LoadDemoData>checkForUserBeforAdd>error: ", error)
+                })
+                await checkForUserBeforAddAndUpdate(uid, email, accessToken)
+                //the reload is neccesary for the image to be visible on first login
+                window.location.reload()
+            }
+        }       
+    }
 
     function googleSignIn(){
-        return auth.signInWithPopup(provider);
+        return auth.signInWithPopup(provider).then(async(result)=>{
+            const user = result.user;
+            await checkForUserBeforAddAndUpdate(user.uid, user.email)
+        }).catch((error)=>{
+
+        });
     }
 
     function fbSignIn(){
-        return signInWithPopup(fbAuth, fbProvider).then((result)=>{
+        return signInWithPopup(fbAuth, fbProvider).then(async(result)=>{
             // The signed-in user info.
             const user = result.user;
 
             // This gives you a Facebook Access Token. You can use it to access the Facebook API.
             const credential = FacebookAuthProvider.credentialFromResult(result);
             const accessToken = credential.accessToken;
-            window.localStorage.setItem("fbAccessToken", JSON.stringify({token: accessToken}))
+            await checkForUserBeforAddAndUpdate(user.uid, user.email, accessToken)
+            //window.localStorage.setItem("fbAccessToken", JSON.stringify({token: accessToken}))
         }).catch((error)=>{
                 // Handle Errors here.
                 const errorCode = error.code;

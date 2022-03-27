@@ -72,7 +72,7 @@ export default function NewProject(props){
                                     <FloatingLabel controlId="floatingTextarea" label="Description" className="mb-3">
                                         <Form.Control as="textarea" placeholder="Write Ticket Description here" ref={descriptionRef} />
                                     </FloatingLabel>
-                                    <Button disabledd={loading} type="submit" className="w-100">Add Ticket</Button>
+                                    <Button disabled={loading} type="submit" className="w-100">Add Ticket</Button>
                                 </Form>
                             </Card.Body>
                         </Card>
