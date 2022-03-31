@@ -25,7 +25,7 @@ export default function Project(){
     }
 
     function findProject(id){
-        return userData.projectsAll.find(project => project.id === id)
+        return userData.projectsAll.find(project => project._id === id)
     }
 
     const {id} = useParams();

@@ -34,10 +34,13 @@ router.route("/update/:id").post((req, res)=>{
 
     User.findById(req.params.id).then(
         (user)=>{
-            user.email = req.body.useremail;
-            user.authId = req.body.userAuthId;
+            user.email = req.body.email;
+            user.authId = req.body.authId;
             if(req.body.accessToken){
                 user.accessToken = req.body.accessToken
+            }
+            if(req.body.projects){
+                user.projects = req.body.projects
             }
             user.save().then(
                 ()=> res.json("User updated!")

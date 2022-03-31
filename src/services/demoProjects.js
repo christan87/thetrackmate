@@ -1,8 +1,8 @@
 //needs an author field / project admin field
 const projects = [
     {
-        projectName: "Project 1",
-        projectDescription: "A test project...",
+        name: "Project 1",
+        description: "A test project...",
         collaborators: [
             {
                 name: "Mark Tate",
@@ -28,11 +28,11 @@ const projects = [
         status: "In Progress",
         priority: "Low",
         private: false,
-        id: "123456"
+        _id: "123456"
     },
     {
-        projectName: "Project 2",
-        projectDescription: "A test project...",
+        name: "Project 2",
+        description: "A test project...",
         collaborators: [
             {
                 name:'Van Henry',
@@ -58,11 +58,11 @@ const projects = [
         status: "In Progress",
         priority: "Medium",
         private: false,
-        id: "123457"
+        _id: "123457"
     },
     {
-        projectName: "Project 3",
-        projectDescription: "A test project...",
+        name: "Project 3",
+        description: "A test project...",
         collaborators: [
             {
                 name:'Bradley Wilkerson',
@@ -88,11 +88,11 @@ const projects = [
         status: "Complete",
         priority: "High",
         private: true,
-        id: "123458"
+        _id: "123458"
     },
         {
-        projectName: "Project 4",
-        projectDescription: "A test project...",
+        name: "Project 4",
+        description: "A test project...",
         collaborators: [
         ],
         tickets: [
@@ -102,7 +102,7 @@ const projects = [
         status: "Open",
         priority: "High",
         private: true,
-        id: "124459"
+        _id: "124459"
     }
 ]
 export default projects;

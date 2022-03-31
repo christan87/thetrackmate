@@ -38,19 +38,19 @@ export default function Projects(){
                             {userData.projectsAll&& userData.projectsAll.filter((project)=>{
                                 if(searchTerm === ""){
                                     return project;
-                                }else if(project.projectName.toLowerCase().includes(searchTerm.toLowerCase())) {
+                                }else if(project.name.toLowerCase().includes(searchTerm.toLowerCase())) {
                                     return project
                                 }
                             }).map((project)=>{
                                 return(
-                                    <Col xs={12} sm={6} md={4} lg={2} key={project.id} >
-                                        <Link to={`project/${project.id}`} style={{textDecoration: "none", color:"black"}}>
+                                    <Col xs={12} sm={6} md={4} lg={2} key={project._id} >
+                                        <Link to={`project/${project._id}`} style={{textDecoration: "none", color:"black"}}>
                                             <span>
                                                 <Card className="mx-2">
                                                     <Card.Body>
-                                                        <Card.Title>{project.projectName}</Card.Title>
+                                                        <Card.Title>{project.name}</Card.Title>
                                                         <Divider className="my-1" component="div" />
-                                                        <Card.Text>{project.projectDescription}</Card.Text>
+                                                        <Card.Text>{project.description}</Card.Text>
                                                     </Card.Body>
                                                 </Card>
                                             </span>

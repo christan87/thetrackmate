@@ -11,7 +11,7 @@ import { Link, useNavigate as useHistory } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
 import { useUserData } from "../../contexts/UserDataContext";
-//import axios from "axios";
+import axios from "axios";
 // import demoUsers from '../../services/demoUsers';
 
 export default function NewProject(props){
@@ -24,12 +24,34 @@ export default function NewProject(props){
     const priorityRef = useRef();
     const descriptionRef = useRef();
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = async (e)=>{
         e.preventDefault();
         setLoading(true)
         setError("");
 
-        
+        let newProject = {
+            name: nameRef.current.value,
+            description: descriptionRef.current.value,
+            priority: priorityRef.current.value,
+            status: "Open",
+            private: true,
+            admin: userData.foundUser._id
+        }
+
+        await axios.post("http://localhost:5000/projects/add", newProject).then(async(response)=>{
+            
+            let updateUser = userData.foundUser;
+            updateUser.projects = [...userData.foundUser.projects, response.data._id]
+
+            await axios.post(`http://localhost:5000/users/update/${userData.foundUser._id}`, updateUser).then((response)=>{
+                console.log("Update Respons: ", response.data)
+            }).catch((error)=>{
+                console.log("NewProject>handleSubmit(update user)>error: ", error)
+            })
+            console.log("response: ", response.data)
+        }).catch((error)=>{
+            console.log("NewProject>handleSubmit(add new project)>error: ", error)
+        })
 
         if(props.onHide){
             props.onHide()

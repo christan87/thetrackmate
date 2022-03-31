@@ -18,10 +18,21 @@ router.route("/add").post((req, res)=>{
         admin: admin
     });
     newProject.save().then(
-        ()=> res.json("Project added!")
+        ()=> res.json(newProject)
     ).catch(
         err => res.status(400).json("Error: " + err)
     )
+})
+
+//find users tickets
+router.route("/user/:id").get((req, res)=>{
+    Project.find().where("admin").equals(req.params.id).exec((err, foundProjects)=>{
+        if(err){
+            console.log("No Projecta Found: ", err)
+        }else{
+            res.json({projects: foundProjects})
+        }
+    });
 })
 
 module.exports = router;

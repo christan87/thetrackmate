@@ -102,6 +102,7 @@ export default function LoadDemoData({children}){
         }).catch((error)=>{
             console.log("LoadDemoData>findUserByUID>error: ", error)
         });
+        data.foundUser = user;
         return user;
     }
 
@@ -168,6 +169,24 @@ export default function LoadDemoData({children}){
         }
     }
 
+    async function setProjects(){
+        let projects = [];
+        try{
+            const foundUser = await findUserByUID(currentUser.uid)
+            await axios.get(`http://localhost:5000/projects/user/${foundUser._id}`).then((response)=>{
+                if(response.data !== null && response.data !== undefined){
+                    projects = response.data;
+                    data.projectsAll = response.data.projects
+                }
+            }).catch((error)=>{
+                console.log("LoadDemoData>setProjects: ", error)
+            })
+        }catch(e){
+            console.log("LoadDemoData>setProjects: ", e)
+        }
+        return projects;
+    }
+
     useEffect(async ()=>{
         if(demoMode){
             console.log("User Account Type: Demo")
@@ -193,6 +212,7 @@ export default function LoadDemoData({children}){
             }
             //await checkForUserBeforAddAndUpdate(currentUser.uid, currentUser.email)
             await setPhotoURL();
+            await setProjects();
         }else{
             console.log("User Account Type: No User Detected")
             data = {}

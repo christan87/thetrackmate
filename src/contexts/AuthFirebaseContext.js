@@ -46,8 +46,8 @@ export function AuthProvider({ children }) {
 
         const foundUser = await findUserByUID(uid);
         const newUser = {
-            useremail: email,
-            userAuthId: uid,
+            email: email,
+            authId: uid,
         }
         console.log("AuthFirebaseContext>found user: ", foundUser)
         if(foundUser === null || foundUser === undefined){
