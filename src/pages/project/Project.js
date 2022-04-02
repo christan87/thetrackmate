@@ -47,11 +47,11 @@ export default function Project(){
                     <Card.Body>
                         <Row>
                             <Col xs={4}>
-                                <Card.Title>{project.projectName}</Card.Title>
-                                <Card.Text>description: {project.projectDescription}</Card.Text>
+                                <Card.Title>{project.name}</Card.Title>
+                                <Card.Text>description: {project.description}</Card.Text>
                                 <Card.Text>status: {project.status}</Card.Text>
                                 <Card.Text>priority: {project.priority}</Card.Text>
-                                <Card.Text>{project.priority? <>Set to: Private</> : <>Set to: Public</>}</Card.Text>
+                                <Card.Text>{project.private? <>Set to: Private</> : <>Set to: Public</>}</Card.Text>
                             </Col>
                             <Col xs={8}>
                                 {console.log("Comments: ", projectComments)}

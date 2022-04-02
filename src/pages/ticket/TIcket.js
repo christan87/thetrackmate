@@ -19,7 +19,7 @@ export default function Ticket(){
 
     const { id } = useParams();
     const { userData } = useUserData();
-    const ticket = userData.ticketsAll.find(element => element.id === id);
+    const ticket = userData.ticketsAll.find(element => element._id === id);
     const comments = userData.ticketCommentsAll.filter(element => element.ticketId === String(id));
     const commentRef = useRef();
     const [loading, setLoading] = useState(false) 

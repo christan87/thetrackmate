@@ -10,7 +10,7 @@ import {
 import { Link, useNavigate as useHistory } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
-//import axios from "axios";
+import axios from "axios";
 // import demoProjects from '../../services/demoProjects';
 // import demoUsers from '../../services/demoUsers';
 import { useUserData } from "../../contexts/UserDataContext";
@@ -38,19 +38,21 @@ export default function NewTicket(props){
 
         let newTicket = {
             name: nameRef.current.value,
-            id: userData.id,
+            priority: priorityRef.current.value,
             type: typeRef.current.value,
             description: descriptionRef.current.value,
-            priority: priorityRef.current.value,
-            status: "Open",
-            assignedDevs:[],
-            comments:[],
-            date: "01/12/22",
-            private: true,
-            project:{
-                id: userData.projectsAll[assignedProjectRef.current.value - 1].id,
-                name: userData.projectsAll[assignedProjectRef.current.value - 1].projectName
-            } 
+            admin: userData.foundUser._id,
+            // assignedDevs:[],
+            // comments:[],
+            // date: "01/12/22",
+            // private: true,
+            // project:{
+            //     id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
+            //     name: userData.projectsAll[assignedProjectRef.current.value - 1].projectName
+            // } 
+        }
+        if(assignedProjectRef.current.value > 0){
+            newTicket.project = userData.projectsAll[assignedProjectRef.current.value - 1]._id;
         }
         console.log("Ticket: ", newTicket)
         // let newTicket = {
@@ -60,29 +62,39 @@ export default function NewTicket(props){
         //     admin: currentUser.mongoId 
         // }
 
-        // if(newTicket.ticketName === ""){
-        //     return setError("Must Complete Form...");
-        // }
+        if(newTicket.ticketName === ""){
+            return setError("Must Complete Form...");
+        }
         // if(newTicket.assignedTo === "0"){
         //     newTicket.assignedTo = ""
         //     return setError("Must Complete Form...");
         // }else{
         //     newTicket.assignedTo = users[newTicket.assignedTo-1]
         // }
-        // if(newTicket.priorityLevel === "0"){
-        //     newTicket.priorityLevel = ""
-        //     return setError("Must Complete Form...");
-        // }
-        // try{
-        //     axios.post('http://localhost:5000/tickets/add', newTicket).then(
-        //         res=> {
-        //             console.log("Ticket Added!: ", res.data)
-        //             history(`/show-ticket/${res.data}`)
-        //         }
-        //     )
-        // }catch(err){
-        //     console.log("Ticket Not Added: ", err)
-        // }
+        if(newTicket.priorityLevel === "0"){
+            newTicket.priorityLevel = ""
+            return setError("Must Complete Form...");
+        }
+        try{
+            await axios.post('http://localhost:5000/tickets/add', newTicket).then(
+                async res=> {
+                    console.log("Ticket Added!: ", res.data)
+                    let updateProject = await (await axios.get(`http://localhost:5000/projects/${newTicket.project}`)).data;
+                    console.log("updateProject: ", updateProject)
+                    updateProject.tickets = [...updateProject.tickets, res.data]
+                    
+                    await axios.put(`http://localhost:5000/projects/update/${newTicket.project}`, updateProject).then((response)=>{
+                        console.log("ticket added to project")
+                    }).catch((err)=>{
+                        console.log("Project Not Updated: ", err)
+                    })
+                    history(`/show-ticket/${res.data}`)
+                    
+                }
+            )
+        }catch(err){
+            console.log("Ticket Not Added: ", err)
+        }
         if(props.onHide){
             props.onHide()
         }
@@ -130,7 +142,7 @@ export default function NewTicket(props){
                                         <Form.Select aria-label="Project Assignment Select" ref={assignedProjectRef} >
                                             <option value="0"></option>
                                             {userData.projectsAll&& userData.projectsAll.map((project, index)=>{
-                                                return <option value={index+1} key={`${project.projectName}${index}`}>{project.projectName}</option>
+                                                return <option value={index+1} key={`${project.name}${index}`}>{project.name}</option>
                                             })}
                                         </Form.Select>
                                     </FloatingLabel>

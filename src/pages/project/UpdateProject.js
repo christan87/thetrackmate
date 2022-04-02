@@ -10,6 +10,7 @@ import {
 import { Link, useNavigate as useHistory, useParams } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
+import axios from 'axios'
 import demoTickets from '../../services/demoTickets';
 // import demoProjects from '../../services/demoProjects';
 import { useUserData } from "../../contexts/UserDataContext";
@@ -21,6 +22,7 @@ export default function UpdateProject(){
     const nameRef = useRef();
     const assignedRef = useRef();
     const priorityRef = useRef();
+    const descriptionRef = useRef();
     const { currentUser } = useAuth();
     const [error, setError] = useState("");
     const [currentProject, setCurrentProject] = useState();
@@ -37,36 +39,40 @@ export default function UpdateProject(){
     
     //demo
     useEffect(()=>{
-        const project = userData.projectsAll.find((project)=> project.id === id)
+        const project = userData.projectsAll.find((project)=> project._id === id)
         setCurrentProject(project)
+        setPrivacy(project.private)
         console.log("currentProject: ", currentProject)
     },[]);
     //This needs to be updated to update the ticket
     async function handleSubmit(e){
         e.preventDefault();
         setLoading(true)
+
+        let updatedProject = currentProject;
+
+        updatedProject.name = nameRef.current.value;
+        updatedProject.priority = priorityRef.current.value;
+        updatedProject.description = descriptionRef.current.value;
+        updatedProject.private = privacy;
+
     
-        let updatedTicket = {
-            ticketName: nameRef.current.value,
-            assignedTo: assignedRef.current.value,
-            priorityLevel: priorityRef.current.value,
-            admin: currentUser.mongoId,
-            private: privacy 
+        if(updatedProject.name === ""){
+            return setError("Must Complete Form...");
         }
-    
-        // if(updatedTicket.ticketName === ""){
-        //     return setError("Must Complete Form...");
-        // }
         // if(updatedTicket.assignedTo === "0"){
         //     updatedTicket.assignedTo = ""
         //     return setError("Must Complete Form...");
         // }else{
         //     updatedTicket.assignedTo = users[updatedTicket.assignedTo-1]
         // }
-        // if(updatedTicket.priorityLevel === "0"){
-        //     updatedTicket.priorityLevel = ""
-        //     return setError("Must Complete Form...");
-        // }
+        if(updatedProject.priorityLevel === "0"){
+            updatedProject.priorityLevel = ""
+            return setError("Must Complete Form...");
+        }
+        if(updatedProject.description === ""){
+            return setError("Must Complete Form...");
+        }
     
         // try{
         //     axios.put(`http://localhost:5000/tickets/update/${id}`, updatedTicket).then(
@@ -77,10 +83,19 @@ export default function UpdateProject(){
         // }catch(err){
         //     console.log("Ticket Not Updated: ", err)
         // }
-    
+        try{
+            await axios.put(`http://localhost:5000/projects/update/${id}`, updatedProject).then(async(response)=>{
+                history(`/project/${response.data}`)
+            }).catch((error)=>{
+                console.log("Project Not Updated: ", error)
+            })
+        }catch(error){
+            console.log("UpdateProject>handleSubmit: ", error)
+        }
         setLoading(false)
+        setError("")
     }
-    console.log("Users: ", userData.usersAll)
+    // console.log("Users: ", userData.usersAll)
     return(
         <>
             <Container>
@@ -94,7 +109,7 @@ export default function UpdateProject(){
                                 <h2 className="text-center mb-4">Update Project</h2>
                                 {error && <Alert variant="danger">{error}</Alert>}
                                 <Form onSubmit={handleSubmit}>
-                                    <FloatingLabel controlId="floatingNameField" label="Ticket Name" className="mb-3">
+                                    <FloatingLabel controlId="floatingNameField" label="Project Name" className="mb-3">
                                         {!currentProject?
                                             <Form.Control 
                                                 type="text" 
@@ -103,7 +118,7 @@ export default function UpdateProject(){
                                             :
                                             <Form.Control 
                                                 type="text" 
-                                                defaultValue={currentProject.projectName}
+                                                defaultValue={currentProject.name}
                                                 ref={nameRef} 
                                             />
                                         }
@@ -148,6 +163,20 @@ export default function UpdateProject(){
                                                     }
                                                 })}
                                             </Form.Select>
+                                        }
+                                    </FloatingLabel>
+                                    <FloatingLabel controlId="floatingNameField" label="Project Description" className="mb-3">
+                                        {!currentProject?
+                                            <Form.Control 
+                                                type="text" 
+                                                ref={descriptionRef} 
+                                            />
+                                            :
+                                            <Form.Control 
+                                                type="text" 
+                                                defaultValue={currentProject.description}
+                                                ref={descriptionRef} 
+                                            />
                                         }
                                     </FloatingLabel>
                                     <Form.Group controlId="floatingPrivate" className="mb-3">

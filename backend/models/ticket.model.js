@@ -18,7 +18,15 @@ const ticketSchema = new Schema({
         type: String,
         required: true
     },
+    status: {
+        type: String,
+        default: "open"
+    },
     project:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project"
+    },
+    admin:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Project"
     },

@@ -18,7 +18,7 @@ export default function NewProject(props){
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const { userData } = useUserData();
+    const { userData, setUserData } = useUserData();
     const nameRef = useRef();
     const assignedRef = useRef();
     const priorityRef = useRef();
@@ -56,6 +56,7 @@ export default function NewProject(props){
         if(props.onHide){
             props.onHide()
         }
+        userData.projectsAll.push()
         setLoading(false)
     }
 

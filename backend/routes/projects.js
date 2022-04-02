@@ -24,7 +24,7 @@ router.route("/add").post((req, res)=>{
     )
 })
 
-//find users tickets
+//find users projects
 router.route("/user/:id").get((req, res)=>{
     Project.find().where("admin").equals(req.params.id).exec((err, foundProjects)=>{
         if(err){
@@ -35,4 +35,28 @@ router.route("/user/:id").get((req, res)=>{
     });
 })
 
+//find specific project
+router.route("/:id").get((req, res)=>{
+    Project.findById(req.params.id).then((project)=>{
+        return res.json(project)
+    }).catch((err)=>{
+        res.status(400).json("Error: " + err)
+    })
+});
+
+//update project
+router.route("/update/:id").put((req, res)=>{
+    Project.findById(req.params.id).then((project)=>{
+        project.name = req.body.name;
+        project.assigned = req.body.assignedTo;
+        project.priority = req.body.priority;
+        project.description = req.body.description;
+        project.private = req.body.private;
+        project.tickets = req.body.tickets;
+        project.save();
+        res.json(project._id)
+    }).catch(
+        err => res.status(400).json("Error: " + err)
+    )
+})
 module.exports = router;
