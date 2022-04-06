@@ -52,7 +52,10 @@ export default function NewTicket(props){
             // } 
         }
         if(assignedProjectRef.current.value > 0){
-            newTicket.project = userData.projectsAll[assignedProjectRef.current.value - 1]._id;
+            newTicket.project = {
+                id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
+                name: userData.projectsAll[assignedProjectRef.current.value - 1].name
+            }
         }
         console.log("Ticket: ", newTicket)
         // let newTicket = {
@@ -79,7 +82,7 @@ export default function NewTicket(props){
             await axios.post('http://localhost:5000/tickets/add', newTicket).then(
                 async res=> {
                     console.log("Ticket Added!: ", res.data)
-                    let updateProject = await (await axios.get(`http://localhost:5000/projects/${newTicket.project}`)).data;
+                    let updateProject = await (await axios.get(`http://localhost:5000/projects/${newTicket.project.id}`)).data;
                     console.log("updateProject: ", updateProject)
                     updateProject.tickets = [...updateProject.tickets, res.data]
                     

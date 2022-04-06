@@ -207,7 +207,7 @@ export default function CustomPaginationActionsTable({tickets, moreDetails}) {
                               {row.status}
                           </TableCell>
                           <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
-                              {row.date}
+                              {new Date(row.createdAt).toLocaleDateString()}
                           </TableCell>
                           <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
                               {row.private? "Private" : "Public"}
@@ -216,7 +216,7 @@ export default function CustomPaginationActionsTable({tickets, moreDetails}) {
                               {!moreDetails?
                                 <Link to={`/project/${row.project.id}`}>{row.project.name}</Link>
                                 :
-                                <Link to={`/ticket/${row.id}`}>More Details</Link>
+                                <Link to={`/ticket/${row._id}`}>More Details</Link>
                               }
                               
                               

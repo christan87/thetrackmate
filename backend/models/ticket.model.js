@@ -23,8 +23,14 @@ const ticketSchema = new Schema({
         default: "open"
     },
     project:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Project"
+        id:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Project"
+        },
+        name:{
+            type: String
+        }
+
     },
     admin:{
         type: mongoose.Schema.Types.ObjectId,
@@ -59,7 +65,8 @@ const ticketSchema = new Schema({
         default: true
     },
     createdAt: {
-        type: Date
+        type: Date,
+        default: new Date()
     }
 })
 

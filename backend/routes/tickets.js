@@ -7,7 +7,8 @@ router.route("/add").post((req, res)=>{
     const priority = req.body.priority;
     const type = req.body.type;
     const description = req.body.description;
-    const project = req.body.project;
+    const projectId = req.body.project.id;
+    const projectName = req.body.project.name;
     // const assignedTo = req.body.assignedTo;
     const admin = req.body.admin;
     const newTicket = new Ticket({
@@ -15,7 +16,10 @@ router.route("/add").post((req, res)=>{
         priority: priority,
         type: type,
         description: description,
-        project: project,
+        project: {
+            id: projectId,
+            name: projectName
+        },
         admin: admin,
         // assigned: [assignedTo], 
         admin_privilages: [admin]
@@ -38,7 +42,7 @@ router.route("/:id").get((req, res)=>{
 
 //find users tickets
 router.route("/user/:id").get((req, res)=>{
-    Ticket.find().where("admin_privilages").equals(req.params.id).exec((err, foundTickets)=>{
+    Ticket.find().where("admin").equals(req.params.id).exec((err, foundTickets)=>{
         if(err){
             console.log("No Tickets Found: ", err)
         }else{

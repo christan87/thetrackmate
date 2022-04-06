@@ -186,6 +186,24 @@ export default function LoadDemoData({children}){
         }
         return projects;
     }
+    
+    async function setTickets(){
+        let tickets = [];
+        try{
+            const foundUser = await findUserByUID(currentUser.uid)
+            await axios.get(`http://localhost:5000/tickets/user/${foundUser._id}`).then((response)=>{
+                if(response.data !== null && response.data !== undefined){
+                    tickets = response.data;
+                    data.ticketsAll = tickets.tickets
+                }
+            }).catch((error)=>{
+                console.log("LoadDemoData>setTickets: ", error)
+            })
+        }catch(e){
+            console.log("LoadDemoData>setTickets: ", e)
+        }
+        return tickets;
+    }
 
     useEffect(async ()=>{
         if(demoMode){
@@ -213,6 +231,7 @@ export default function LoadDemoData({children}){
             //await checkForUserBeforAddAndUpdate(currentUser.uid, currentUser.email)
             await setPhotoURL();
             await setProjects();
+            await setTickets();
         }else{
             console.log("User Account Type: No User Detected")
             data = {}
