@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Ticket = require("../models/ticket.model");
+const Project = require("../models/project.model");
 // const Comment = require("../models/comment.model");
 
 router.route("/add").post((req, res)=>{
@@ -24,9 +25,15 @@ router.route("/add").post((req, res)=>{
         // assigned: [assignedTo], 
         admin_privilages: [admin]
     });
-    newTicket.save().then(
-        ()=> res.json(newTicket._id)
-    ).catch(
+    newTicket.save().then(()=>{ 
+        Project.findById(projectId).then((project)=>{
+            project.tickets = [...project.tickets, newTicket._id]
+            project.save();
+        }).catch((err)=>{
+            res.status(400).json("newTicket.save>Project.findById>Error: " + err)
+        })
+        res.json(newTicket._id)
+    }).catch(
         err => res.status(400).json("Error: " + err)
     )
 })

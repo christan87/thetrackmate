@@ -82,15 +82,15 @@ export default function NewTicket(props){
             await axios.post('http://localhost:5000/tickets/add', newTicket).then(
                 async res=> {
                     console.log("Ticket Added!: ", res.data)
-                    let updateProject = await (await axios.get(`http://localhost:5000/projects/${newTicket.project.id}`)).data;
-                    console.log("updateProject: ", updateProject)
-                    updateProject.tickets = [...updateProject.tickets, res.data]
+                    // let updateProject = await (await axios.get(`http://localhost:5000/projects/${newTicket.project.id}`)).data;
+                    // console.log("updateProject: ", updateProject)
+                    // updateProject.tickets = [...updateProject.tickets, res.data]
                     
-                    await axios.put(`http://localhost:5000/projects/update/${newTicket.project}`, updateProject).then((response)=>{
-                        console.log("ticket added to project")
-                    }).catch((err)=>{
-                        console.log("Project Not Updated: ", err)
-                    })
+                    // await axios.put(`http://localhost:5000/projects/update/${newTicket.project}`, updateProject).then((response)=>{
+                    //     console.log("ticket added to project")
+                    // }).catch((err)=>{
+                    //     console.log("Project Not Updated: ", err)
+                    // })
                     history(`/show-ticket/${res.data}`)
                     
                 }

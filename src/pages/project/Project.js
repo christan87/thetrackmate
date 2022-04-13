@@ -30,7 +30,7 @@ export default function Project(){
 
     const {id} = useParams();
     const project = findProject(id);
-    const projectTickets = userData.ticketsAll.filter((ticket)=>{
+    const projectTickets = project.tickets || userData.ticketsAll.filter((ticket)=>{
         return project.tickets.includes(ticket.id)
     });
     const projectComments = userData.projectCommentsAll.filter((comment)=>{

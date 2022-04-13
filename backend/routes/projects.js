@@ -26,7 +26,7 @@ router.route("/add").post((req, res)=>{
 
 //find users projects
 router.route("/user/:id").get((req, res)=>{
-    Project.find().where("admin").equals(req.params.id).exec((err, foundProjects)=>{
+    Project.find().where("admin").equals(req.params.id).populate("tickets").exec((err, foundProjects)=>{
         if(err){
             console.log("No Projecta Found: ", err)
         }else{
