@@ -91,7 +91,7 @@ export default function NewTicket(props){
                     // }).catch((err)=>{
                     //     console.log("Project Not Updated: ", err)
                     // })
-                    history(`/show-ticket/${res.data}`)
+                    history(`/ticket/${res.data}`)
                     
                 }
             )

@@ -208,6 +208,7 @@ export default function LoadDemoData({children}){
     useEffect(async ()=>{
         if(demoMode){
             console.log("User Account Type: Demo")
+            data.mode = "demo"
             setTheDemoMessages()
             setDemoTicketsAll()
             setDemoProjectsAll()
@@ -219,6 +220,8 @@ export default function LoadDemoData({children}){
         }else if(currentUser){
             console.log("User Account Type: Autheneticated")
             data = {
+                name: currentUser.displayName,
+                mode: "live",
                 messages: [],
                 count: 0,
                 ticketsAll: [],

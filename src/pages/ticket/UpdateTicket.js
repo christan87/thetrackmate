@@ -13,13 +13,14 @@ import { useDemoAuth } from "../../contexts/AuthDemoContext";
 // import demoTickets from '../../services/demoTickets';
 // import demoUsers from '../../services/demoUsers';
 import { useUserData } from "../../contexts/UserDataContext";
-// import axios from "axios";
+import axios from "axios";
 
 export default function UpdateTicket(){
     
     const { id } = useParams(); 
     const { userData } = useUserData();
     const nameRef = useRef();
+    const descriptionRef = useRef();
     const assignedRef = useRef();
     const priorityRef = useRef();
     const { currentUser } = useAuth();
@@ -36,8 +37,11 @@ export default function UpdateTicket(){
     }
     
     //demo
+    let ticket = {}
     useEffect(()=>{
-        const ticket = userData.ticketsAll.find((ticket)=> ticket.id === id)
+        ticket = userData.ticketsAll.find((ticket)=> ticket._id === String(id))
+        setPrivacy(ticket.private)
+        console.log("Ticket: ", ticket)
         setCurrentTicket(ticket)
         console.log("currentTicket: ", currentTicket)
     },[]);
@@ -46,37 +50,44 @@ export default function UpdateTicket(){
         e.preventDefault();
         setLoading(true)
 
-        let updatedTicket = {
-            ticketName: nameRef.current.value,
-            assignedTo: assignedRef.current.value,
-            priorityLevel: priorityRef.current.value,
-            admin: currentUser.mongoId,
-            private: privacy 
-        }
-
-        // if(updatedTicket.ticketName === ""){
-        //     return setError("Must Complete Form...");
+        let updatedTicket = currentTicket;
+        updatedTicket.name = nameRef.current.value;
+        updatedTicket.description = descriptionRef.current.value;
+        // updatedTicket.assignedTo = assignedRef.current.value;
+        updatedTicket.priority = priorityRef.current.value;
+        // updatedTicket.admin = currentUser.mongoId;
+        updatedTicket.private = privacy; 
+        // let updatedTicket = {
+        //     name: nameRef.current.value,
+        //     assignedTo: assignedRef.current.value,
+        //     priorityLevel: priorityRef.current.value,
+        //     admin: currentUser.mongoId,
+        //     private: privacy 
         // }
+
+        if(updatedTicket.ticketName === ""){
+            return setError("Must Complete Form...");
+        }
         // if(updatedTicket.assignedTo === "0"){
         //     updatedTicket.assignedTo = ""
         //     return setError("Must Complete Form...");
         // }else{
         //     updatedTicket.assignedTo = users[updatedTicket.assignedTo-1]
         // }
-        // if(updatedTicket.priorityLevel === "0"){
-        //     updatedTicket.priorityLevel = ""
-        //     return setError("Must Complete Form...");
-        // }
+        if(updatedTicket.priorityLevel === "0"){
+            updatedTicket.priorityLevel = ""
+            return setError("Must Complete Form...");
+        }
 
-        // try{
-        //     axios.put(`http://localhost:5000/tickets/update/${id}`, updatedTicket).then(
-        //         res=> {
-        //             history(`/show-ticket/${res.data}`)
-        //         }
-        //     )
-        // }catch(err){
-        //     console.log("Ticket Not Updated: ", err)
-        // }
+        try{
+            axios.put(`http://localhost:5000/tickets/update/${id}`, updatedTicket).then(
+                res=> {
+                    history(`/ticket/${res.data}`)
+                }
+            )
+        }catch(err){
+            console.log("Ticket Not Updated: ", err)
+        }
 
         setLoading(false)
     }
@@ -131,6 +142,20 @@ export default function UpdateTicket(){
                                                 type="text" 
                                                 defaultValue={currentTicket.name}
                                                 ref={nameRef} 
+                                            />
+                                        }
+                                    </FloatingLabel>
+                                    <FloatingLabel controlId="floatingNameField" label="Ticket Description" className="mb-3">
+                                        {!currentTicket?
+                                            <Form.Control 
+                                                type="text" 
+                                                ref={descriptionRef} 
+                                            />
+                                            :
+                                            <Form.Control 
+                                                type="text" 
+                                                defaultValue={currentTicket.description}
+                                                ref={descriptionRef} 
                                             />
                                         }
                                     </FloatingLabel>

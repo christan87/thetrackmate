@@ -49,7 +49,7 @@ router.route("/:id").get((req, res)=>{
 
 //find users tickets
 router.route("/user/:id").get((req, res)=>{
-    Ticket.find().where("admin").equals(req.params.id).exec((err, foundTickets)=>{
+    Ticket.find().where("admin").equals(req.params.id).populate("comments").exec((err, foundTickets)=>{
         if(err){
             console.log("No Tickets Found: ", err)
         }else{
@@ -61,12 +61,12 @@ router.route("/user/:id").get((req, res)=>{
 //update ticket
 router.route("/update/:id").put((req, res)=>{
     Ticket.findById(req.params.id).then((ticket)=>{
-        ticket.name = req.body.ticketName;
-        ticket.priority = req.body.priorityLevel;
-        ticket.type = req.body.type;
+        ticket.name = req.body.name;
+        ticket.priority = req.body.priority;
+        // ticket.type = req.body.type;
         ticket.description = req.body.description
-        ticket.assigned = req.body.assignedTo;
-        ticket.admin_privilages = req.body.admin_privilages;
+        // ticket.assigned = req.body.assignedTo;
+        // ticket.admin_privilages = req.body.admin_privilages;
         ticket.private = req.body.private;
         ticket.save();
         res.json(ticket._id)

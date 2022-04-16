@@ -2,7 +2,7 @@
 export default [
     {
         name:"Bug 1",
-        id: "48625",
+        _id: "48625",
         type: "Bug",
         description: "Testing bug...",
         priority: "High",
@@ -18,7 +18,7 @@ export default [
     },
     {
         name:"Goal 1",
-        id: "48725",
+        _id: "48725",
         type: "Goal",
         description: "Generic goal...",
         priority: "Medium",
@@ -46,7 +46,7 @@ export default [
     },
     {
         name:"Feature 1",
-        id: "486288",
+        _id: "486288",
         type: "Feature Request",
         description: "Generic Feature Request",
         priority: "Low",
@@ -79,7 +79,7 @@ export default [
     },
     {
         name:"Bug 2",
-        id: "4845625",
+        _id: "4845625",
         type: "Bug",
         description: "Testing bug...",
         priority: "High",
@@ -95,7 +95,7 @@ export default [
     },
     {
         name:"Goal 2",
-        id: "548625",
+        _id: "548625",
         type: "Goal",
         description: "Generic goal...",
         priority: "Medium",
@@ -123,7 +123,7 @@ export default [
     },
     {
         name:"Feature 2",
-        id: "487825",
+        _id: "487825",
         type: "Feature Request",
         description: "Generic Feature Request",
         priority: "Low",

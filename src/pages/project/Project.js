@@ -30,9 +30,15 @@ export default function Project(){
 
     const {id} = useParams();
     const project = findProject(id);
-    const projectTickets = project.tickets || userData.ticketsAll.filter((ticket)=>{
-        return project.tickets.includes(ticket.id)
-    });
+    let projectTickets = [];
+    if(userData.mode === "demo"){
+        projectTickets = userData.ticketsAll.filter((ticket)=>{
+            return project.tickets.includes(ticket._id)
+        });
+    }else{
+        projectTickets = project.tickets 
+    }
+
     const projectComments = userData.projectCommentsAll.filter((comment)=>{
         return project.comments.includes(comment.id)
     })
