@@ -7,7 +7,7 @@ export default [
         description: "Testing bug...",
         priority: "High",
         status: "Open",
-        assignedDevs:[],
+        assigned:[],
         comments:[],
         date: "01/12/22",
         private: true,
@@ -23,14 +23,14 @@ export default [
         description: "Generic goal...",
         priority: "Medium",
         status: "In Progress...",
-        assignedDevs:[
+        assigned:[
             {
                 name: "Mark Tate",
-                id: 7410
+                _id: 7410
             },
             {
                 name: "Angela Lark",
-                id: 8520
+                _id: 8520
             },
         ],
         comments:[
@@ -51,18 +51,18 @@ export default [
         description: "Generic Feature Request",
         priority: "Low",
         status: "Closed",
-        assignedDevs:[
+        assigned:[
             {
                 name: "Rodger Bellows",
-                id: 9630
+                _id: 9630
             },
             {
                 name: "Lark Mann",
-                id: 7450
+                _id: 7450
             },
             {
                 name: "Recce Bullock",
-                id: 8580
+                _id: 8580
             },
         ],
         comments:[
@@ -84,7 +84,7 @@ export default [
         description: "Testing bug...",
         priority: "High",
         status: "Open",
-        assignedDevs:[],
+        assigned:[],
         comments:[],
         date: "01/12/22",
         private: true,
@@ -100,14 +100,14 @@ export default [
         description: "Generic goal...",
         priority: "Medium",
         status: "In Progress...",
-        assignedDevs:[
+        assigned:[
             {
                 name: "Janet Rodgers",
-                id: 9639
+                _id: 9639
             },
             {
                 name:'Oliver Hansen',
-                id:19639
+                _id:19639
             },
         ],
         comments:[
@@ -128,18 +128,18 @@ export default [
         description: "Generic Feature Request",
         priority: "Low",
         status: "Closed",
-        assignedDevs:[
+        assigned:[
             {
                 name: "Lark Mann",
-                id: 7450
+                _id: 7450
             },
             {
                 name: "Janet Rodgers",
-                id: 9639
+                _id: 9639
             },
             {
                 name:'Ralph Hubbard',
-                id:49639
+                _id:49639
             },
         ],
         comments:[

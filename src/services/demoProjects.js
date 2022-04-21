@@ -6,15 +6,15 @@ const projects = [
         collaborators: [
             {
                 name: "Mark Tate",
-                id: 7410
+                _id: 7410
             },
             {
                 name: "Rodger Bellows",
-                id: 9630
+                _id: 9630
             },
             {
                 name:'Van Henry',
-                id:29639
+                _id:29639
             }
         ],
         tickets: [
@@ -36,15 +36,15 @@ const projects = [
         collaborators: [
             {
                 name:'Van Henry',
-                id:29639
+                _id:29639
             },
             {
                 name:'Omar Alexander',
-                id:59639
+                _id:59639
             },
             {
                 name:'Virginia Andrews',
-                id:99639
+                _id:99639
             }
         ],
         tickets: [
@@ -66,15 +66,15 @@ const projects = [
         collaborators: [
             {
                 name:'Bradley Wilkerson',
-                id:89639
+                _id:89639
             },
             {
                 name:'Miriam Wagner',
-                id:79639
+                _id:79639
             },
             {
                 name:'April Tucker',
-                id:39639
+                _id:39639
             }
         ],
         tickets: [

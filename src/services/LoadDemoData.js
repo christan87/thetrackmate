@@ -205,6 +205,21 @@ export default function LoadDemoData({children}){
         return tickets;
     }
 
+    async function setUsers(){
+        try{
+            let users = [];
+            await axios.get("http://localhost:5000/users").then((response)=>{
+              users = response.data;
+              data.usersAll = users;
+            }).catch((error)=>{
+                console.log("LoadDemoData>setUsers1: ", error)
+            })
+            return users;
+        }catch(e){
+            console.log("LoadDemoData>setUsers2: ", e)
+        }
+    }
+
     useEffect(async ()=>{
         if(demoMode){
             console.log("User Account Type: Demo")
@@ -235,6 +250,7 @@ export default function LoadDemoData({children}){
             await setPhotoURL();
             await setProjects();
             await setTickets();
+            await setUsers();
         }else{
             console.log("User Account Type: No User Detected")
             data = {}

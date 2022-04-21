@@ -15,21 +15,22 @@ export default function AltUser(){
 
     const { id } = useParams()
     const { userData } = useUserData();
-    const user = userData.usersAll.find((user)=> user.id == id)
+    const user = userData.usersAll.find((user)=> user._id == id)
+    
     const projects = userData.projectsAll.filter((project)=>{
-        const found = project.collaborators.filter((user)=> user.id == id);
+        const found = project.collaborators.filter((user)=> user._id == id);
         if(found.length > 0){
             return project
         }
     })
 
     const tickets = userData.ticketsAll.filter((ticket)=>{
-        const found = ticket.assignedDevs.filter((user)=> user.id == id);
+        const found = ticket.assigned.filter((user)=> user._id == id);
         if(found.length > 0){
             return ticket
         }
     })
-
+    console.log("Tickets: ", tickets)
     const style={
         backgroundColor: "blue", 
         display: "flex",
@@ -47,10 +48,10 @@ export default function AltUser(){
                         <Card.Text>Email: {user.email}</Card.Text>
                         <Card.Text>Set To: {user.private==true? "Private" : "Public"}</Card.Text>
                         <Card.Text>
-                            Projects: {projects.map((project=><Card.Text><Link to={`/project/${project.id}`}>{project.projectName}</Link></Card.Text>))}
+                            Projects: {projects.map((project=><Card.Text><Link to={`/project/${project._id}`}>{project.name}</Link></Card.Text>))}
                         </Card.Text> 
                         <Card.Text>
-                            Tickets: {tickets.map((ticket=><Card.Text><Link to={`/ticket/${ticket.id}`}>{ticket.name}</Link></Card.Text>))}
+                            Tickets: {tickets.map((ticket=><Card.Text><Link to={`/ticket/${ticket._id}`}>{ticket.name}</Link></Card.Text>))}
                         </Card.Text> 
                     </Card.Body>
                 </Card>

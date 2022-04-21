@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -12,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { useUserData } from "../../contexts/UserDataContext";
 import { Link } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-
+import axios from "axios";
 const columns = [
     {id: 'name', label: 'Name', minWidth: 280},
     {id: 'email', label: 'Email', minWidth: 500},
@@ -95,9 +95,45 @@ export default function Users() {
   const { userData } = useUserData();
   
   let rows= [];
-  const users = userData.usersAll.filter((user)=> user.private == false)
+  let users = [];
+
+  // async function getUsers(){
+  //   let users = [];
+  //   await axios.get("http://localhost:5000/users").then((response)=>{
+  //     users = response.data
+  //   }).catch((error)=>{
+  //     console.log("Users.js>getUsers>error: ", error)
+  //   })
+  //   return users;
+  // }
+
+  // function defineRows(users){
+  //   users.forEach((user)=>{
+  //     rows.push(createData(user.name, user.email, user._id))
+  //   })
+  // }
+
+  // useEffect(()=>{
+  //   if(userData.mode === "demo"){
+  //     users = userData.usersAll.filter((user)=> user.private == false)
+
+  //   }else{
+  //     users = userData.usersAll;
+  //     console.log("UserList222: ", users)
+  //   }
+
+  // },[])
+
+  if(userData.mode === "demo"){
+    users = userData.usersAll.filter((user)=> user.private == false)
+
+  }else{
+    users = userData.usersAll;
+  }
+
+  console.log("UserList: ", users)
   users.forEach((user)=>{
-      rows.push(createData(user.name, user.email, user.id))
+    rows.push(createData(user.name, user.email, user._id))
   })
 
   function handleChange(event){
@@ -150,7 +186,7 @@ export default function Users() {
                 }).map((row) => {
                   return (
                     
-                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                        <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                         {columns.map((column) => {
                             const value = row[column.id];
                             return (

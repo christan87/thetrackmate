@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -21,6 +21,10 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
+import { Button } from 'react-bootstrap';
+
+import EnlargeModal from '../analytics/EnlargeModal';
+import NewMessage from './NewMessage';
 import {useDemoAuth} from "../../contexts/AuthDemoContext";
 // import demoMessages from '../../services/demoMessages';
 import { useUserData } from "../../contexts/UserDataContext";
@@ -160,6 +164,15 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
+  const [modalShow, setModalShow] = useState(false);
+
+  function onShow(event){
+    setModalShow(true)
+  }
+
+  function onHide(){
+    setModalShow(false)
+  }
 
   return (
     <Toolbar
@@ -176,7 +189,7 @@ const EnhancedTableToolbar = (props) => {
           Mail
         </Typography>
       )}
-
+      <Button className="text-nowrap" onClick={onShow}>New Message</Button>
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
@@ -190,6 +203,9 @@ const EnhancedTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       )}
+      <EnlargeModal show={modalShow} onHide={onHide} >
+        <NewMessage />
+      </EnlargeModal>
     </Toolbar>
   );
 };
