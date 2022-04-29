@@ -220,6 +220,15 @@ export default function LoadDemoData({children}){
         }
     }
 
+    async function setMessagesAll(){
+        try{
+            const foundUser = await findUserByUID(currentUser.uid)
+            data.messages = foundUser.messages
+        }catch(err){
+            console.log("LoadDemoData>setMessagesAll: ", err)
+        }
+    }
+
     useEffect(async ()=>{
         if(demoMode){
             console.log("User Account Type: Demo")
@@ -251,6 +260,7 @@ export default function LoadDemoData({children}){
             await setProjects();
             await setTickets();
             await setUsers();
+            await setMessagesAll();
         }else{
             console.log("User Account Type: No User Detected")
             data = {}

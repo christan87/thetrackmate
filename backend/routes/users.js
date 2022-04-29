@@ -22,12 +22,16 @@ router.route("/add").post((req, res)=>{
 
 //find authenticated user
 router.route("/auth/:uid").get((req, res)=>{
-    User.findOne({"authId": `${req.params.uid}`}).then(
-        user => res.json(user)
-    ).catch(
-        err => res.status(400).json("Error: " + err)
-    )
-})
+    // populates user messages completely and 'then'populates the author field for each message but 'just' name and _id
+    User.findOne({"authId": `${req.params.uid}`}).populate({path: "messages", populate: {path: "author", select: "name"}}).exec((err, user) => {
+        if(err){
+            res.status(400).json("Error: " + err)
+        }else{
+            res.json(user)
+        }
+        
+    })
+});
 
 //update specific user
 router.route("/update/:id").post((req, res)=>{

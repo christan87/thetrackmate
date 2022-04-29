@@ -20,7 +20,7 @@ const ticketSchema = new Schema({
     },
     status: {
         type: String,
-        default: "open"
+        default: "Open"
     },
     project:{
         id:{

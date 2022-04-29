@@ -12,12 +12,15 @@ import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
 import demoProjects from '../../services/demoProjects';
 import demoUsers from '../../services/demoUsers';
+import { useUserData } from "../../contexts/UserDataContext";
+import axios from "axios";
 
 export default function Reply(props){
     const subjectRef = useRef();
     const messageRef = useRef();
     const { currentUser } = useAuth();
     const { demoUser } = useDemoAuth();
+    const { userData } = useUserData();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -27,19 +30,31 @@ export default function Reply(props){
         setError("");
 
         let newMessage = {
-            type: "message",
+            type: "reply",
             subject: subjectRef.current.value,
             text: messageRef.current.value,
-            author: {
-                name: demoUser.userName,
-                id:demoUser._id
-            },
-            date: "02/10/22",
-            id: "654693175",
-            recipientId: props.recipientId,
+            author: userData.foundUser._id,
             read: false
         }
-        console.log("newMessage: ", newMessage)
+
+        try{
+            newMessage.recipient = props.replyId;
+        }catch(error){
+            console.log("NewMessage.js>newMessage.recipient> ", error)
+        }
+
+        if(subjectRef.current.value === ""){
+            return setError("Fill in all fields...")
+        }else if(messageRef.current.value === ""){
+            return setError("Fill in all fields...")
+        }
+        console.log("replyMessage: ", newMessage)
+
+        await axios.post(`http://localhost:5000/messages/reply/${newMessage.recipient}`, newMessage).then((response)=>{
+            console.log(response.data)
+        }).catch((error)=>{
+            console.log("NewMessage.js>handleSubmit>axios.post> ", error)
+        })
 
         if(props.onHide){
             props.onHide()

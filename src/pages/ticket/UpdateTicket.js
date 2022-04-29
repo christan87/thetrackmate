@@ -22,6 +22,7 @@ export default function UpdateTicket(){
     const nameRef = useRef();
     const descriptionRef = useRef();
     const assignedRef = useRef();
+    const statusRef = useRef();
     const priorityRef = useRef();
     const { currentUser } = useAuth();
     const [error, setError] = useState("");
@@ -29,6 +30,7 @@ export default function UpdateTicket(){
     const [privacy, setPrivacy] = useState(true);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
+    const status = ["Open", "In Progress...", "Closed"]
     const priorities = ["Low", "Medium", "High"];
     const history = useHistory();
 
@@ -54,6 +56,7 @@ export default function UpdateTicket(){
         updatedTicket.name = nameRef.current.value;
         updatedTicket.description = descriptionRef.current.value;
         // updatedTicket.assignedTo = assignedRef.current.value;
+        updatedTicket.status = statusRef.current.value;
         updatedTicket.priority = priorityRef.current.value;
         // updatedTicket.admin = currentUser.mongoId;
         updatedTicket.private = privacy; 
@@ -68,6 +71,9 @@ export default function UpdateTicket(){
         if(updatedTicket.ticketName === ""){
             return setError("Must Complete Form...");
         }
+        if(updatedTicket.status === "" || 0){
+            return setError("Must Complete Form...");
+        }
         // if(updatedTicket.assignedTo === "0"){
         //     updatedTicket.assignedTo = ""
         //     return setError("Must Complete Form...");
@@ -78,7 +84,7 @@ export default function UpdateTicket(){
             updatedTicket.priorityLevel = ""
             return setError("Must Complete Form...");
         }
-
+        return console.log("Update:", updatedTicket)
         try{
             axios.put(`http://localhost:5000/tickets/update/${id}`, updatedTicket).then(
                 res=> {
@@ -175,6 +181,27 @@ export default function UpdateTicket(){
                                                         return <option value={index+1} key={`${user.userName}${index}`} selected>{user.userName}</option>
                                                     }else{
                                                         return <option value={index+1} key={`${user.userName}${index}`}>{user.userName}</option>
+                                                    }
+                                                })}
+                                            </Form.Select>
+                                        }
+                                    </FloatingLabel>
+                                    <FloatingLabel controlId="floatingStatusLevel" label="Status" className="mb-3">
+                                        {!currentTicket?
+                                            <Form.Select aria-label="Status Select" ref={statusRef}>
+                                                <option value="0"></option>
+                                                {status.map((status, index)=>{
+                                                    return <option value={status} key={`${status}${index}`} >{status}</option>
+                                                })}
+                                            </Form.Select>
+                                            :
+                                            <Form.Select aria-label="Status Select" ref={statusRef}>
+                                                <option value="0"></option>
+                                                {status.map((status, index)=>{
+                                                    if(status === currentTicket.status){
+                                                        return <option value={status} key={`${status}${index}`} selected >{status}</option>
+                                                    }else{
+                                                        return <option value={status} key={`${status}${index}`} >{status}</option>
                                                     }
                                                 })}
                                             </Form.Select>

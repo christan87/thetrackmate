@@ -101,40 +101,74 @@ export default function BarGraph(props){
         setModalShow(true)
     }
 
+    let liveData = {
+      labels: ["Tickets by Status"],
+      datasets: [
+        {
+          label: "Open",
+          data: [0],
+          backgroundColor: "rgba(0,128,0,0.2)",
+          borderColor:"rgb(0,128,0)",
+          borderWidth: 1
+        },
+        {
+          label: "In Progress...",
+          data: [0],
+          backgroundColor: "rgba(204,204,0,0.2)",
+          borderColor:"rgb(204,204,0)",
+          borderWidth: 1
+        },
+        {
+          label: "Closed",
+          data: [0],
+          backgroundColor: "rgba(255, 0, 0, 0.2)",
+          borderColor:"rgb(255, 0, 0)",
+          borderWidth: 1
+        }
+      
+      ]
+    }
+
     function dataProcess(tickets){
-      let data = {
-        labels: ["Tickets by Status"],
-        datasets: [
-          {
-            label: "Open",
-            data: [4],
-            backgroundColor: "rgba(0,128,0,0.2)",
-            borderColor:"rgb(0,128,0)",
-            borderWidth: 1
-          },
-          {
-            label: "In Progress...",
-            data: [1],
-            backgroundColor: "rgba(204,204,0,0.2)",
-            borderColor:"rgb(204,204,0)",
-            borderWidth: 1
-          },
-          {
-            label: "Closed",
-            data: [7],
-            backgroundColor: "rgba(255, 0, 0, 0.2)",
-            borderColor:"rgb(255, 0, 0)",
-            borderWidth: 1
-          }
-        
-        ]
+      let data;
+      if(userData.mode === "live"){
+        data = liveData;
+      }else{
+        data = {
+          labels: ["Tickets by Status"],
+          datasets: [
+            {
+              label: "Open",
+              data: [4],
+              backgroundColor: "rgba(0,128,0,0.2)",
+              borderColor:"rgb(0,128,0)",
+              borderWidth: 1
+            },
+            {
+              label: "In Progress...",
+              data: [1],
+              backgroundColor: "rgba(204,204,0,0.2)",
+              borderColor:"rgb(204,204,0)",
+              borderWidth: 1
+            },
+            {
+              label: "Closed",
+              data: [7],
+              backgroundColor: "rgba(255, 0, 0, 0.2)",
+              borderColor:"rgb(255, 0, 0)",
+              borderWidth: 1
+            }
+          
+          ]
+        }
       }
+      
       tickets.forEach(ticket => {
         if(ticket.status === "Open"){
           data.datasets[0].data[0]++;
         }else if(ticket.status === "In Progress..."){
           data.datasets[1].data[0]++;
-        }else{
+        }else if(ticket.status === "Closed"){
           data.datasets[2].data[0]++;
         }
       });

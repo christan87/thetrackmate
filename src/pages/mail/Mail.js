@@ -253,7 +253,8 @@ export default function Mail() {
   const messages = userData.messages || [];
   const rows = []
   messages.forEach((message)=>{
-      const data = createData2(message.author.name, message.type, message.date, message.id)
+      let date = new Date(message.createdAt).toLocaleDateString()
+      const data = createData2(message.author.name, message.subject, date, message._id)
       rows.push(data)
   })
 

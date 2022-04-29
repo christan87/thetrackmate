@@ -26,8 +26,9 @@ import EnlargeModal from '../pages/analytics/EnlargeModal';
 import NewTicket from '../pages/ticket/NewTicket'
 import NewProject from '../pages/project/NewProject'
 
-import { useDemoAuth } from '../contexts/AuthDemoContext';
-import demoMessages from '../services/demoMessages';
+// import { useDemoAuth } from '../contexts/AuthDemoContext';
+import { useUserData } from '../contexts/UserDataContext'
+// import demoMessages from '../services/demoMessages';
 
 const drawerWidth = 240;
 
@@ -101,8 +102,10 @@ export default function DrawerWrap({children}) {
   const [modalShow, setModalShow] = useState(false);
   const [modalShow2, setModalShow2] = useState(false);
 
-  const { demoUser, demoUserData } = useDemoAuth();
-  const count = demoUserData.messageCount
+  // const { demoUser, demoUserData } = useDemoAuth();
+  const { userData } = useUserData();
+  // const count = demoUserData.messageCount
+  const count = userData.messages.length;
 
   function onHide(){
       setModalShow(false)

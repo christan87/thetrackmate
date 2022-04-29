@@ -22,6 +22,7 @@ export default function UpdateProject(){
     const nameRef = useRef();
     const assignedRef = useRef();
     const priorityRef = useRef();
+    const statusRef = useRef();
     const descriptionRef = useRef();
     const { currentUser } = useAuth();
     const [error, setError] = useState("");
@@ -30,6 +31,7 @@ export default function UpdateProject(){
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const priorities = ["Low", "Medium", "High"];
+    const status = ["Open", "In Progress...", "Closed"]
     const { userData } = useUserData();
     const history = useHistory();
     
@@ -53,6 +55,7 @@ export default function UpdateProject(){
 
         updatedProject.name = nameRef.current.value;
         updatedProject.priority = priorityRef.current.value;
+        updatedProject.status = statusRef.current.value;
         updatedProject.description = descriptionRef.current.value;
         updatedProject.private = privacy;
 
@@ -66,6 +69,9 @@ export default function UpdateProject(){
         // }else{
         //     updatedTicket.assignedTo = users[updatedTicket.assignedTo-1]
         // }
+        if(updatedProject.status === "0"){
+            return setError("Must Complete Form...");
+        }
         if(updatedProject.priorityLevel === "0"){
             updatedProject.priorityLevel = ""
             return setError("Must Complete Form...");
@@ -139,6 +145,27 @@ export default function UpdateProject(){
                                                         return <option value={index+1} key={`${user.name}${index}`} selected>{user.name}</option>
                                                     }else{
                                                         return <option value={index+1} key={`${user.name}${index}`}>{user.name}</option>
+                                                    }
+                                                })}
+                                            </Form.Select>
+                                        }
+                                    </FloatingLabel>
+                                    <FloatingLabel controlId="floatingStatusLevel" label="Status" className="mb-3">
+                                        {!currentProject?
+                                            <Form.Select aria-label="Status Select" ref={statusRef}>
+                                                <option value="0"></option>
+                                                {status.map((status, index)=>{
+                                                    return <option value={status} key={`${status}${index}`} >{status}</option>
+                                                })}
+                                            </Form.Select>
+                                            :
+                                            <Form.Select aria-label="Status Select" ref={statusRef}>
+                                                <option value="0"></option>
+                                                {status.map((status, index)=>{
+                                                    if(status === currentProject.status){
+                                                        return <option value={status} key={`${status}${index}`} selected >{status}</option>
+                                                    }else{
+                                                        return <option value={status} key={`${status}${index}`} >{status}</option>
                                                     }
                                                 })}
                                             </Form.Select>

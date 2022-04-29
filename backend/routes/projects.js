@@ -49,6 +49,7 @@ router.route("/update/:id").put((req, res)=>{
     Project.findById(req.params.id).then((project)=>{
         project.name = req.body.name;
         project.assigned = req.body.assignedTo;
+        project.status = req.body.status;
         project.priority = req.body.priority;
         project.description = req.body.description;
         project.private = req.body.private;

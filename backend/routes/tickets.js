@@ -62,6 +62,7 @@ router.route("/user/:id").get((req, res)=>{
 router.route("/update/:id").put((req, res)=>{
     Ticket.findById(req.params.id).then((ticket)=>{
         ticket.name = req.body.name;
+        ticket.status = req.body.status;
         ticket.priority = req.body.priority;
         // ticket.type = req.body.type;
         ticket.description = req.body.description

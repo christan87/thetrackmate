@@ -17,7 +17,7 @@ export default function Message(){
 
     const { id } = useParams();
     const { userData } = useUserData();
-    const message = userData.messages.find((message)=> message.id === id);
+    const message = userData.messages.find((message)=> message._id === id);
     const style={
         backgroundColor: "blue", 
         display: "flex",
@@ -66,7 +66,7 @@ export default function Message(){
                                 </Card.Body>
                             </Card>
                             <EnlargeModal show={modalShow} onHide={onHide}>
-                                <Reply onHide={onHide} replyId={message.author.id}/>
+                                <Reply onHide={onHide} replyId={message.author._id}/>
                             </EnlargeModal>
                             <div className="w-100 text-center mt-2">
                                 <Link to="/mail">Inbox</Link>
