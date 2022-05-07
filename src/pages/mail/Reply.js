@@ -29,32 +29,55 @@ export default function Reply(props){
         setLoading(true)
         setError("");
 
-        let newMessage = {
-            type: "reply",
-            subject: subjectRef.current.value,
-            text: messageRef.current.value,
-            author: userData.foundUser._id,
-            read: false
+        if(userData.mode === "live"){
+            let newMessage = {
+                type: "reply",
+                subject: subjectRef.current.value,
+                text: messageRef.current.value,
+                author: userData.foundUser._id,
+                read: false
+            }
+    
+            try{
+                newMessage.recipient = props.replyId;
+            }catch(error){
+                console.log("NewMessage.js>newMessage.recipient> ", error)
+            }
+    
+            if(subjectRef.current.value === ""){
+                return setError("Fill in all fields...")
+            }else if(messageRef.current.value === ""){
+                return setError("Fill in all fields...")
+            }
+            console.log("replyMessage: ", newMessage)
+    
+            await axios.post(`http://localhost:5000/messages/reply/${newMessage.recipient}`, newMessage).then((response)=>{
+                console.log(response.data)
+            }).catch((error)=>{
+                console.log("NewMessage.js>handleSubmit>axios.post> ", error)
+            })
+        }else if(userData.mode === "demo"){
+            let newMessage = {
+                type: "reply",
+                subject: subjectRef.current.value,
+                text: messageRef.current.value,
+                author: userData.id,
+                read: false
+            }
+    
+            try{
+                newMessage.recipient = props.replyId;
+            }catch(error){
+                console.log("NewMessage.js>newMessage.recipient> ", error)
+            }
+    
+            if(subjectRef.current.value === ""){
+                return setError("Fill in all fields...")
+            }else if(messageRef.current.value === ""){
+                return setError("Fill in all fields...")
+            }
+            console.log("replyMessage: ", newMessage)
         }
-
-        try{
-            newMessage.recipient = props.replyId;
-        }catch(error){
-            console.log("NewMessage.js>newMessage.recipient> ", error)
-        }
-
-        if(subjectRef.current.value === ""){
-            return setError("Fill in all fields...")
-        }else if(messageRef.current.value === ""){
-            return setError("Fill in all fields...")
-        }
-        console.log("replyMessage: ", newMessage)
-
-        await axios.post(`http://localhost:5000/messages/reply/${newMessage.recipient}`, newMessage).then((response)=>{
-            console.log(response.data)
-        }).catch((error)=>{
-            console.log("NewMessage.js>handleSubmit>axios.post> ", error)
-        })
 
         if(props.onHide){
             props.onHide()

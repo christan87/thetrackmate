@@ -8,7 +8,7 @@ export default [
             id: 7410
         },
         date: "02/10/22",
-        id: "842693175",
+        _id: "842693175",
         recipientId: "admin-D123456",
         read: false
     },
@@ -21,7 +21,7 @@ export default [
             id: 7410
         },
         date: "02/10/22",
-        id: "842653175",
+        _id: "842653175",
         recipientId: "admin-D123456",
         read: false
     },
@@ -34,7 +34,7 @@ export default [
             id: 8520
         },
         date: "02/10/22",
-        id: "8252693175",
+        _id: "8252693175",
         recipientId: "collaborator-D123456",
         read: false
     },
@@ -47,7 +47,7 @@ export default [
             id: 8520
         },
         date: "02/10/22",
-        id: "842634175",
+        _id: "842634175",
         recipientId: "collaborator-D123456",
         read: false
     },
@@ -60,7 +60,7 @@ export default [
             id: 8580
         },
         date: "02/10/22",
-        id: "842695145",
+        _id: "842695145",
         recipientId: "user-D123456",
         read: false
     },
@@ -73,7 +73,7 @@ export default [
             id:39639
         },
         date: "02/10/22",
-        id: "654693175",
+        _id: "654693175",
         recipientId: "guest-D123456",
         read: false
     },

@@ -33,9 +33,23 @@ export const data = {
   ],
 };
 
-function dataProcess(projects){
-  let data = {
-    labels: ["Open", "In Progress...", "Complete"],
+function dataProcess(projects, userData){
+  let data;
+
+  let liveData = {
+    labels: ["Open Projects", "Projects In Progress...", "Complete Projects"],
+    datasets: [
+      {
+        label: "In Progress",
+        data: [0, 0, 0],
+        backgroundColor: ["rgba(0,128,0,0.5)", "rgba(204,204,0,0.5)", "rgba(255, 0, 0, 0.5)"]
+      }
+    ],
+    borderWidth: 1
+  }
+
+  let demoData = {
+    labels: ["Open Projects", "Projects In Progress...", "Complete Projects"],
     datasets: [
       {
         label: "In Progress",
@@ -45,12 +59,19 @@ function dataProcess(projects){
     ],
     borderWidth: 1
   }
+
+  if(userData.mode === "live"){
+    data = liveData;
+  }else{
+    data = demoData;
+  }
+
   projects.forEach(project => {
     if(project.status === "Open"){
       data.datasets[0].data[0]++;
-    }else if(project.status === "In Progress"){
+    }else if(project.status === "In Progress..."){
       data.datasets[0].data[1]++;
-    }else{
+    }else if(project.status === "Closed"){
       data.datasets[0].data[2]++;
     }
   });
@@ -62,7 +83,7 @@ export default function PolarAreaChart(props) {
   const [modalShow, setModalShow] = useState(false);
   const { userData } = useUserData()
 
-  const processedData = dataProcess(userData.projectsAll);
+  const processedData = dataProcess(userData.projectsAll, userData);
 
   function onHide(){
       setModalShow(false)

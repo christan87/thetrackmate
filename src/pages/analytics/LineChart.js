@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -61,32 +61,33 @@ export const data = {
   ],
 };
 
-let liveData = {
-  labels: ["Open Tickets", "In Progress Tickets", "Closed Tickets"],
-  datasets: [
-    {
-      label: "Open Projects",
-      data: [0, 0, 0],
-      borderColor: "rgb(0,128,0)",
-      backgroundColor: "rgba(0,128,0,0.5)"
-    },
-    {
-      label: "In Progress Projects",
-      data: [0, 0, 0],
-      borderColor: "rgb(204,204,0)",
-      backgroundColor: "rgba(204,204,0,0.5)"
-    },
-    {
-      label: 'Closed Projects',
-      data: [0, 0, 0],
-      borderColor: "rgb(255, 0, 0)",
-      backgroundColor: "rgba(255, 0, 0, 0.5)"
-    }
-  ]
-}
+function dataProcess(projects, userData){
 
-function dataProcess(projects, tickets, userData){
   let data;
+
+  let liveData = {
+    labels: ["Open Tickets", "In Progress Tickets", "Closed Tickets"],
+    datasets: [
+      {
+        label: "Open Projects",
+        data: [0, 0, 0],
+        borderColor: "rgb(0,128,0)",
+        backgroundColor: "rgba(0,128,0,0.5)"
+      },
+      {
+        label: "In Progress Projects",
+        data: [0, 0, 0],
+        borderColor: "rgb(204,204,0)",
+        backgroundColor: "rgba(204,204,0,0.5)"
+      },
+      {
+        label: 'Closed Projects',
+        data: [0, 0, 0],
+        borderColor: "rgb(255, 0, 0)",
+        backgroundColor: "rgba(255, 0, 0, 0.5)"
+      }
+    ]
+  }
 
   if(userData.mode === "live"){
     data = liveData;
@@ -114,40 +115,43 @@ function dataProcess(projects, tickets, userData){
         }
       ]
     }
+
   }
 
   projects.forEach(project => {
-    const currTickets = tickets.filter(ticket => ticket.project.id === project._id);
-    console.log("projects: ", project)
-    currTickets.forEach(ticket=>{ 
-      if(project.status === "Open"){     
+    if(project.status === "Open"){
+      project.tickets.forEach(ticket=>{
         if(ticket.status === "Open"){
           data.datasets[0].data[0]++;
         }else if(ticket.status === "In Progress..."){
           data.datasets[0].data[1]++;
-        }else{
+        }else if(ticket.status === "Closed"){
           data.datasets[0].data[2]++;
         }
-      }else if(project.status === "In Progress..."){
+      })
+    }else if(project.status === "In Progress..."){
+      project.tickets.forEach(ticket=>{
         if(ticket.status === "Open"){
           data.datasets[1].data[0]++;
         }else if(ticket.status === "In Progress..."){
           data.datasets[1].data[1]++;
-        }else{
+        }else if(ticket.status === "Closed"){
           data.datasets[1].data[2]++;
         }
-      }else if(project.status === "Closed"){
+      })
+    }else if(project.status === "Closed"){
+      project.tickets.forEach(ticket=>{
         if(ticket.status === "Open"){
           data.datasets[2].data[0]++;
         }else if(ticket.status === "In Progress..."){
           data.datasets[2].data[1]++;
-        }else{
+        }else if(ticket.status === "Closed"){
           data.datasets[2].data[2]++;
         }
-      }
-    })
+      })
+    }
   });
-  console.log("DATA: ", data)
+
   return data;
 }
 
@@ -157,7 +161,7 @@ export default function LineChart(props) {
   const [modalShow, setModalShow] = useState(false);
   const { userData } = useUserData()
 
-  const processedData = dataProcess(userData.projectsAll, userData.ticketsAll, userData);
+  const processedData = dataProcess(userData.projectsAll, userData);
 
   function onHide(){
       setModalShow(false)

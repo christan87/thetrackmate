@@ -17,12 +17,29 @@ export default function LoadDemoData({children}){
         demoMode, 
         demoUser, 
         setMessages, 
-        setMessageCount 
+        setMessageCount,
+        updateLocalStorageData, 
+        getLocalStorageData, 
+        removeLocalStorageData  
     } = useDemoAuth();
 
     const { currentUser } = useAuth();
     const { userData, setUserData } = useUserData();
     const [loading, setLoading] = useState(true)
+
+    let localStorageData = getLocalStorageData() || {
+        name: demoUser.userName,
+        mode: "demo",
+        messages: [],
+        count: 0,
+        ticketsAll: [],
+        projectsAll: [],
+        usersAll: [],
+        projectCommentsAll: [],
+        ticketCommentsAll: [],
+        id: demoUser._id
+    }
+
     let data = {
         
     }
@@ -35,6 +52,9 @@ export default function LoadDemoData({children}){
             data.count = count;
             setMessages(messages)
             setMessageCount(count);
+            localStorageData.messages = messages;
+            localStorageData.count = count;
+            updateLocalStorageData(localStorageData)
         }catch(e){
             console.log("LoadDemoData>setTheMessages: ", e)
         }
@@ -45,6 +65,8 @@ export default function LoadDemoData({children}){
         try{
             const ticketsAll = demoTickets;
             data.ticketsAll = ticketsAll;
+            localStorageData.ticketsAll = ticketsAll;
+            updateLocalStorageData(localStorageData)
         }catch(e){
             console.log("LoadDemoData>setDemoTicketsAll: ", e)
         }
@@ -54,6 +76,8 @@ export default function LoadDemoData({children}){
         try{
             const projectsAll = demoProjects;
             data.projectsAll = projectsAll;
+            localStorageData.projectsAll = projectsAll;
+            updateLocalStorageData(localStorageData)
         }catch(e){
             console.log("LoadDemoData>setDemoProjectsAll: ", e)
         }
@@ -63,6 +87,8 @@ export default function LoadDemoData({children}){
         try{
             const usersAll = demoUsers;
             data.usersAll = usersAll;
+            localStorageData.usersAll = usersAll;
+            updateLocalStorageData(localStorageData)
         }catch(e){
             console.log("LoadDemoData>setDemoUsersAll: ", e)
         }
@@ -72,6 +98,8 @@ export default function LoadDemoData({children}){
         try{
             const projectCommentsAll = demoProjectComments;
             data.projectCommentsAll = projectCommentsAll;
+            localStorageData.projectCommentsAll = projectCommentsAll;
+            updateLocalStorageData(localStorageData)
         }catch(e){
             console.log("LoadDemoData>setDemoProjectCommentsAll: ", e)
         }
@@ -81,6 +109,8 @@ export default function LoadDemoData({children}){
         try{
             const ticketCommentsAll = demoTicketComments;
             data.ticketCommentsAll = ticketCommentsAll;
+            localStorageData.ticketCommentsAll = ticketCommentsAll;
+            updateLocalStorageData(localStorageData)
         }catch(e){
             console.log("LoadDemoData>setDemoTicketCommentsAll: ", e)
         }

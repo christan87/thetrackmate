@@ -16,7 +16,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Pie Chart',
+      text: 'Tickets by status - Chart.js Pie Chart',
     },
   },
 };
@@ -48,8 +48,9 @@ export const data = {
   ],
 };
 
-function dataProcess(tickets){
-  let data = {
+function dataProcess(tickets, userData){
+  let data;
+  let demoData = {
     labels: ["Open", "In Progress...", "Closed"],
     datasets: [
       {
@@ -61,12 +62,32 @@ function dataProcess(tickets){
       }
     ]
   }
+
+  let liveData={
+    labels: ["Open", "In Progress...", "Closed"],
+    datasets: [
+      {
+        label: '# of Tickets',
+        data: [0, 0, 0],
+        backgroundColor: ["rgba(0,128,0,0.2)", "rgba(204,204,0,0.2)", "rgba(255, 0, 0, 0.2)"],
+        borderColor: ["rgb(0,128,0)", "rgb(204,204,0)", "rgb(255, 0, 0)"],
+        borderWidth: 1
+      }
+    ]
+  }
+
+  if(userData.mode === "live"){
+    data = liveData;
+  }else{
+    data = demoData;
+  }
+
   tickets.forEach(ticket => {
     if(ticket.status === "Open"){
       data.datasets[0].data[0]++;
     }else if(ticket.status === "In Progress..."){
       data.datasets[0].data[1]++;
-    }else{
+    }else if(ticket.status === "Closed"){
       data.datasets[0].data[2]++;
     }
   });
@@ -79,7 +100,7 @@ export default function PieChart(props) {
   const [modalShow, setModalShow] = useState(false);
   const { userData } = useUserData()
 
-  const processedData = dataProcess(userData.ticketsAll);
+  const processedData = dataProcess(userData.ticketsAll, userData);
 
   function onHide(){
       setModalShow(false)

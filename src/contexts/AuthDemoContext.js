@@ -75,6 +75,18 @@ export function DemoAuthProvider({ children }) {
         window.localStorage.removeItem("demoRole");
     }
 
+    function updateLocalStorageData(demoTrackMateData){
+        window.localStorage.setItem("demoTrackMateData", JSON.stringify(demoTrackMateData));
+    }
+
+    function getLocalStorageData(){
+        return JSON.parse(window.localStorage.getItem("demoTrackMateData"))
+    }
+
+    function removeLocalStorageData(){
+        window.localStorage.removeItem("demoTrackMateData");
+    }
+
     useEffect(()=>{
         //Determines if user already logged in under a demo role  
         const demoRole = JSON.parse(window.localStorage.getItem("demoRole"));
@@ -99,7 +111,10 @@ export function DemoAuthProvider({ children }) {
         guestDemoLogin,
         setMessageCount,
         demoUserData,
-        setMessages
+        setMessages,
+        updateLocalStorageData,
+        getLocalStorageData,
+        removeLocalStorageData
     }
     
     return(

@@ -23,7 +23,7 @@ export default function NewTicket(props){
     const priorityRef = useRef();
     const descriptionRef = useRef();
     const { currentUser } = useAuth();
-    const { demoUser } = useDemoAuth();
+    const { demoUser, updateLocalStorageData, getLocalStorageData, removeLocalStorageData} = useDemoAuth();
     const [error, setError] = useState("");
     const [users, setUsers] = useState([]);
     const [assignedProject, setProject] = useState({});
@@ -36,67 +36,118 @@ export default function NewTicket(props){
         setLoading(true)
         setError("");
 
-        let newTicket = {
-            name: nameRef.current.value,
-            priority: priorityRef.current.value,
-            type: typeRef.current.value,
-            description: descriptionRef.current.value,
-            admin: userData.foundUser._id,
-            // assignedDevs:[],
-            // comments:[],
-            // date: "01/12/22",
-            // private: true,
-            // project:{
-            //     id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
-            //     name: userData.projectsAll[assignedProjectRef.current.value - 1].projectName
-            // } 
-        }
-        if(assignedProjectRef.current.value > 0){
-            newTicket.project = {
-                id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
-                name: userData.projectsAll[assignedProjectRef.current.value - 1].name
+        if(userData.mode === "demo"){
+            let demoTrackMateData = getLocalStorageData();
+            let newTicket = {
+                name: nameRef.current.value,
+                priority: priorityRef.current.value,
+                type: typeRef.current.value,
+                description: descriptionRef.current.value,
+                admin: userData.id,
+                // assignedDevs:[],
+                // comments:[],
+                // date: "01/12/22",
+                // private: true,
+                // project:{
+                //     id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
+                //     name: userData.projectsAll[assignedProjectRef.current.value - 1].projectName
+                // } 
             }
-        }
-        console.log("Ticket: ", newTicket)
-        // let newTicket = {
-        //     name: nameRef.current.value,
-        //     assignedTo: assignedRef.current.value,
-        //     priorityLevel: priorityRef.current.value,
-        //     admin: currentUser.mongoId 
-        // }
-
-        if(newTicket.ticketName === ""){
-            return setError("Must Complete Form...");
-        }
-        // if(newTicket.assignedTo === "0"){
-        //     newTicket.assignedTo = ""
-        //     return setError("Must Complete Form...");
-        // }else{
-        //     newTicket.assignedTo = users[newTicket.assignedTo-1]
-        // }
-        if(newTicket.priorityLevel === "0"){
-            newTicket.priorityLevel = ""
-            return setError("Must Complete Form...");
-        }
-        try{
-            await axios.post('http://localhost:5000/tickets/add', newTicket).then(
-                async res=> {
-                    console.log("Ticket Added!: ", res.data)
-                    // let updateProject = await (await axios.get(`http://localhost:5000/projects/${newTicket.project.id}`)).data;
-                    // console.log("updateProject: ", updateProject)
-                    // updateProject.tickets = [...updateProject.tickets, res.data]
-                    
-                    // await axios.put(`http://localhost:5000/projects/update/${newTicket.project}`, updateProject).then((response)=>{
-                    //     console.log("ticket added to project")
-                    // }).catch((err)=>{
-                    //     console.log("Project Not Updated: ", err)
-                    // })
-                    history(`/ticket/${res.data}`)
-                    
+            if(assignedProjectRef.current.value > 0){
+                newTicket.project = {
+                    id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
+                    name: userData.projectsAll[assignedProjectRef.current.value - 1].name
                 }
-            )
-        }catch(err){
-            console.log("Ticket Not Added: ", err)
+            }
+            console.log("Ticket: ", newTicket)
+            // let newTicket = {
+            //     name: nameRef.current.value,
+            //     assignedTo: assignedRef.current.value,
+            //     priorityLevel: priorityRef.current.value,
+            //     admin: currentUser.mongoId 
+            // }
+    
+            if(newTicket.ticketName === ""){
+                return setError("Must Complete Form...");
+            }
+            // if(newTicket.assignedTo === "0"){
+            //     newTicket.assignedTo = ""
+            //     return setError("Must Complete Form...");
+            // }else{
+            //     newTicket.assignedTo = users[newTicket.assignedTo-1]
+            // }
+            if(newTicket.priorityLevel === "0"){
+                newTicket.priorityLevel = ""
+                return setError("Must Complete Form...");
+            }
+            demoTrackMateData.ticketsAll = [...demoTrackMateData.ticketsAll, newTicket]
+            updateLocalStorageData(demoTrackMateData);
+            console.log("Demo Track MateData: ", demoTrackMateData)
+        }else if(userData.mode === "live"){
+            let newTicket = {
+                name: nameRef.current.value,
+                priority: priorityRef.current.value,
+                type: typeRef.current.value,
+                description: descriptionRef.current.value,
+                admin: userData.foundUser._id,
+                // assignedDevs:[],
+                // comments:[],
+                // date: "01/12/22",
+                // private: true,
+                // project:{
+                //     id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
+                //     name: userData.projectsAll[assignedProjectRef.current.value - 1].projectName
+                // } 
+            }
+
+            if(assignedProjectRef.current.value > 0){
+                newTicket.project = {
+                    id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
+                    name: userData.projectsAll[assignedProjectRef.current.value - 1].name
+                }
+            }
+            console.log("Ticket: ", newTicket)
+            // let newTicket = {
+            //     name: nameRef.current.value,
+            //     assignedTo: assignedRef.current.value,
+            //     priorityLevel: priorityRef.current.value,
+            //     admin: currentUser.mongoId 
+            // }
+
+            if(newTicket.ticketName === ""){
+                return setError("Must Complete Form...");
+            }
+            // if(newTicket.assignedTo === "0"){
+            //     newTicket.assignedTo = ""
+            //     return setError("Must Complete Form...");
+            // }else{
+            //     newTicket.assignedTo = users[newTicket.assignedTo-1]
+            // }
+            if(newTicket.priorityLevel === "0"){
+                newTicket.priorityLevel = ""
+                return setError("Must Complete Form...");
+            }
+        
+            try{
+                await axios.post('http://localhost:5000/tickets/add', newTicket).then(
+                    async res=> {
+                        console.log("Ticket Added!: ", res.data)
+                        // let updateProject = await (await axios.get(`http://localhost:5000/projects/${newTicket.project.id}`)).data;
+                        // console.log("updateProject: ", updateProject)
+                        // updateProject.tickets = [...updateProject.tickets, res.data]
+                        
+                        // await axios.put(`http://localhost:5000/projects/update/${newTicket.project}`, updateProject).then((response)=>{
+                        //     console.log("ticket added to project")
+                        // }).catch((err)=>{
+                        //     console.log("Project Not Updated: ", err)
+                        // })
+                        history(`/ticket/${res.data}`)
+                        
+                    }
+                )
+            }catch(err){
+                console.log("Ticket Not Added: ", err)
+            }
         }
         if(props.onHide){
             props.onHide()

@@ -19,40 +19,59 @@ export default function NewProject(props){
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const { userData, setUserData } = useUserData();
+    const {updateLocalStorageData, getLocalStorageData, removeLocalStorageData} = useDemoAuth();
     const nameRef = useRef();
     const assignedRef = useRef();
     const priorityRef = useRef();
     const descriptionRef = useRef();
 
+    function demoSubmit(newProject){
+        let demoUserData = getLocalStorageData();
+        demoUserData.projectsAll = [...demoUserData.projectsAll, newProject];
+        console.log("DemoUeserData: ", demoUserData);
+        //updateLocalStorageData(demoUserData);
+    }
+    
     const handleSubmit = async (e)=>{
         e.preventDefault();
         setLoading(true)
         setError("");
 
-        let newProject = {
-            name: nameRef.current.value,
-            description: descriptionRef.current.value,
-            priority: priorityRef.current.value,
-            status: "Open",
-            private: true,
-            admin: userData.foundUser._id
-        }
+        if(userData.mode === "live"){
+            let newProject = {
+                name: nameRef.current.value,
+                description: descriptionRef.current.value,
+                priority: priorityRef.current.value,
+                status: "Open",
+                private: true,
+                admin: userData.foundUser._id
+            }
 
-        await axios.post("http://localhost:5000/projects/add", newProject).then(async(response)=>{
-            
-            let updateUser = userData.foundUser;
-            updateUser.projects = [...userData.foundUser.projects, response.data._id]
+            await axios.post("http://localhost:5000/projects/add", newProject).then(async(response)=>{
+                
+                let updateUser = userData.foundUser;
+                updateUser.projects = [...userData.foundUser.projects, response.data._id]
 
-            await axios.post(`http://localhost:5000/users/update/${userData.foundUser._id}`, updateUser).then((response)=>{
-                console.log("Update Respons: ", response.data)
+                await axios.post(`http://localhost:5000/users/update/${userData.foundUser._id}`, updateUser).then((response)=>{
+                    console.log("Update Respons: ", response.data)
+                }).catch((error)=>{
+                    console.log("NewProject>handleSubmit(update user)>error: ", error)
+                })
+                console.log("response: ", response.data)
             }).catch((error)=>{
-                console.log("NewProject>handleSubmit(update user)>error: ", error)
+                console.log("NewProject>handleSubmit(add new project)>error: ", error)
             })
-            console.log("response: ", response.data)
-        }).catch((error)=>{
-            console.log("NewProject>handleSubmit(add new project)>error: ", error)
-        })
-
+        }else{
+            let newProject = {
+                name: nameRef.current.value,
+                description: descriptionRef.current.value,
+                priority: priorityRef.current.value,
+                status: "Open",
+                private: true,
+                admin: userData.id
+            }
+            demoSubmit(newProject);
+        }
         if(props.onHide){
             props.onHide()
         }
