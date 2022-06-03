@@ -8,6 +8,7 @@ import demoUsers from "./demoUsers"
 import { useDemoAuth } from '../contexts/AuthDemoContext';
 import { useAuth } from '../contexts/AuthFirebaseContext';
 import { useUserData } from '../contexts/UserDataContext';
+import { useNavigate as useHistory } from 'react-router-dom';
 import axios from 'axios'
 /*
     fix Users and Data Analytics
@@ -26,6 +27,7 @@ export default function LoadDemoData({children}){
     const { currentUser } = useAuth();
     const { userData, setUserData } = useUserData();
     const [loading, setLoading] = useState(true)
+    const history = useHistory();
 
     let localStorageData = getLocalStorageData() || {
         name: demoUser.userName,
@@ -294,6 +296,7 @@ export default function LoadDemoData({children}){
         }else{
             console.log("User Account Type: No User Detected")
             data = {}
+            history("/login")
         }
         setUserData(data);
 

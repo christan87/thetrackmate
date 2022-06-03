@@ -22,6 +22,8 @@ import User from '../pages/user/User';
 import AltUser from '../pages/user/AltUser';
 import Users from '../pages/user/Users';
 import LoadDemoData from "../services/LoadDemoData";
+import './App.css';
+
 function App() {
   return (
     <div>

@@ -13,6 +13,7 @@ import { useUserData } from "../../contexts/UserDataContext";
 import User from './User';
 import Projects from './Projects';
 import Tickets from './Tickets';
+import './Dashboard.css'
 
 export default function Dashboard(){
     const { currentUser } = useAuth();
@@ -42,8 +43,8 @@ export default function Dashboard(){
     },[])
 
     return(
-        <>
-            <Container>
+        < >
+            <Container className="dash-body">
                 <div
                     className="d-flex justify-content-center"
                     style={{ minHeight: "75vh" }}

@@ -29,6 +29,7 @@ import NewProject from '../pages/project/NewProject'
 // import { useDemoAuth } from '../contexts/AuthDemoContext';
 import { useUserData } from '../contexts/UserDataContext'
 // import demoMessages from '../services/demoMessages';
+import "./DrawerWrap.css"
 
 const drawerWidth = 240;
 

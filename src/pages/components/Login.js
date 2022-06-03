@@ -4,11 +4,17 @@ import {
     Form,
     Button, 
     Alert,
-    Container
+    Container,
+    Row,
+    Col
 } from 'react-bootstrap'
 import { Link, useNavigate as useHistory, Navigate as Redirect } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
+import '../../styles/components/Login.css'
+import logo from '../../assets/LogoDesignColor.png';
+import googleLogo from '../../assets/googleLogo.png'
+import fbLogo from '../../assets/fbLogo.png'
 // import Navbar from "../../components/Navbar"
 
 export default function Login(){
@@ -74,15 +80,29 @@ export default function Login(){
     }
 
     return(
-        <>
-            <Container>
+        <div className="login-body">
+            <Container className="d-flex flex-row justify-content-end">
                 {/* <Navbar /> */}
+                <Row>
+                <Col lg={3} md={6} sm={12}>
+                <img className="login-blurb-logo" src={logo} alt="Track Mate Logo" />
+                </Col>
+
+                <Col lg={5} md={6} sm={12}>
+                <div className="d-flex flex-column login-blurb">
+                    <h1 className="font-weight-bolder login-blurb-title">Track Mate</h1>
+                    <h3 className="login-blurb-text">The solution to effective</h3>
+                    <h3 className="login-blurb-text">team problem solving</h3>
+                </div>
+                </Col>
+
+                <Col lg={4} md={6} sm={12}>
                 <div
-                    className="d-flex align-items-center justify-content-center"
+                    className="d-flex align-items-center login-form"
                     style={{ minHeight: "100vh" }}
                 >
                     <div className="w-100" style={{ maxWidth: "400px" }}>
-                        <Card>
+                        <Card className="login-form-input">
                             <Card.Body>
                                 <h2 className="text-center mb-4">Log In</h2>
                                 {error && <Alert variant="danger">{error}</Alert>}
@@ -90,15 +110,29 @@ export default function Login(){
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group id="email">
                                         <Form.Label>Email</Form.Label>
-                                        <Form.Control type="email" ref={emailRef} required />
+                                        <Form.Control className="login-form-input" type="email" ref={emailRef} required />
                                     </Form.Group>
                                     <Form.Group id="password">
                                         <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" ref={passwordRef} required />
+                                        <Form.Control className="login-form-input" type="password" ref={passwordRef} required />
                                     </Form.Group>
-                                    <Button disabled={loading} type="submit" className="w-100 mt-3">Log In</Button>
-                                    <Button onClick={handleGoogleLogin} className="w-100">Google Log In</Button>
-                                    <Button onClick={handleFacebookLogin} className="w-100">Facebook Log In</Button>
+
+                                    <div className="d-flex flex-row login-form-btn">
+                                        <div/>
+                                        <Button disabled={loading} type="submit">Log In</Button>
+                                    </div>
+                                    
+                                    <div className="d-flex flex-row login-form-btn">
+                                    <img  src={googleLogo} alt="Google Logo" />
+                                        <Button onClick={handleGoogleLogin}>Google Log In</Button>
+                                    </div>
+                                    
+                                    <div className="d-flex flex-row login-form-btn">
+                                    <img  src={fbLogo} alt="Facebook Logo" />
+                                        <Button onClick={handleFacebookLogin}>Facebook Log In</Button>
+                                    </div>
+                                    
+                                    
                                 </Form>
                                 <div className="w-100 text-center mt-3">
                                     <Link to="/forgot-password">Forgot Password?</Link>
@@ -111,7 +145,9 @@ export default function Login(){
                         </div>
                     </div>
                 </div>
+                </Col>
+                </Row>
             </Container>
-        </>
+        </div>
     )
 }
