@@ -24,6 +24,8 @@ import Users from '../pages/user/Users';
 import LoadDemoData from "../services/LoadDemoData";
 import './App.css';
 
+import DrawerWrap2 from "./DrawerWrap2";
+
 function App() {
   return (
     <div>
@@ -36,11 +38,11 @@ function App() {
                 <Route exact path="/" element={ 
                     <AuthLoader>
                       <LoadDemoData>
-                        <DrawerWrap>
+                        <DrawerWrap2>
                           <PrivateRoute>  
                             <Dashboard />                      
                           </PrivateRoute>
-                        </DrawerWrap>
+                        </DrawerWrap2>
                       </LoadDemoData>
                     </AuthLoader>
                   } 

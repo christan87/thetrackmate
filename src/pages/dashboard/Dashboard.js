@@ -11,8 +11,8 @@ import { useDemoAuth } from "../../contexts/AuthDemoContext";
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useUserData } from "../../contexts/UserDataContext";
 import User from './User';
-import Projects from './Projects';
-import Tickets from './Tickets';
+import Projects from './Projects2';
+import Tickets from './Tickets2';
 import './Dashboard.css'
 
 export default function Dashboard(){
@@ -42,6 +42,12 @@ export default function Dashboard(){
         }
     },[])
 
+    const contentStyles ={
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+    }
+
     return(
         < >
             <Container className="dash-body">
@@ -50,13 +56,13 @@ export default function Dashboard(){
                     style={{ minHeight: "75vh" }}
                 >
                     {/* <div className="w-100" style={{ maxWidth: "600px" }}> */}
-                    <div className="w-100">
+                    <div className="w-100" style={contentStyles}>
                         {/* <User imgURL={imgURL} /> */}
                         <Projects />
                         <Tickets />
-                        <div className="w-100 text-center mt-2">
+                        {/* <div className="w-100 text-center mt-2">
                             <Link to="">Place Holder 3</Link>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </Container>
