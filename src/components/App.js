@@ -19,6 +19,7 @@ import UpdateProject from '../pages/project/UpdateProject'
 import Mail from '../pages/mail/Mail'
 import Message from '../pages/mail/Message'
 import User from '../pages/user/User';
+import User2 from '../pages/user/User2';
 import AltUser from '../pages/user/AltUser';
 import Users from '../pages/user/Users';
 import LoadDemoData from "../services/LoadDemoData";
@@ -168,11 +169,11 @@ function App() {
                 <Route exact path="/user" element={ 
                     <AuthLoader>
                       <LoadDemoData>
-                        <DrawerWrap>
+                        <DrawerWrap2>
                           <PrivateRoute>  
-                            <User />                      
+                            <User2 />                      
                           </PrivateRoute>
-                        </DrawerWrap>
+                        </DrawerWrap2>
                       </LoadDemoData>
                     </AuthLoader>
                   } 

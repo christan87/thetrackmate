@@ -200,6 +200,8 @@ function Pagination (props){
     let displaying = displaySearch.slice(sliceFirst, sliceLast)
     const [displayingSearch, setDisplayingSearch] = useState(displaySearch)
     let displaying2 = displayingSearch.slice(sliceFirst, sliceLast)
+    const [paginationWidth, setpPginationWidth] = useState("100%")
+    const [paginationLeft, setpPginationLeft] = useState("0")
 
     //sets initial display size
     useEffect(()=>{
@@ -231,6 +233,8 @@ function Pagination (props){
         let last = currProjects.last;
         if(size >= 1260 && windowSize !== "xl"){
             setWindowSize("xl")
+            setpPginationWidth("100%")
+            setpPginationLeft("0")
             if(currProjects.first < 0 && currProjects.last < 2){
                 setCurrProjects({first: -1, last: 2})
             }else{
@@ -244,6 +248,8 @@ function Pagination (props){
             }
         }else if(size < 1260 && size >= 1025 && windowSize !== "lg"){
             setWindowSize("lg")
+            setpPginationWidth("80%")
+            setpPginationLeft("6.7rem")
             if(currProjects.first < 0){
                 setCurrProjects({first: -1, last: 1})
                 setPaginationStep(3)
@@ -253,6 +259,8 @@ function Pagination (props){
             }
         }else if(size < 1025 && size >= 769 && windowSize !== "md"){
             setWindowSize("md")
+            setpPginationWidth("60%")
+            setpPginationLeft("13.4rem")
             if(currProjects.first < 0){
                 setCurrProjects({first: -1, last: 0})
                 setPaginationStep(2)
@@ -262,6 +270,8 @@ function Pagination (props){
             }
         }else if(size < 769 && size >= 481 && windowSize !== "sm"){
             setWindowSize("sm")
+            setpPginationWidth("40%")
+            setpPginationLeft("20.1rem")
             if(currProjects.first < 0){
                 setCurrProjects({first: -1, last: -1})
                 setPaginationStep(1)
@@ -278,7 +288,7 @@ function Pagination (props){
 
     const paginationStyle={
         display: "flex",
-        width: "100%",
+        width: paginationWidth, //"100%",
         height: '12.5rem', //200px
         // alignItems: "center",
         // justifyContent: "space-between",
@@ -371,7 +381,8 @@ function Pagination (props){
 
     const parentStyle = {
         position: "relative",
-        top: "-3.313rem"
+        top: "-3.313rem",
+        left: paginationLeft
     }
 
     return(
@@ -450,6 +461,8 @@ export default function Projects(){
         width: "100%",
         top: "5.313rem", // 85px
         display: "flex",
+        padding: "0",
+        justifyContent: "space-around"
     }
 
     return(
