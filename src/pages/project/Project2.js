@@ -14,6 +14,7 @@ import demoProjectComments from '../../services/demoProjectComments';
 import Tickets from '../dashboard/Tickets2'
 import { Link, useNavigate as useHistory, useParams } from 'react-router-dom';
 import { useUserData } from "../../contexts/UserDataContext";
+import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 
 export default function Project(){
 
@@ -43,12 +44,35 @@ export default function Project(){
         return project.comments.includes(comment.id)
     })
 
+
+    const bannerStyle = {
+        backgroundColor: "#336CFB", 
+        display: "flex",
+        height: "10.688rem", // 171px
+        width: "100%",
+        justifyContent: "space-between",
+        padding: "0",
+        // alignItems: "center",
+        // position: "absolute",
+        title: {
+            color: "#FFFFFF",
+            fontWeight: "400"
+        },
+        img: {
+            height: "10.688rem", // 171px
+            width: "10.688rem", // 171px
+        }
+    }
+
     return(
         <div className="container">
-            <div style={{backgroundColor: "blue"}} > 
-                <h4 className="mb-0 ms-5" >Project</h4>
+        <div className="container" style={bannerStyle} > 
+            <h2 className="mb-0 ms-2 mt-2" style={bannerStyle.title}>Project</h2>
+            <div style={{display:"flex", alignItems:"center"}}>
+                <img alt="banner illustration" src={bannerImg} style={bannerStyle.img} />
             </div>
-            <Container className="">
+        </div>
+            <div className="">
                 <Card className="mt-0 w-100">
                     <Card.Body>
                         <Row>
@@ -77,7 +101,7 @@ export default function Project(){
                     </Card.Body>
                 </Card>
                 <Button className="my-3" onClick={handleClick}>Update Project</Button>
-            </Container>
+            </div>
             <Tickets tickets={projectTickets} moreDetails={true} />
         </div>
     )
