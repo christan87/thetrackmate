@@ -1,0 +1,62 @@
+.login-body {
+    background: var(--color-bg-neutral);
+    font-family: var(--font-family);
+}
+
+.login-form {
+    /* margin-right: 4rem; */
+}
+
+.login-form-card {
+    box-shadow: 4px 0px 16px rgba(0, 0, 0, 0.08);
+}
+
+.login-form-input {
+    box-shadow: 4px 0px 16px rgba(0, 0, 0, 0.08);
+}
+
+.login-form-btn{
+    margin-top: .5rem;
+}
+
+.login-form-btn img{
+    width: 38px;
+    height: 38px;
+    margin-right: .5rem;
+}
+
+.login-form-btn div{
+    width: 38px;
+    height: 38px;
+    margin-right: .5rem;
+}
+
+.login-form-btn button{
+    width: 183px;
+    height: 38px;
+
+}
+
+.login-blurb{
+    width: fit-content;
+    margin: 0;
+    margin-top: 7rem;
+    margin-right: 4rem;
+}
+
+.login-blurb-title{
+    width: fit-content;
+    margin-bottom: 2rem;
+    color: var(--color-primary-default);
+}
+
+.login-blurb-text{
+    width: fit-content;
+}
+
+.login-blurb-logo{
+    width: 200px;
+    height: 200px;
+    margin-top: 7rem;
+    margin-right: 2rem;
+}

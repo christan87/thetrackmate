@@ -1,0 +1,85 @@
+.search-box-ind {
+    /* 
+    Allows element to expand from right to left if
+    element not alredy floated to left or right
+    transform: translate(); 
+    */
+    margin-left: 16rem;
+    /* margin-right: 1rem; */
+    background: #2f3640;
+    display: flex;
+    height: 40px;
+    width: 40px;
+    border-radius: 40px;
+    padding: 10px;
+    transition: 0.4s;
+    z-index: 1;
+  }
+
+  .search-box-ind:hover{
+    width: 240px;
+    display: flex;
+    transition: 0.4s;
+  }
+
+  .search-box-ind:hover > .search-text-ind{
+    width: 190px;
+    padding: 0 6px;
+  }
+
+  /* keeps the search box expanded while one of its child elements is in focus */
+  .search-box-ind:focus-within{
+    width: 240px;
+    display: flex;
+    transition: 0.4s;
+  }
+
+  /* Keeps the text input field expanded while in focus */
+  .search-text-ind:focus{
+    width: 190px;
+    padding: 0 6px;
+  }
+
+  /* Maintains the color transition for he button when input field in focus */
+  .search-text-ind:focus + .search-btn-ind{
+    background: white;
+    color: black;
+  }
+  
+  .search-box-ind:hover > .search-btn-ind{
+    background: white;
+    color: black;
+    transition: 0.4s;
+  }
+  
+  .search-btn-ind {
+    color: #e84118;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2f3640;
+    transition: 0.4s;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .search-btn-ind > i {
+    font-size: 30px;
+  }
+  
+  .search-text-ind {
+    border: none;
+    background: none;
+    outline: none;
+    float: left;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+    font-weight: normal;
+    transition: 0.4s;
+    line-height: 40px;
+    width: 0px;
+    
+  /*   width: 250px; */
+    
+  }

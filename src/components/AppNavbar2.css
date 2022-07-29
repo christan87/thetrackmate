@@ -1,0 +1,18 @@
+.appNavbar{
+    background-color: var(--color-neutral-white);
+
+    /* vertical shadow */
+    box-shadow: 4px 0px 16px rgba(0, 0, 0, 0.08);
+}
+
+.appNavbar-nav{
+
+}
+
+.appNavbar-notification{
+    
+}
+
+.appNavbar-btn{
+    padding: 6px;
+}
