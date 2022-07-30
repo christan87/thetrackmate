@@ -20,7 +20,7 @@ import Mail from '../pages/mail/Mail'
 import Message from '../pages/mail/Message'
 import User from '../pages/user/User';
 import User2 from '../pages/user/User2';
-import AltUser from '../pages/user/AltUser';
+import AltUser from '../pages/user/AltUser2';
 import Users from '../pages/user/Users';
 import Users2 from '../pages/user/Users2';
 import LoadDemoData from "../services/LoadDemoData";
@@ -183,11 +183,11 @@ function App() {
                 <Route exact path="/user/:id" element={ 
                     <AuthLoader>
                       <LoadDemoData>
-                        <DrawerWrap>
+                        <DrawerWrap2>
                           <PrivateRoute>  
                             <AltUser />                      
                           </PrivateRoute>
-                        </DrawerWrap>
+                        </DrawerWrap2>
                       </LoadDemoData>
                     </AuthLoader>
                   } 
