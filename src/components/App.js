@@ -17,7 +17,7 @@ import UpdateTicket from '../pages/ticket/UpdateTicket'
 import NewProject from '../pages/project/NewProject'
 import UpdateProject from '../pages/project/UpdateProject'
 import Mail from '../pages/mail/Mail'
-import Message from '../pages/mail/Message'
+import Message from '../pages/mail/Message2'
 import User from '../pages/user/User';
 import User2 from '../pages/user/User2';
 import AltUser from '../pages/user/AltUser2';
@@ -157,11 +157,11 @@ function App() {
                 <Route exact path="/mail/message/:id" element={ 
                     <AuthLoader>
                       <LoadDemoData>
-                        <DrawerWrap>
+                        <DrawerWrap2>
                           <PrivateRoute>  
                             <Message />                      
                           </PrivateRoute>
-                        </DrawerWrap>
+                        </DrawerWrap2>
                       </LoadDemoData>
                     </AuthLoader>
                   } 
