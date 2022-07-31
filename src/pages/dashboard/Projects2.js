@@ -11,6 +11,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { useUserData } from '../../contexts/UserDataContext';
 import SearchBarExpand from '../components/SearchBarExpand2';
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
@@ -70,6 +73,40 @@ const projectList = [
         img: projectCoverImage001
     },
 ]
+
+function generateRand(max){
+    return Math.floor(Math.random() * (max - 1) + 1);
+}
+
+function generateProjectObject(arr){
+    const returnArr = [];
+    arr.forEach((project)=>{
+        let rand = generateRand(4)
+        let projectIMG = projectCoverImage001;
+        switch(rand) {
+            case 1:
+              projectIMG = projectCoverImage001;
+              break;
+            case 2:
+              projectIMG = projectCoverImage002;
+              break;
+            case 3:
+              projectIMG = projectCoverImage003;
+            break;
+            default:
+              projectIMG = projectCoverImage001;
+        }
+        const pushProject = {
+            name: project.name,
+            color: "#",
+            img: projectIMG,
+            description: project.description,
+            id: project._id
+        }
+        returnArr.push(pushProject)
+    })
+    return returnArr;
+}
 
 function AddProjectCard(){
 
@@ -151,6 +188,15 @@ function ProjectCard(props){
         }
     }
 
+    let projectTextStyle = {
+        display: 'block',
+        maxWidth: '180px',
+        whiteSpace: 'nowrap',
+        textDecoration: 'none', 
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+    }
+
     let tempStyle = {}
 
     /*
@@ -167,6 +213,15 @@ function ProjectCard(props){
     }else{
         tempStyle = propStyles.end;
     }
+    const HtmlTooltip = withStyles((theme) => ({
+        tooltip: {
+          backgroundColor: '#f5f5f9',
+          color: 'rgba(0, 0, 0, 0.87)',
+          maxWidth: 350,
+          fontSize: theme.typography.pxToRem(12),
+          border: '1px solid #dadde9',
+        },
+      }))(Tooltip);
 
     return(
         //<div style={{width: "fit-content", marginRight: "1.5rem", marginLeft: "1.5rem"}}>
@@ -176,7 +231,21 @@ function ProjectCard(props){
                 <Card.Img style={cardStyle.img} variant="top" src={props.project.img} alt="Project Cover Image" />
             </div>
             <Card.Body>
-                <Card.Title>{props.project.name}</Card.Title>
+                {props.project.id? 
+                    <Card.Title> 
+                        <HtmlTooltip style={{maxWidth:'180px'}} title={
+                            <React.Fragment>
+                            <Typography color="inherit">{props.project.name}</Typography>
+                            <b>Description: </b>{`${props.project.description}`}
+                            </React.Fragment>
+                        }>
+                            <Link style={projectTextStyle} to={`/project/${props.project.id}`}>{`${props.project.name}`}</Link>
+                        </HtmlTooltip>
+                    </Card.Title>
+                    :
+                    <Card.Title style={projectTextStyle} >{props.project.name}</Card.Title>
+                }
+                
                 {/* <Card.Text>
                 Description: Some quick example text to build on the card title and make up the bulk of
                 the card's content.
@@ -191,10 +260,11 @@ function Pagination (props){
     const [windowSize, setWindowSize] = useState("xl")
     const [currProjects, setCurrProjects] = useState({first: -1, last: 2})
     const [previousDisabled, setPreviousDisabled] = useState(true)
-    const [nextDisabled, setNextDisabled] = useState(false)
+    const [nextDisabled, setNextDisabled] = useState(props.projectsAll.length < 4)
     const [paginationStep, setPaginationStep] = useState(4)
     const [searchTerm, setSearchTerm] = useState("");
-    const [displaySearch, setDisplaySearch] = useState(props.projects);
+    //const [displaySearch, setDisplaySearch] = useState(props.projects);
+    const [displaySearch, setDisplaySearch] = useState(generateProjectObject(props.projectsAll)); // uses actual projects
     const sliceFirst = currProjects.first < 0? 0 : currProjects.first;
     const sliceLast = currProjects.last + 1;
     let displaying = displaySearch.slice(sliceFirst, sliceLast)
@@ -203,6 +273,12 @@ function Pagination (props){
     const [paginationWidth, setpPginationWidth] = useState("100%")
     const [searchWidth, setpSearchWidth] = useState("100%")
     const [paginationLeft, setpPginationLeft] = useState("0")
+
+    if(props.projectsAll.length < 4){
+        console.log("====== ", props.projectsAll.length)
+    }
+
+
 
     //sets initial display size
     useEffect(()=>{
@@ -482,7 +558,7 @@ export default function Projects(){
                     <img alt="banner illustration" src={bannerImg} style={bannerStyle.img} />
                 </div>
                 <Container style={projectStyle}>
-                    <Pagination projects={projectList} />
+                    <Pagination projects={projectList} projectsAll={userData.projectsAll}/>
                 </Container>
             </div>
 
