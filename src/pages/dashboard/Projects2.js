@@ -15,6 +15,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { useUserData } from '../../contexts/UserDataContext';
+import EnlargeModal from '../../pages/analytics/EnlargeModal';
+import NewProject from '../../pages/project/NewProject'
 import SearchBarExpand from '../components/SearchBarExpand2';
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import projectCoverImage001 from '../../assets/project-cover-img-001.png';
@@ -109,6 +111,15 @@ function generateProjectObject(arr){
 }
 
 function AddProjectCard(){
+    const [modalShow, setModalShow] = useState(false);
+
+    function onHide(){
+        setModalShow(false)
+      }
+      
+      function onShow(event){
+          setModalShow(true)
+      }
 
     const addProjectCardStyle = {
         backgroundColor: "#FFFFFF",
@@ -143,14 +154,29 @@ function AddProjectCard(){
             <Card style={addProjectCardStyle}>
                 <Card.Body style={addProjectCardStyle.body} >
                     <Card.Text style={addProjectCardStyle.text} >
-                        <AddIcon style={{fontStyle: "large"}} />
+                        <IconButton onClick={onShow}>
+                            <AddIcon style={{fontStyle: "large"}} />
+                        </IconButton>
                         Add Project
                     </Card.Text>
                 </Card.Body>
             </Card>
+            <EnlargeModal show={modalShow} onHide={onHide} >
+                <NewProject onHide={onHide} />
+            </EnlargeModal>
         </div>
     )
 }
+
+const HtmlTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: '#f5f5f9',
+      color: 'rgba(0, 0, 0, 0.87)',
+      maxWidth: 350,
+      fontSize: theme.typography.pxToRem(12),
+      border: '1px solid #dadde9',
+    },
+}))(Tooltip);
 
 function ProjectCard(props){
 
@@ -213,15 +239,6 @@ function ProjectCard(props){
     }else{
         tempStyle = propStyles.end;
     }
-    const HtmlTooltip = withStyles((theme) => ({
-        tooltip: {
-          backgroundColor: '#f5f5f9',
-          color: 'rgba(0, 0, 0, 0.87)',
-          maxWidth: 350,
-          fontSize: theme.typography.pxToRem(12),
-          border: '1px solid #dadde9',
-        },
-      }))(Tooltip);
 
     return(
         //<div style={{width: "fit-content", marginRight: "1.5rem", marginLeft: "1.5rem"}}>

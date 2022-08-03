@@ -10,7 +10,7 @@ import Login from '../pages/components/Login';
 import DemoLogin from '../pages/components/DemoLogin';
 import Dashboard from '../pages/dashboard/Dashboard'
 import Project from '../pages/project/Project2';
-import Ticket from '../pages/ticket/TIcket';
+import Ticket from '../pages/ticket/Ticket2';
 import Analytics from '../pages/analytics/Analytics2'
 import NewTicket from '../pages/ticket/NewTicket'
 import UpdateTicket from '../pages/ticket/UpdateTicket'
@@ -118,11 +118,11 @@ function App() {
                 <Route exact path="/ticket/:id" element={ 
                     <AuthLoader>
                       <LoadDemoData>
-                        <DrawerWrap>
+                        <DrawerWrap2>
                           <PrivateRoute>  
                             <Ticket />                      
                           </PrivateRoute>
-                        </DrawerWrap>
+                        </DrawerWrap2>
                       </LoadDemoData>
                     </AuthLoader>
                   } 
