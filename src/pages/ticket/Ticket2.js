@@ -87,7 +87,7 @@ export default function Ticket(){
         justifyContent: "space-between",
         marginBottom: "1.5rem"
       }
-
+      
     return(
         <div className="container">
             <div style={bannerStyle} > 

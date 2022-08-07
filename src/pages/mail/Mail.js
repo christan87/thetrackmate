@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -29,6 +29,8 @@ import {useDemoAuth} from "../../contexts/AuthDemoContext";
 // import demoMessages from '../../services/demoMessages';
 import { useUserData } from "../../contexts/UserDataContext";
 import { Link } from 'react-router-dom';
+
+import axios from 'axios'
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -192,7 +194,7 @@ const EnhancedTableToolbar = (props) => {
       <Button className="text-nowrap" onClick={onShow}>New Message</Button>
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton aria-label="delete">
+          <IconButton aria-label="delete" onClick={props.handleDelete}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -240,23 +242,95 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Mail() {
   const classes = useStyles();
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('date');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('date');
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rows, setRows]= useState([]);
 
   const {demoUser} = useDemoAuth();
   const { userData } = useUserData();
   // const messages = demoMessages.filter((message)=>message.recipientId === demoUser._id);
-  const messages = userData.messages || [];
-  const rows = []
-  messages.forEach((message)=>{
+  let messages = userData.messages || [];
+  const tempRows = []
+
+  useEffect(()=>{
+    messages.forEach((message)=>{
       let date = new Date(message.createdAt).toLocaleDateString()
       const data = createData2(message.author.name, message.subject, date, message._id)
-      rows.push(data)
+      tempRows.push(data)
+      setRows(tempRows)
   })
+  },[])
+
+  const refreshRows = (newMessages)=>{
+    //let refresh = []
+    try{
+      // console.log("Entered")
+      // newMessages.forEach((message)=>{
+      //   let date = new Date(message.createdAt).toLocaleDateString()
+      //   const data = createData2(message.author.name, message.subject, date, message._id)
+      //   refresh.push(data)
+      // })
+      setRows(newMessages)
+      setSelected([]);
+    }catch(err){
+      console.log("refreshRows>Err: ", err)
+    }
+
+  }
+
+
+  const deleteUserMessage = async(userId, messageId) =>{
+    try{
+        await axios.post(`http://localhost:80/messages/delete/${userId}/${messageId}`, {}).then((response)=>{
+            if(response.data !== null && response.data !== undefined){
+              console.log("Delete Response: ", response)
+            }
+        }).catch((error)=>{
+            console.log("Mail>handleDelete: ", error)
+        })
+    }catch(e){
+        console.log("Mail>handleDelete: ", e)
+    }
+  }
+
+  const deleteUserMessages = async(userId, messages) =>{
+    try{
+        await axios.post(`http://localhost:80/messages/multidelete/${userId}`, {messages: messages}).then((response)=>{
+            if(response.data !== null && response.data !== undefined){
+              console.log("Delete Response: ", response)
+            }
+        }).catch((error)=>{
+            console.log("Mail>handleDelete: ", error)
+        })
+    }catch(e){
+        console.log("Mail>handleDelete: ", e)
+    }
+  }
+
+  const handleDelete = async ()=>{
+    let newMessages = rows;
+    /*
+      if more than 1 message is selected the deleteUserMessages function submits to the 
+      "/messages/multidelete/:userId" endpoing and sends an array of ids insted of a single message
+      id to be deleted, then it filters the newMessages array which has been set to rows and passes
+      it to the refreshRows function to refresh the displayed messages
+    */
+    if(selected.length > 1){
+      await deleteUserMessages(userData.foundUser._id, selected)
+      let selectStr = []
+      selected.forEach(select=> selectStr.push(select.toString()))
+      newMessages = newMessages.filter(newMsg => !selectStr.includes(newMsg.id))
+      refreshRows(newMessages)
+    }else{
+      await deleteUserMessage(userData.foundUser._id, selected[0])
+      newMessages = newMessages.filter(msg=>msg.id !== selected[0]);
+      refreshRows(newMessages)
+    }
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -313,7 +387,7 @@ export default function Mail() {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} handleDelete={handleDelete}/>
         <TableContainer>
           <Table
             className={classes.table}
