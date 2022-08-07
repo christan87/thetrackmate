@@ -18,13 +18,19 @@ import NoteAddIcon from '@material-ui/icons/NoteAdd';
 import BlurOnIcon from '@material-ui/icons/BlurOn';
 import PeopleIcon from '@material-ui/icons/People'; //collab
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate as useHistory } from 'react-router-dom';
 
 import EnlargeModal from '../pages/analytics/EnlargeModal';
 import NewTicket from '../pages/ticket/NewTicket'
 import NewProject from '../pages/project/NewProject'
 
 import { useUserData } from '../contexts/UserDataContext'
+
+import { useAuth } from "../contexts/AuthFirebaseContext";
+import { useDemoAuth } from "../contexts/AuthDemoContext";
+import { 
+  Button
+} from 'react-bootstrap';
 
 import './DrawerWrap2.css'
 import logo from '../assets/LogoDesignColor.png';
@@ -60,6 +66,10 @@ export default function DrawerWrap2({children}) {
   const { userData } = useUserData();
   const count = userData.messages.length;
 
+  const { currentUser, logout, setCurrentUser, setAuthUser } = useAuth();
+  const { demoMode, demoLogout, demoUser } = useDemoAuth();
+  const history = useHistory();
+
   const preventDefault = (event) => event.preventDefault();
 
   const [modalShow, setModalShow] = useState(false);
@@ -81,6 +91,23 @@ function onHide2(){
 function onShow2(event){
     preventDefault(event)
     setModalShow2(true)
+}
+
+async function handleLogout() {
+  try{
+      if(currentUser){
+          await logout();
+          setCurrentUser(null)
+          setAuthUser(null)
+      }
+      if(demoMode){
+          demoLogout();
+      }
+      history("/login");
+  }catch(err){
+      console.log("Failed to log out: ", err);
+  }
+  
 }
 
   return (
@@ -154,7 +181,18 @@ function onShow2(event){
               {/* for some reason the onshow/onhide not being triggered. use console to toggle state */}
             </Link>
           </ListItem>
+          <Divider />
         </List>
+        <div style={{
+          height:"100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between"
+        }}>
+          <div style={{height: "20px", width:"100%"}}></div>
+        
+          {(currentUser || demoMode) && <Button onClick={handleLogout} className="mx-2 mb-5 btn btn-danger">Log Out</Button>}
+        </div>
       </Drawer>
       <main className={classes.content}>
         <AppNavbar2 
