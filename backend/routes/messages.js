@@ -32,6 +32,82 @@ router.route("/message/:id").post((req, res)=>{
     )
 });
 
+router.route("/delete/:id").post((req, res)=>{
+    Message.findById(req.params.id).then(message=>{
+        try{
+            if(message){
+                message.remove()
+            }
+        }catch(err){
+            console.log("Message Not Deleted Error: ", err)
+        }
+    }).catch(
+        err => res.status(400).json("Error: " + err)
+    )
+})
+
+router.route("/delete/:userId/:messageId").post((req, res)=>{
+    User.findById(req.params.userId).then(
+        user=>{
+            try{
+                let oldMessages = user.messages;
+                user.messages = user.messages.filter(message=> message.toString() !== req.params.messageId)
+                if(oldMessages.length == user.messages.length){console.log("refference delete error")}
+                user.save().then(
+                    ()=> res.json("Message Refference Removed From User!")
+                ).catch(
+                    err => res.status(400).json("Error: " + err)
+                )
+            }catch(err){
+                console.log("Message Refference Not Deleted on User Error: ", err)
+            }
+        }
+    ).catch()
+    Message.findById(req.params.messageId).then(message=>{
+        try{
+            if(message){
+                message.remove()
+            }
+        }catch(err){
+            console.log("Message Not Deleted Error: ", err)
+        }
+    }).catch(
+        err => res.status(400).json("Error: " + err)
+    )
+})
+
+router.route("/multidelete/:userId").post((req, res)=>{
+    User.findById(req.params.userId).then(
+        user=>{
+            try{
+                let oldMessages = user.messages;
+                user.messages = user.messages.filter(message=> !req.body.messages.includes(message.toString()))
+                if(oldMessages.length == user.messages.length){console.log("refference delete error")}
+                user.save().then(
+                    ()=> res.json("Message Refference Removed From User!")
+                ).catch(
+                    err => res.status(400).json("Error: " + err)
+                )
+            }catch(err){
+                console.log("Message Refference Not Deleted on User Error: ", err)
+            }
+        }
+    ).catch()
+    req.body.messages.forEach(messageId => {
+        Message.findById(messageId).then(message=>{
+            try{
+                if(message){
+                    message.remove()
+                }
+            }catch(err){
+                console.log("Message Not Deleted Error: ", err)
+            }
+        }).catch(
+            err => res.status(400).json("Error: " + err)
+        )
+    });
+})
+
 router.route("/reply/:id").post((req, res)=>{
     User.findById(req.params.id).then(
         user =>{
