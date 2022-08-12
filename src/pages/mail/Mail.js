@@ -20,6 +20,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import MailSearchBar from './MailSearchBar';
 
 import { Button } from 'react-bootstrap';
 
@@ -159,14 +160,15 @@ const useToolbarStyles = makeStyles((theme) => ({
           backgroundColor: theme.palette.secondary.dark,
         },
   title: {
-    flex: '1 1 100%',
+    flex: '1 1',
   },
 }));
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const { numSelected, searchMessages, resetMessages } = props;
   const [modalShow, setModalShow] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   function onShow(event){
     setModalShow(true)
@@ -174,6 +176,17 @@ const EnhancedTableToolbar = (props) => {
 
   function onHide(){
     setModalShow(false)
+  }
+
+  function handleChange(event){
+    setSearchTerm(event.target.value);
+    if(event.target.value === ""){
+      resetMessages();
+    }
+  }
+
+  function handleSearch(){
+    searchMessages(searchTerm)
   }
 
   return (
@@ -191,6 +204,7 @@ const EnhancedTableToolbar = (props) => {
           Mail
         </Typography>
       )}
+      <MailSearchBar handleChange={handleChange} handleSearch={handleSearch}/>
       <Button className="text-nowrap" onClick={onShow}>New Message</Button>
       {numSelected > 0 ? (
         <Tooltip title="Delete">
@@ -242,27 +256,31 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Mail() {
   const classes = useStyles();
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('date');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [rows, setRows]= useState([]);
+  const [allRows, setAllRows] = useState([]);
 
   const {demoUser} = useDemoAuth();
   const { userData } = useUserData();
   // const messages = demoMessages.filter((message)=>message.recipientId === demoUser._id);
   let messages = userData.messages || [];
-  const tempRows = []
+
+  let tempRows = []
 
   useEffect(()=>{
     messages.forEach((message)=>{
       let date = new Date(message.createdAt).toLocaleDateString()
       const data = createData2(message.author.name, message.subject, date, message._id)
       tempRows.push(data)
-      setRows(tempRows)
-  })
+    })
+    tempRows = tempRows.reverse()
+    setRows(tempRows)
+    setAllRows(tempRows)
   },[])
 
   const refreshRows = (newMessages)=>{
@@ -282,6 +300,15 @@ export default function Mail() {
 
   }
 
+  const searchMessages = (searchTerm)=>{
+    let newMessages = rows;
+    newMessages= newMessages.filter(message => message.sender.toLowerCase().includes(searchTerm.toLowerCase()) || message.subject.toLowerCase().includes(searchTerm.toLowerCase()))
+    refreshRows(newMessages);
+  }
+
+  const resetMessages = ()=>{
+    setRows(allRows)
+  }
 
   const deleteUserMessage = async(userId, messageId) =>{
     try{
@@ -385,9 +412,10 @@ export default function Mail() {
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
+    
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} handleDelete={handleDelete}/>
+        <EnhancedTableToolbar numSelected={selected.length} handleDelete={handleDelete} resetMessages={resetMessages} searchMessages={searchMessages}/>
         <TableContainer>
           <Table
             className={classes.table}
