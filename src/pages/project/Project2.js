@@ -15,6 +15,7 @@ import Tickets from '../dashboard/Tickets2'
 import { Link, useNavigate as useHistory, useParams } from 'react-router-dom';
 import { useUserData } from "../../contexts/UserDataContext";
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
+import UserList2 from '../../components/UserList2';
 
 export default function Project(){
 
@@ -83,7 +84,8 @@ export default function Project(){
                                 <Card.Text>priority: {project.priority}</Card.Text>
                                 <Card.Text>{project.private? <>Set to: Private</> : <>Set to: Public</>}</Card.Text>
                             </Col>
-                            <Col xs={8}>
+                            {/* <Col xs={8}> */}
+                            <Col xs={4}>
                                 {console.log("Comments: ", projectComments)}
                                 {projectComments.map((comment)=>{
                                     return(
@@ -96,6 +98,9 @@ export default function Project(){
                                         </div>
                                     )
                                 })}
+                            </Col>
+                            <Col xs={4}>
+                                <UserList2 />
                             </Col>
                         </Row>
                     </Card.Body>

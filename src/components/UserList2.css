@@ -1,0 +1,19 @@
+.user-list-root{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all .4s ease-in-out;
+
+}
+
+.user-list-root:focus-within{
+    box-shadow: 4px 0px 16px rgba(0, 0, 0, 0.08);
+    transition: all .4s ease-in-out;
+}
+
+.user-list-btn{
+    width: 85%;
+    margin-top: .25rem;
+    margin-bottom: 1rem;
+
+}
