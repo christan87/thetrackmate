@@ -15,6 +15,10 @@ const userSchema = new Schema({
         type: String,
         default: ""
     },
+    photoURL:{
+        type: String,
+        default: ""
+    },
     private:{
         type: Boolean,
         default: true

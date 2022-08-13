@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,6 +13,9 @@ import { Link } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import SearchBarExpand from '../components/SearchBarExpand2';
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
+import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 const columns = [
     {id: 'name', label: 'Name', minWidth: 280},
@@ -20,8 +23,8 @@ const columns = [
 
 ]
 
-function createData(name, email, id) {
-  return { name, email, id };
+function createData(name, email, id, photoURL) {
+  return { name, email, id, photoURL };
 }
 
 const useStyles = makeStyles({
@@ -32,6 +35,33 @@ const useStyles = makeStyles({
     maxHeight: 440,
   },
 });
+
+
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 350,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
+
+const ProfIMG = (props)=>{
+  const profStyle={
+    width: "30px",
+    height: "30px",
+    borderRadius: "50%"
+  }
+
+  const photoURL = props.photoURL || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+
+  return(
+    <div style={profStyle} >
+      <img style={profStyle} src={photoURL} alt="Profile IMG"></img>
+    </div>
+  )
+}
 
 export default function Users() {
   const classes = useStyles();
@@ -52,7 +82,7 @@ export default function Users() {
 
   console.log("UserList: ", users)
   users.forEach((user)=>{
-    rows.push(createData(user.name, user.email, user._id))
+    rows.push(createData(user.name, user.email, user._id, user.photoURL))
   })
 
   function handleChange(event){
@@ -103,7 +133,9 @@ const searchStyle = {
 }
 
   return (
+    
     <div className="container" >     
+    {console.log("Users: ", users)}
       <div className="container" style={bannerStyle} > 
           <h2 className="mb-0 ms-2 mt-2" style={bannerStyle.title}>Users</h2>
           <div style={{display:"flex", alignItems:"center"}}>
@@ -147,7 +179,18 @@ const searchStyle = {
                             return (
                             <TableCell key={column.id} align={column.align}>
                                 {column.id === "name"? 
-                                    <Link to={`/user/${row.id}`}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                                    <HtmlTooltip style={{maxWidth:'180px'}} placement="right" title={
+                                      <React.Fragment>
+                                      <div style={{display:"flex", justifyContent: "center"}}>
+                                        <ProfIMG photoURL={row.photoURL}/>
+                                        <Typography style={{marginLeft: "0.25rem"}} color="inherit">{row.name}</Typography>
+
+                                      </div>
+
+                                      </React.Fragment>
+                                    }>
+                                      <Link to={`/user/${row.id}`}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                                    </HtmlTooltip>
                                     : 
                                     <>{column.format && typeof value === 'number' ? column.format(value) : value}</>
                                 }

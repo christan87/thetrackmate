@@ -186,6 +186,33 @@ export default function LoadDemoData({children}){
         
     // }
 
+    async function updateUserPhoto(){
+        const foundUser = await findUserByUID(currentUser.uid)
+        let photoURL = currentUser.photoURL
+        if(photoURL.includes("facebook")){
+            photoURL = photoURL + `?access_token=${foundUser.accessToken}`;
+        }
+        const newUser = {
+            email: currentUser.email,
+            authId: currentUser.uid,
+            photoURL: photoURL
+        }
+        try{
+            await axios.post(`http://localhost:80/users/update/${foundUser._id}`, newUser).then(
+                (response)=>{
+                    console.log("response: ", response.data)
+                }
+            ).catch(
+                (err)=>{
+                    console.log("LoadDemoData>updateUserPhoto>error: ", err)
+                }
+            )
+
+        }catch(err){
+            console.log("LoadDemoData>updateUserPhoto>: ", err)
+        }
+    }
+
     async function setPhotoURL(){
         try{
             const foundUser = await findUserByUID(currentUser.uid)
@@ -289,6 +316,7 @@ export default function LoadDemoData({children}){
             }
             //await checkForUserBeforAddAndUpdate(currentUser.uid, currentUser.email)
             await setPhotoURL();
+            await updateUserPhoto();
             await setProjects();
             await setTickets();
             await setUsers();

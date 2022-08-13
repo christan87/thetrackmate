@@ -42,6 +42,9 @@ router.route("/update/:id").post((req, res)=>{
         (user)=>{
             user.email = req.body.email;
             user.authId = req.body.authId;
+            if(req.body.photoURL){
+                user.photoURL = req.body.photoURL;
+            }
             if(req.body.accessToken){
                 user.accessToken = req.body.accessToken
             }
