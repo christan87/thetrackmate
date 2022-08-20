@@ -291,12 +291,6 @@ function Pagination (props){
     const [searchWidth, setpSearchWidth] = useState("100%")
     const [paginationLeft, setpPginationLeft] = useState("0")
 
-    if(props.projectsAll.length < 4){
-        console.log("====== ", props.projectsAll.length)
-    }
-
-
-
     //sets initial display size
     useEffect(()=>{
         let size = window.innerWidth

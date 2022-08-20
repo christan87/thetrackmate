@@ -13,6 +13,7 @@ import { useDemoAuth } from "../../contexts/AuthDemoContext";
 import demoProjects from '../../services/demoProjects';
 import demoUsers from '../../services/demoUsers';
 import { useUserData } from "../../contexts/UserDataContext";
+import Autocomplete from "../../components/AutoComplete";
 import axios from "axios";
 
 export default function NewMessage(props){
@@ -24,12 +25,14 @@ export default function NewMessage(props){
     const { userData } = useUserData();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [autoValue, setAutoValue] = useState([]);
 
     async function handleSubmit(e){
         e.preventDefault();
         setLoading(true)
         setError("");
-
+        let tempRef =  document.getElementById("customized-hook-demo").value
+        console.log("tempRef: ", tempRef)
         if(userData.mode === "live"){
 
             let newMessage = {
@@ -94,6 +97,11 @@ export default function NewMessage(props){
         //history("/")    
     }
 
+    const handleAutoCompleteValue = (value)=>{
+        setAutoValue(value)
+        console.log("autoVlue: ", autoValue)
+    }
+
     return(
         <>
             <Container>
@@ -107,9 +115,10 @@ export default function NewMessage(props){
                                 <h2 className="text-center mb-4">New Message</h2>
                                 {error && <Alert variant="danger">{error}</Alert>}
                                 <Form onSubmit={handleSubmit}>
-                                    <FloatingLabel controlId="floatingNameField" label="Subject" className="mb-3">
+                                     <FloatingLabel controlId="floatingNameField" label="Subject" className="mb-3">
                                         <Form.Control type="text" placeholder="Leave Subjecte Here" ref={subjectRef} />
-                                    </FloatingLabel>     
+                                    </FloatingLabel>  
+                                    <Autocomplete autoCompleteOptions={userData.usersAll} handleAutoCompleteValue={handleAutoCompleteValue} />  
                                     <FloatingLabel controlId="floatingNameField" label="to" className="mb-3">
                                         <Form.Control type="text" placeholder="enter username" ref={userRef} />
                                     </FloatingLabel>                
