@@ -9,13 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Avatar from '@material-ui/core/Avatar';
 import { useUserData } from "../contexts/UserDataContext";
 import './UserList2.css'
-import { 
-    Card, 
-    Container,
-    Row,
-    Col,
-    Button 
-} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,11 +21,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UserList2() {
+export default function UserList2(props) {
   const classes = useStyles();
   const [checked, setChecked] = useState([1]);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [disabledUsers, setDisabledUsers] = useState([]);
   const { userData } = useUserData();
+  const {currCollaborators, handleAddUsers} = props;
 
   let users = [];
 
@@ -60,13 +56,19 @@ export default function UserList2() {
     setChecked(newChecked);
   };
 
+  function handleAdd(){
+    handleAddUsers(selectedUsers)
+    setDisabledUsers(selectedUsers)
+  }
+
   return (
     <div className='user-list-root'>
         <List dense className={classes.root}>
         {users.map((value) => {
             const labelId = `checkbox-list-secondary-label-${value.name}`;
+            const disable = currCollaborators.includes(value._id) || disabledUsers.includes(value._id)
             return (
-            <ListItem key={value.email} button>
+            <ListItem key={value.email} button disabled={disable}>
                 <ListItemAvatar>
                 <Avatar
                     alt={`Avatar n°${value + 1}`}
@@ -80,57 +82,15 @@ export default function UserList2() {
                     onChange={handleToggle(value)}
                     checked={checked.indexOf(value) !== -1}
                     inputProps={{ 'aria-labelledby': labelId }}
+                    disabled={disable}
                 />
                 </ListItemSecondaryAction>
             </ListItem>
             );
         })}
-        {/* {users.map((value) => {
-            const labelId = `checkbox-list-secondary-label-${value.name}`;
-            return (
-            <ListItem key={value.email} button>
-                <ListItemAvatar>
-                <Avatar
-                    alt={`Avatar n°${value + 1}`}
-                    src={value.photoURL}
-                />
-                </ListItemAvatar>
-                <ListItemText id={labelId} primary={value.name} />
-                <ListItemSecondaryAction>
-                <Checkbox
-                    edge="end"
-                    onChange={handleToggle(value)}
-                    checked={checked.indexOf(value) !== -1}
-                    inputProps={{ 'aria-labelledby': labelId }}
-                />
-                </ListItemSecondaryAction>
-            </ListItem>
-            );
-        })}
-               {users.map((value) => {
-            const labelId = `checkbox-list-secondary-label-${value.name}`;
-            return (
-            <ListItem key={value.email} button>
-                <ListItemAvatar>
-                <Avatar
-                    alt={`Avatar n°${value + 1}`}
-                    src={value.photoURL}
-                />
-                </ListItemAvatar>
-                <ListItemText id={labelId} primary={value.name} />
-                <ListItemSecondaryAction>
-                <Checkbox
-                    edge="end"
-                    onChange={handleToggle(value)}
-                    checked={checked.indexOf(value) !== -1}
-                    inputProps={{ 'aria-labelledby': labelId }}
-                />
-                </ListItemSecondaryAction>
-            </ListItem>
-            );
-        })} */}
+
         </List>
-        <Button disabled={selectedUsers.length > 0? false:true} className='user-list-btn btn'>
+        <Button disabled={selectedUsers.length > 0? false:true} className='user-list-btn btn' onClick={handleAdd}>
             {selectedUsers.length > 1?
                 "Add Users"
                 :

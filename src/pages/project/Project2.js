@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { 
     Card, 
     Container,
@@ -16,11 +16,17 @@ import { Link, useNavigate as useHistory, useParams } from 'react-router-dom';
 import { useUserData } from "../../contexts/UserDataContext";
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import UserList2 from '../../components/UserList2';
+import axios from 'axios';
+import useLocalStorageState from '../../hooks/useLocalStorageState';
 
 export default function Project(){
 
     const history = useHistory();
     const { userData } = useUserData();
+    const {id} = useParams();
+    let project = findProject(id);
+    let projectTickets = [];
+    const [addedUsers, setAddedUsers] = useState([]);
 
     function handleClick(){
         history(`/project/update/${id}`)
@@ -30,9 +36,24 @@ export default function Project(){
         return userData.projectsAll.find(project => project._id === id)
     }
 
-    const {id} = useParams();
-    const project = findProject(id);
-    let projectTickets = [];
+    async function handleAdd(newUsers){
+        let updatedUsers = [...project.collaborators, ...newUsers]
+        project.collaborators = updatedUsers;
+        let port = 80;
+        try{
+            await axios.put(`http://localhost:${port}/projects/update/${id}`, project).then((response)=>{
+                console.log("response: ", response.data)
+                setAddedUsers(updatedUsers);
+            }).catch((err)=>{
+                console.log("Project2.js>handleAdd>error: ", err)
+            })
+        }catch(err){
+            console.log("Project2.js>handleAdd>error: ", err)
+        }
+
+    }
+
+
     if(userData.mode === "demo"){
         projectTickets = userData.ticketsAll.filter((ticket)=>{
             return project.tickets.includes(ticket._id)
@@ -100,7 +121,7 @@ export default function Project(){
                                 })}
                             </Col>
                             <Col xs={4}>
-                                <UserList2 />
+                                <UserList2 currCollaborators={project.collaborators} handleAddUsers={handleAdd}/>
                             </Col>
                         </Row>
                     </Card.Body>
