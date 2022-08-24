@@ -18,6 +18,57 @@ import { useUserData } from "../../contexts/UserDataContext";
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import axios from "axios"
 
+function  Comment(props){
+    const { userData } = useUserData();
+    const {comment} = props;
+    const defaultAvatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+    const date = new Date(comment.createdAt).toLocaleDateString();
+    const commentDisplayStyle = {
+
+        borderRadius: "5px",
+        boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+        padding: "10px",
+        comment:{
+            boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+            borderRadius: "5px",
+            backgroundColor: "rgba(66, 135, 245, 0.5)",
+            maxWidth: "90%",
+            minWidth: "90%",
+            padding: "0px 5px 0px"
+        },
+        avatar:{
+            maxWidth:"40px",
+            minWidth: "40px",
+            maxHeight: "40px",
+            minHeight: "40px",
+            borderRadius: "50px",
+            marginRight: ".5rem"
+        },
+        date:{
+            fontSize:"12px",
+            color: "rgba(76, 76, 76, 0.5)"
+        }
+    }
+
+    return(
+        <div style={{display:"flex", marginBottom:".5rem"}}>
+            {console.log("comment: ", comment)}
+            <div>
+                <img src={comment.author.avatar? comment.author.avatar : defaultAvatar} style={commentDisplayStyle.avatar}/>
+            </div>
+            <div style={{width:"100%"}}>
+                {console.log("Date: ", new Date(comment.createdAt).toLocaleDateString())}
+                <strong>{`${comment.author.name}`}</strong>
+                <span style={commentDisplayStyle.date}> - {date === "Invalid Date"? comment.date : date}</span>
+                <div className="mb-2" style={commentDisplayStyle.comment}> 
+                    <Card.Text className="mb-0">{comment.text}</Card.Text>
+                </div>
+            </div>
+
+        </div>
+    )
+}
+
 export default function Ticket(){
 
     const { id } = useParams();
@@ -87,6 +138,14 @@ export default function Ticket(){
         justifyContent: "space-between",
         marginBottom: "1.5rem"
       }
+
+    const commentDisplayStyle = {
+
+        borderRadius: "5px",
+        boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+        padding: "10px",
+        overflowY: "scroll"
+    }
       
     return(
         <div className="container">
@@ -100,12 +159,12 @@ export default function Ticket(){
                     <Row>
                         <Col>
                             <Card.Title>{ticket.name}</Card.Title>
-                            <Card.Text>description: {ticket.description}</Card.Text>
-                            <Card.Text>type: {ticket.type}</Card.Text>
-                            <Card.Text>priority: {ticket.priority}</Card.Text>
-                            <Card.Text>status: {ticket.status}</Card.Text>
+                            <Card.Text>Description: {ticket.description}</Card.Text>
+                            <Card.Text>Type: {ticket.type}</Card.Text>
+                            <Card.Text>Priority: {ticket.priority}</Card.Text>
+                            <Card.Text>Status: {ticket.status}</Card.Text>
                             <Card.Text>Created: {new Date(ticket.createdAt).toLocaleDateString()}</Card.Text>
-                            <Card.Text>private: {String(ticket.private)}</Card.Text>
+                            <Card.Text>Private: {String(ticket.private)}</Card.Text>
                             <Button onClick={handleClick}>Update Ticket</Button>
                         </Col>
                         <Col>
@@ -119,16 +178,15 @@ export default function Ticket(){
                 <h2 className="mb-0 ms-2 mt-4">Comments</h2>
             </div>
             <Container className="">
-                <Card className="mt-0 w-100">
+                <Card className="mt-0 w-100" >
                     <Card.Body>
                         <Row>
-                            <Col xs={6}>
+                            {console.log("Comments: ", comments)}
+                            {console.log("User Data: ", userData)}
+                            <Col xs={6} style={commentDisplayStyle}>
                             {comments.map((comment)=>{
                                 return(
-                                    <div className="mb-2">
-                                        <Card.Text className="mb-0"><strong>{`${comment.author.name}: `}</strong>{comment.text}</Card.Text>
-                                        <Card.Text><strong>Date: </strong>{new Date(comment.createdAt).toLocaleDateString()}</Card.Text>
-                                    </div>
+                                    <Comment comment={comment} />
                                 )
                             })}
                             </Col>
@@ -138,7 +196,7 @@ export default function Ticket(){
                                 <FloatingLabel controlId="floatingTextarea" label="Comment..." className="mb-3">
                                     <Form.Control as="textarea" placeholder="Comment..." ref={commentRef} style={{minHeight: "10rem"}} />
                                 </FloatingLabel>
-                                <Button disabledd={loading} onClick={handleComment} className="w-100">Submit</Button>
+                                <Button disabled={loading} onClick={handleComment} className="w-100">Submit</Button>
                             </Col>
                         </Row>
                     </Card.Body>
