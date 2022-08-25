@@ -62,4 +62,26 @@ router.route("/update/:id").post((req, res)=>{
     )
 })
 
+//update specific user data
+router.route("/update-data/:id").post((req, res)=>{
+    User.findById(req.params.id).then(
+        (user)=>{
+            
+            user.userData.firstName = req.body.firstName
+            user.userData.lastName = req.body.lastName
+            user.userData.email = req.body.email
+            user.userData.website = req.body.website
+            user.userData.bio = req.body.bio
+
+            user.save().then(
+                ()=> res.json("User updated!")
+            ).catch(
+                err => res.status(400).json("Error: " + err)
+            )
+        }
+    ).catch(
+        err => res.status(400).json("Error: " + err)
+    )
+})
+
 module.exports = router;

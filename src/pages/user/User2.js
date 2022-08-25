@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import { useParams } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
@@ -7,7 +7,9 @@ import { Card, Container, Form, Row, Col, Button} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import banner from '../../assets/user-banner.png'
-
+import { FreeBreakfastOutlined } from '@material-ui/icons';
+import userEvent from '@testing-library/user-event';
+import axios from 'axios'
 function DisplayName(){
     const { currentUser } = useAuth();
     return(
@@ -31,7 +33,7 @@ function DisplayIMG(props){
     return(
         <div className="d-flex justify-content-around">
             {!currentUser?
-                <></>
+                <Avatar src="/broken-image.jpg" style={{width: "100px", height: "100px"}} className="my-3" />
                 :
                 <>{currentUser.photoURL?
                     <img src={props.imgURL} alt="profile picture" width="100" height="100" style={{borderRadius: "50%"}}  className="my-3"/>
@@ -44,9 +46,44 @@ function DisplayIMG(props){
 }
 
 function UserUpdateForm(props){
+    const {fName, lName, email, website, bio} = props.data;
+    const {userData} = useUserData();
+    const fNameRef = useRef();
+    const lNameRef = useRef();
+    const emailRef = useRef();
+    const websiteRef = useRef();
+    const bioRef = useRef();
+    const [userAccountData, setUserAccountData] = useState({})
 
-    function handleSubmit(){
-        console.log("submitted......")
+    useEffect(()=>{
+        let temp = {}
+        if(userData.mode !== "demo" && userData.foundUser.userData){
+            temp.firstName = userData.foundUser.userData.firstName;
+            temp.lastName = userData.foundUser.userData.lastName;
+            temp.email = userData.foundUser.userData.email;
+            temp.website = userData.foundUser.userData.website;
+            temp.bio = userData.foundUser.userData.bio;
+        }
+        setUserAccountData(temp)
+    },[])
+
+    async function handleSubmit(e){
+        e.preventDefault()
+        console.log("UserAccountData: ", userAccountData)
+        return
+        const accountData = {
+            firstName: fNameRef.current.value,
+            lastName: lNameRef.current.value,
+            email: emailRef.current.value,
+            website: websiteRef.current.value,
+            bio: bioRef.current.value
+        }
+        axios.post(`http://localhost:80/users/update-data/${userData.foundUser._id}`, accountData).then((response)=>{
+            console.log("Response: ", response.data)
+        }).catch((err)=>{
+            console.log("User2.js>UserUpdateForm>handleSubmit: ", err)
+        })
+        console.log("submitted......", accountData)
     }
 
     const formStyles={
@@ -76,29 +113,28 @@ function UserUpdateForm(props){
 
                         <Form.Group style={formStyles.group} controlId="formGridAddress1">
                             <Form.Label>First Name</Form.Label>
-                            <Form.Control style={formStyles.control} placeholder="First Name..." />
+                            <Form.Control style={formStyles.control} ref={fNameRef} defaultValue={userAccountData.firstName || fName} placeholder="First Name..." />
                         </Form.Group>
-
                         <Form.Group style={formStyles.group} controlId="formGridAddress2">
                             <Form.Label>Last Name</Form.Label>
-                            <Form.Control style={formStyles.control} placeholder="Last Name..." />
+                            <Form.Control style={formStyles.control} ref={lNameRef} defaultValue={userAccountData.lastName || lName} placeholder="Last Name..." />
                         </Form.Group>
 
                         <Form.Group style={formStyles.group} as={Col} controlId="formGridEmail">
                             <Form.Label>Email</Form.Label>
-                            <Form.Control style={formStyles.control} type="email" placeholder="Enter email" />
+                            <Form.Control style={formStyles.control} type="email" ref={emailRef} defaultValue={userAccountData.email || email} placeholder="Enter email" />
                         </Form.Group>
 
                         <Form.Group style={formStyles.group} controlId="formGridAddress3">
                             <Form.Label>Website</Form.Label>
-                            <Form.Control style={formStyles.control} placeholder="https://..." />
+                            <Form.Control style={formStyles.control} ref={websiteRef} defaultValue={userAccountData.website || website} placeholder="https://..." />
                         </Form.Group>
 
                     </Col>
                     <Col>
                         <Form.Group style={formStyles.group} controlId="formGridAddress3">
                             <Form.Label>Bio</Form.Label>
-                            <Form.Control style={formStyles.textArea} as="textarea" placeholder="Bio..." />
+                            <Form.Control style={formStyles.textArea} as="textarea"  ref={bioRef} defaultValue={userAccountData.bio || bio} placeholder="Bio..." />
                         </Form.Group>
                     </Col>
                 </Row>
@@ -120,7 +156,44 @@ export default function User(){
     const { id } = useParams();
     const { userData } = useUserData();
     const { demoMode, demoUser} = useDemoAuth();
+    const [flName, setFlName] = useState([]); 
+    const [formData, setFormData] = useState({});
 
+    useEffect(()=>{
+        const fullName = [];
+        let myNameArray = []
+        let newFormData = {};
+        
+        if(userData.mode !== "demo"){
+            myNameArray = userData.foundUser.name.split(" ");
+            newFormData.email = userData.foundUser.email || "";
+            newFormData.website = userData.website || "";
+            newFormData.bio = userData.bio || "";
+        }else{
+            myNameArray = userData.id.split("-");
+            newFormData.email = `${myNameArray[0]}@trackmate.com` || "";
+            newFormData.website = `https://www.trackmate.com/${myNameArray[0]}` || "";
+            newFormData.bio = `Tis the bio section for the ${myNameArray[0]} account...` || "";
+        }
+
+
+        myNameArray.forEach((name)=>{
+            if(name.includes("(")){
+    
+            }else{
+                fullName.push(name)
+            }
+        })
+        if(fullName.length === 2){
+            setFlName(fullName);
+        }else{
+            setFlName([fullName[0], fullName[fullName.length-1]]);
+        }
+
+        newFormData.fName = fullName[0] || "";
+        newFormData.lName = fullName[fullName.length-1] || "";
+        setFormData(newFormData);
+    },[])
 
     const profileStyle = {
         display: "flex",
@@ -150,7 +223,7 @@ export default function User(){
                     <DisplayName />
                     {demoMode? <h2 className="text-center mb-4">{`Demo Role: ${demoUser.role}`}</h2> : <></>}
                     <div className="w-100 text-center mt-3">
-                        <UserUpdateForm />
+                        <UserUpdateForm data={formData} />
                         <Link to="">Place Holder 1</Link>
                         <Link className="ms-1" to="">Place Holder 2</Link>
                     </div>

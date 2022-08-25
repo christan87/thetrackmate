@@ -44,7 +44,29 @@ const userSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Message"
         }
-    ]
+    ],
+    userData:{
+        firstName: {
+            type: String,
+            default: ""
+        },
+        lastName: {
+            type: String,
+            default: ""
+        },
+        email:{
+            type: String,
+            default: ""
+        },
+        website:{
+            type: String,
+            default: ""
+        },
+        bio:{
+            type: String,
+            default: ""
+        }
+    }
 });
 
 const User = mongoose.model("User", userSchema);
