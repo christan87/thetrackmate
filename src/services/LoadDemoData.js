@@ -9,6 +9,7 @@ import { useDemoAuth } from '../contexts/AuthDemoContext';
 import { useAuth } from '../contexts/AuthFirebaseContext';
 import { useUserData } from '../contexts/UserDataContext';
 import { useNavigate as useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios'
 /*
     fix Users and Data Analytics
@@ -27,6 +28,7 @@ export default function LoadDemoData({children}){
     const { currentUser } = useAuth();
     const { userData, setUserData } = useUserData();
     const [loading, setLoading] = useState(true)
+    const { AltUserId } = useParams()
     const history = useHistory();
 
     let localStorageData = getLocalStorageData() || {
@@ -232,7 +234,8 @@ export default function LoadDemoData({children}){
         let projects = [];
         try{
             const foundUser = await findUserByUID(currentUser.uid)
-            await axios.get(`http://localhost:80/projects/user/${foundUser._id}`).then((response)=>{
+            let useId = AltUserId || foundUser._id; // allows for correct projects to be loaded on the AltUser page
+            await axios.get(`http://localhost:80/projects/user/${useId}`).then((response)=>{
                 if(response.data !== null && response.data !== undefined){
                     projects = response.data;
                     data.projectsAll = response.data.projects
@@ -250,7 +253,8 @@ export default function LoadDemoData({children}){
         let tickets = [];
         try{
             const foundUser = await findUserByUID(currentUser.uid)
-            await axios.get(`http://localhost:80/tickets/user/${foundUser._id}`).then((response)=>{
+            let useId = AltUserId || foundUser._id; // allows for correct tickets to be loaded on the AltUser page
+            await axios.get(`http://localhost:80/tickets/user/${useId}`).then((response)=>{
                 if(response.data !== null && response.data !== undefined){
                     tickets = response.data;
                     data.ticketsAll = tickets.tickets

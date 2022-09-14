@@ -173,7 +173,7 @@ export default function NewTicket(props){
             <Container>
                 <div
                     className="d-flex mt-5 justify-content-center"
-                    style={{ minHeight: "100vh" }}
+                     style={{ minHeight: "70vh" }}
                 >
                     <div className="w-100" style={{ maxWidth: "400px" }}>
                         <Card>

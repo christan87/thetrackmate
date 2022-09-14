@@ -180,7 +180,7 @@ function App() {
                   } 
                 />
 
-                <Route exact path="/user/:id" element={ 
+                <Route exact path="/user/:AltUserId" element={ 
                     <AuthLoader>
                       <LoadDemoData>
                         <DrawerWrap2>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, Component} from 'react'
 import { useParams, Link } from 'react-router-dom';
 import { 
     Card, 
@@ -14,7 +14,9 @@ import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import Tickets from '../dashboard/Tickets2';
 import projectCoverImage001 from '../../assets/project-cover-img-001.png';
+import { CompassCalibrationOutlined } from '@material-ui/icons';
 
 const HtmlTooltip = withStyles((theme) => ({
     tooltip: {
@@ -96,14 +98,14 @@ function ProjectCard(props){
 
 export default function AltUser(){
 
-    const { id } = useParams()
+    const { AltUserId } = useParams()
     const { userData } = useUserData();
-    const user = userData.usersAll.find((user)=> user._id == id)
+    const user = userData.usersAll.find((user)=> user._id == AltUserId)
     
 
     //const projects = userData.projectsAll;
 
-    const projects = userData.projectsAll.filter(project=> project.admin === id);
+    const projects = userData.projectsAll.filter(project=> project.admin === AltUserId);
 
     // const projects = userData.projectsAll.filter((project)=>{
     //     const found = project.collaborators.filter((user)=> user._id == id);
@@ -113,14 +115,31 @@ export default function AltUser(){
     // })
 
     // const tickets = userData.tickets;
+    async function getTickets(){
+        let tickets = [];
+        let url = `http://localhost:80/tickets/user/${AltUserId}`
+        try {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, false)
+            xhr.onload = ()=>{
+                tickets = JSON.parse(xhr.responseText).tickets;
+            }
 
-    const tickets = userData.ticketsAll.filter(ticket=> ticket.admin === id);
+            xhr.send()
+        } catch (error) {
+            console.log('user>AltUser2.js>getTickets: ', error)
+        }
+        return tickets;
+    }
+    let tickets = userData.ticketsAll.filter(ticket=> ticket.admin === AltUserId);
+    
     // const tickets = userData.ticketsAll.filter((ticket)=>{
     //     const found = ticket.assigned.filter((user)=> user._id == id);
     //     if(found.length > 0){
     //         return ticket
     //     }
     // })
+
 
     console.log("Tickets: ", tickets)
     const style={
@@ -158,7 +177,7 @@ export default function AltUser(){
                 </div>
             </div>
             <div>
-                <Card style={{height: "75vh"}}>
+                <Card style={{height: "80vh"}}>
                     <Card.Body>
                         <Card.Text>Email: {user.email}</Card.Text>
                         <Card.Text>Set To: {user.private==true? "Private" : "Public"}</Card.Text>
@@ -170,8 +189,14 @@ export default function AltUser(){
                             </div>
                         </Card.Text> 
                         <Card.Text>
-                            Tickets: {tickets.map((ticket=><Card.Text><Link to={`/ticket/${ticket._id}`}>{ticket.name}</Link></Card.Text>))}
+                            {tickets.length > 0 ? 
+                                <Tickets tickets={tickets}/> 
+                                : 
+                                <h3><strong>No Tickets Added</strong></h3> 
+                            }
+                            {/* Tickets: {tickets.map((ticket=><Card.Text><Link to={`/ticket/${ticket._id}`}>{ticket.name}</Link></Card.Text>))} */}
                         </Card.Text> 
+
                     </Card.Body>
                 </Card>
             </div>
