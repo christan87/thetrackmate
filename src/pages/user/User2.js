@@ -54,6 +54,7 @@ function UserUpdateForm(props){
     const websiteRef = useRef();
     const bioRef = useRef();
     const [userAccountData, setUserAccountData] = useState({})
+    const {updateDisplayName, currentUser} = useAuth();
 
     useEffect(()=>{
         let temp = {}
@@ -68,9 +69,8 @@ function UserUpdateForm(props){
     },[])
 
     async function handleSubmit(e){
-        e.preventDefault()
+        //e.preventDefault()
         console.log("UserAccountData: ", userAccountData)
-        return
         const accountData = {
             firstName: fNameRef.current.value,
             lastName: lNameRef.current.value,
@@ -83,6 +83,12 @@ function UserUpdateForm(props){
         }).catch((err)=>{
             console.log("User2.js>UserUpdateForm>handleSubmit: ", err)
         })
+        try{
+            let name = `${accountData.firstName} ${accountData.lastName}`
+            updateDisplayName(currentUser, name);
+        }catch(e){
+            console.log("updateDisplayName: ", e)
+        }
         console.log("submitted......", accountData)
     }
 

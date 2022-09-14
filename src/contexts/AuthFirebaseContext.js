@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect} from "react";
 import axios from "axios";
 import { auth } from '../firebase';
-import { GoogleAuthProvider, FacebookAuthProvider, getAuth, signInWithPopup  } from "firebase/auth";
+import { GoogleAuthProvider, FacebookAuthProvider, getAuth, signInWithPopup, updateProfile} from "firebase/auth";
 const AuthContext = React.createContext();
 const provider = new GoogleAuthProvider();
 const fbProvider = new FacebookAuthProvider();
@@ -122,6 +122,14 @@ export function AuthProvider({ children }) {
         return currentUser.updateEmail(email);
     }
 
+    function updateDisplayName(user, name){
+        updateProfile(user, {displayName: name}).then(()=>{
+
+        }).catch(err=>(
+            console.og("updateDisplayName: ", err)
+        ))
+    }
+
     function updatePassword(password){
         return currentUser.updatePassword(password);
     }
@@ -176,6 +184,7 @@ export function AuthProvider({ children }) {
         resetPassword,
         updateEmail,
         updatePassword,
+        updateDisplayName,
         googleSignIn,
         fbSignIn
     }

@@ -17,9 +17,9 @@ export default function EnlargeModal(props) {
     return (
       <Modal {...props} aria-labelledby="contained-modal-title-vcenter" size="lg">
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+          {/* <Modal.Title id="contained-modal-title-vcenter">
             Using Grid in Modal
-          </Modal.Title>
+          </Modal.Title> */}
         </Modal.Header>
         <Modal.Body className="show-grid">
           <Container>

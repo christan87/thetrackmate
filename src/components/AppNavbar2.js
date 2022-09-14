@@ -30,12 +30,6 @@ function AppNavbar(props){
     const { userData } = useUserData();
     const history = useHistory();
 
-    let useId = "";
-    if(currentUser){
-        useId = currentUser._id
-    }else{
-        useId = demoUser._id
-    }
     async function handleLogout() {
         try{
             if(currentUser){
@@ -54,7 +48,6 @@ function AppNavbar(props){
     }
 
     function handleUserAccount(){
-        console.log(`/user/${useId}`)
         history("/user")
     }
 

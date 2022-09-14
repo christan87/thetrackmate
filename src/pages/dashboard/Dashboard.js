@@ -19,6 +19,7 @@ export default function Dashboard(){
     const { currentUser } = useAuth();
     const { userData } = useUserData();
     console.log("User Data: ", userData);
+    console.log("Current USer: ", currentUser);
     const [imgURL, setImgURL] = useState("")
     const history = useHistory();
     useEffect(()=>{
