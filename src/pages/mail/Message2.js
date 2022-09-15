@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate as useHistory } from 'react-router-dom';
 // import demoMessages from '../../services/demoMessages';
 import { useUserData } from "../../contexts/UserDataContext";
 import { 
@@ -13,6 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Reply from './Reply';
 import EnlargeModal from '../analytics/EnlargeModal';
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
+import axios from 'axios';
 
 export default function Message(){
 
@@ -26,7 +27,8 @@ export default function Message(){
     }
 
     const [modalShow, setModalShow] = useState(false);
-  
+    const history = useHistory();
+
     function onHide(){
         setModalShow(false)
     }
@@ -34,6 +36,27 @@ export default function Message(){
     function onShow(){
         setModalShow(true)
     }
+
+    const deleteUserMessage = async(userId, messageId) =>{
+        try{
+            await axios.post(`http://localhost:80/messages/delete/${userId}/${messageId}`, {}).then((response)=>{
+                if(response.data !== null && response.data !== undefined){
+                  console.log("Delete Response: ", response)
+                  window.location.href='/mail';
+                }
+            }).catch((error)=>{
+                console.log("Mail>handleDelete: ", error)
+            })
+        }catch(e){
+            console.log("Mail>handleDelete: ", e)
+        }
+    }
+
+    function handleDelete(){
+        const userId = userData.foundUser._id;
+        deleteUserMessage(userId, id)
+    }
+    
 
     const bannerStyle = {
         backgroundColor: "#336CFB", 
@@ -75,7 +98,7 @@ export default function Message(){
                                         <div className="d-flex align-items-center">
                                             <span><strong>Subject:</strong> {` ${message.subject}`}</span>
                                             <Button className="ms-auto btn-sm" onClick={onShow}>Reply</Button>
-                                            <Button className="ms-2 p-1" style={{backgroundColor: "red", border: "none"}}><DeleteIcon fontSize="medium" /></Button>
+                                            <Button className="ms-2 p-1" style={{backgroundColor: "red", border: "none"}} onClick={handleDelete}><DeleteIcon fontSize="medium" /></Button>
                                         </div>
 
                                     </Card.Header>

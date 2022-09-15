@@ -168,7 +168,7 @@ export default function CustomPaginationActionsTable({tickets, moreDetails}) {
                     : rows
                 ).map((row) => (
                     <AccordianWrap description={row.description} key={row.id}>
-                      <TableRow>
+                      <TableRow style={{width: '100%'}}>
                           <TableCell className={`${classes.tableCell} text-start text-truncate`} style={{ minWidth: 160, maxWidth: 160 }}  component="th" scope="row">
                               {row.name}
                           </TableCell>
@@ -187,9 +187,13 @@ export default function CustomPaginationActionsTable({tickets, moreDetails}) {
                           <TableCell className={`${classes.tableCell} text-start`} style={{ width: 160 }} align="right">
                               {row.private? "Private" : "Public"}
                           </TableCell>
-                          <TableCell className={`${classes.tableCell} text-start text-truncate`} style={{ minWidth: 160, maxWidth: 160 }}  component="th" scope="row">
+                          <TableCell className={`${classes.tableCell} text-start text-truncate`} style={{ minWidth: 160, maxWidth: 170 }}  component="th" scope="row">
                               {!moreDetails?
-                                <Link to={`/project/${row.project.id}`}>{row.project.name}</Link>
+                                <div style={{display: 'flex'}}>
+                                  <Link to={`/project/${row.project.id}`}>{row.project.name}</Link>  
+                                  <div style={{minWidth: '1rem'}}/>                       
+                                  <Link to={`/ticket/${row._id}`}>More Details</Link>
+                                </div>
                                 :
                                 <Link to={`/ticket/${row._id}`}>More Details</Link>
                               }

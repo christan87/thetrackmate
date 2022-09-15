@@ -51,7 +51,7 @@ export default function Reply(props){
             }
             console.log("replyMessage: ", newMessage)
     
-            await axios.post(`http://localhost:5000/messages/reply/${newMessage.recipient}`, newMessage).then((response)=>{
+            await axios.post(`http://localhost:80/messages/reply/${newMessage.recipient}`, newMessage).then((response)=>{
                 console.log(response.data)
             }).catch((error)=>{
                 console.log("NewMessage.js>handleSubmit>axios.post> ", error)
