@@ -189,7 +189,7 @@ const searchStyle = {
 
                                       </React.Fragment>
                                     }>
-                                      <Link to={`/user/${row.id}`}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                                      <Link onClick={() => window.location.href=`/user/${row.id}`} to={`/user/${row.id}`}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
                                     </HtmlTooltip>
                                     : 
                                     <>{column.format && typeof value === 'number' ? column.format(value) : value}</>

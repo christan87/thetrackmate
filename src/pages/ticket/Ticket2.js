@@ -17,14 +17,14 @@ import {useNavigate as useHistory } from 'react-router-dom';
 import { useUserData } from "../../contexts/UserDataContext";
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import axios from "axios"
+import DeleteIcon from '@material-ui/icons/Delete';
 
 function  Comment(props){
     const { userData } = useUserData();
-    const {comment} = props;
+    const {comment, ticketId} = props;
     const defaultAvatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
     const date = new Date(comment.createdAt).toLocaleDateString();
     const commentDisplayStyle = {
-
         borderRadius: "5px",
         boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
         padding: "10px",
@@ -32,6 +32,14 @@ function  Comment(props){
             boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
             borderRadius: "5px",
             backgroundColor: "rgba(66, 135, 245, 0.5)",
+            maxWidth: "90%",
+            minWidth: "90%",
+            padding: "0px 5px 0px"
+        },
+        altComment:{
+            boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+            borderRadius: "5px",
+            backgroundColor: "rgba(52, 238, 173, 0.5)",
             maxWidth: "90%",
             minWidth: "90%",
             padding: "0px 5px 0px"
@@ -47,7 +55,26 @@ function  Comment(props){
         date:{
             fontSize:"12px",
             color: "rgba(76, 76, 76, 0.5)"
+        },
+        delete:{
+            color: 'red'
         }
+    }
+    let commentSwitchStyle;
+
+    if(userData.mode !== 'demo'){
+        commentSwitchStyle = comment.author.id === userData.foundUser._id? commentDisplayStyle.comment : commentDisplayStyle.altComment;
+    }else{
+        commentSwitchStyle = comment.author.id === userData.id? commentDisplayStyle.comment : commentDisplayStyle.altComment;
+    }
+    
+    async function handleDelete(){
+        await axios.delete(`http://localhost:80/comments/delete/${ticketId}/${comment._id}`).then((response)=>{
+            console.log(response.data)
+            window.location.reload(true);
+        }).catch((error)=>{
+            console.log("Ticket.js>handleDelete: ", error)
+        })
     }
 
     return(
@@ -60,8 +87,21 @@ function  Comment(props){
                 {console.log("Date: ", new Date(comment.createdAt).toLocaleDateString())}
                 <strong>{`${comment.author.name}`}</strong>
                 <span style={commentDisplayStyle.date}> - {date === "Invalid Date"? comment.date : date}</span>
-                <div className="mb-2" style={commentDisplayStyle.comment}> 
+                <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                <div className="" style={commentSwitchStyle}> 
                     <Card.Text className="mb-0">{comment.text}</Card.Text>
+                </div>
+                    {userData.mode !== 'demo'?
+                        comment.author.id === userData.foundUser._id? 
+                            <DeleteIcon style={commentDisplayStyle.delete} onClick={handleDelete}/> 
+                            : 
+                            <></>
+                        :
+                        comment.author.id === userData.id? 
+                            <DeleteIcon style={commentDisplayStyle.delete} onClick={handleDelete}/> 
+                            : 
+                            <></>
+                    }
                 </div>
             </div>
 
@@ -102,14 +142,16 @@ export default function Ticket(){
             }
         }
 
-        await axios.post(`http://localhost:5000/comments/ticket/${id}`, comment).then((response)=>{
+        await axios.post(`http://localhost:80/comments/ticket/${id}`, comment).then((response)=>{
             console.log(response.data)
+            setLoading(false)
         }).catch((error)=>{
             console.log("Ticket.js>handleComment: ", error)
         })
 
         console.log("Comment: ", commentRef.current.value)
         commentRef.current.value = "";
+        window.location.reload(true)
     }
 
 
@@ -186,7 +228,7 @@ export default function Ticket(){
                             <Col xs={6} style={commentDisplayStyle}>
                             {comments.map((comment)=>{
                                 return(
-                                    <Comment comment={comment} />
+                                    <Comment comment={comment} ticketId={id}/>
                                 )
                             })}
                             </Col>

@@ -128,7 +128,8 @@ async function handleLogout() {
         <Divider />
         <List>
         <ListItem button key="Dashboard">
-            <Link to="/" className={clsx(classes.LinkStyle)} color="inherit" >
+            {/*  window.location.href='/' reloads on the given page and allows the assets to load properly*/}
+            <Link to="/" onClick={() => window.location.href='/'} className={clsx(classes.LinkStyle)} color="inherit" >
               <div className='d-flex'>
                 <ListItemIcon><DashboardIcon /></ListItemIcon>
                 <ListItemText primary="Dashboard"/>

@@ -182,7 +182,7 @@ function App() {
 
                 <Route exact path="/user/:AltUserId" element={ 
                     <AuthLoader>
-                      <LoadDemoData>
+                      <LoadDemoData page='AltUser'>
                         <DrawerWrap2>
                           <PrivateRoute>  
                             <AltUser />                      

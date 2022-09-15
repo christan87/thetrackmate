@@ -14,7 +14,7 @@ import axios from 'axios'
 /*
     fix Users and Data Analytics
 */
-export default function LoadDemoData({children}){
+export default function LoadDemoData({children, page}){
     const { 
         demoMode, 
         demoUser, 
@@ -229,12 +229,13 @@ export default function LoadDemoData({children}){
             console.log("LoadDemoData>setPhotoURL: ", e)
         }
     }
-
+    if(page){console.log("Page:", page )}
     async function setProjects(){
         let projects = [];
         try{
             const foundUser = await findUserByUID(currentUser.uid)
-            let useId = AltUserId || foundUser._id; // allows for correct projects to be loaded on the AltUser page
+            let useId = foundUser._id;  // allows for correct projects to be loaded on the AltUser page
+            if(AltUserId && page === 'AltUser'){ useId = AltUserId; console.log("useId:",useId)} 
             await axios.get(`http://localhost:80/projects/user/${useId}`).then((response)=>{
                 if(response.data !== null && response.data !== undefined){
                     projects = response.data;
@@ -253,7 +254,9 @@ export default function LoadDemoData({children}){
         let tickets = [];
         try{
             const foundUser = await findUserByUID(currentUser.uid)
-            let useId = AltUserId || foundUser._id; // allows for correct tickets to be loaded on the AltUser page
+            
+            let useId = foundUser._id; // allows for correct tickets to be loaded on the AltUser page
+            if(AltUserId && page === 'AltUser') useId = AltUserId; 
             await axios.get(`http://localhost:80/tickets/user/${useId}`).then((response)=>{
                 if(response.data !== null && response.data !== undefined){
                     tickets = response.data;

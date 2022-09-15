@@ -115,22 +115,6 @@ export default function AltUser(){
     // })
 
     // const tickets = userData.tickets;
-    async function getTickets(){
-        let tickets = [];
-        let url = `http://localhost:80/tickets/user/${AltUserId}`
-        try {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, false)
-            xhr.onload = ()=>{
-                tickets = JSON.parse(xhr.responseText).tickets;
-            }
-
-            xhr.send()
-        } catch (error) {
-            console.log('user>AltUser2.js>getTickets: ', error)
-        }
-        return tickets;
-    }
     let tickets = userData.ticketsAll.filter(ticket=> ticket.admin === AltUserId);
     
     // const tickets = userData.ticketsAll.filter((ticket)=>{
