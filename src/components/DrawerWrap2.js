@@ -19,6 +19,7 @@ import BlurOnIcon from '@material-ui/icons/BlurOn';
 import PeopleIcon from '@material-ui/icons/People'; //collab
 
 import { Link, useNavigate as useHistory } from 'react-router-dom';
+import {default as LinkReload} from '@material-ui/core/Link';
 
 import EnlargeModal from '../pages/analytics/EnlargeModal';
 import NewTicket from '../pages/ticket/NewTicket'
@@ -130,12 +131,18 @@ async function handleLogout() {
         <List>
         <ListItem button key="Dashboard">
             {/*  window.location.href='/' reloads on the given page and allows the assets to load properly*/}
-            <Link to="/" onClick={() => window.location.href='/'} className={clsx(classes.LinkStyle)} color="inherit" >
+            {/* <Link to="/" onClick={() => window.location.href='/'} className={clsx(classes.LinkStyle)} color="inherit" >
               <div className='d-flex'>
                 <ListItemIcon><DashboardIcon /></ListItemIcon>
                 <ListItemText primary="Dashboard"/>
               </div>
-            </Link>
+            </Link> */}
+            <LinkReload href="/" className={clsx(classes.LinkStyle)} color="inherit" >
+              <div className='d-flex'>
+                <ListItemIcon><DashboardIcon /></ListItemIcon>
+                <ListItemText primary="Dashboard"/>
+              </div>
+            </LinkReload>
           </ListItem>
           
           <ListItem>

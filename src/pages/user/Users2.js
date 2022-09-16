@@ -10,6 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import { useUserData } from "../../contexts/UserDataContext";
 import { Link } from 'react-router-dom';
+import {default as LinkReload} from '@material-ui/core/Link';
 import { Container } from 'react-bootstrap';
 import SearchBarExpand from '../components/SearchBarExpand2';
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
@@ -189,7 +190,8 @@ const searchStyle = {
 
                                       </React.Fragment>
                                     }>
-                                      <Link onClick={() => window.location.href=`/user/${row.id}`} to={`/user/${row.id}`}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link>
+                                      {/* <Link onClick={() => window.location.href=`/user/${row.id}`} to={`/user/${row.id}`}>{column.format && typeof value === 'number' ? column.format(value) : value}</Link> */}
+                                      <LinkReload href={`/user/${row.id}`}>{column.format && typeof value === 'number' ? column.format(value) : value}</LinkReload>
                                     </HtmlTooltip>
                                     : 
                                     <>{column.format && typeof value === 'number' ? column.format(value) : value}</>
