@@ -32,6 +32,20 @@ router.route("/message/:id").post((req, res)=>{
     )
 });
 
+router.route('/read/:messageId').put((req, res)=>{
+    Message.findById(req.params.messageId).then(message=>{
+        try {
+            message.read = req.body.read;
+            message.save();
+            res.send('message read!');
+        } catch (err) {
+            
+        }
+    }).catch(
+        err => res.status(400).json("Message Update Error: " + err)
+    )
+})
+
 router.route("/delete/:id").post((req, res)=>{
     Message.findById(req.params.id).then(message=>{
         try{

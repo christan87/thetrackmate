@@ -56,7 +56,6 @@ export default function Message(){
         const userId = userData.foundUser._id;
         deleteUserMessage(userId, id)
     }
-    
 
     const bannerStyle = {
         backgroundColor: "#336CFB", 

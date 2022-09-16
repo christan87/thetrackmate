@@ -29,7 +29,12 @@ import NewMessage from './NewMessage';
 import {useDemoAuth} from "../../contexts/AuthDemoContext";
 // import demoMessages from '../../services/demoMessages';
 import { useUserData } from "../../contexts/UserDataContext";
-import { Link } from 'react-router-dom';
+
+/*
+Better to use a material-ui link when I need a re-render to happen and get most up to date info
+*/
+//import { Link } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 
 import axios from 'axios'
 
@@ -37,8 +42,8 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-function createData2(sender, subject, date, id) {
-    return { sender, subject, date, id };
+function createData2(sender, subject, date, id, read) {
+    return { sender, subject, date, id, read };
   }
 
 const rows2 = [
@@ -275,7 +280,7 @@ export default function Mail() {
   useEffect(()=>{
     messages.forEach((message)=>{
       let date = new Date(message.createdAt).toLocaleDateString()
-      const data = createData2(message.author.name, message.subject, date, message._id)
+      const data = createData2(message.author.name, message.subject, date, message._id, message.read)
       tempRows.push(data)
     })
     tempRows = tempRows.reverse()
@@ -411,6 +416,25 @@ export default function Mail() {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const linkStyle = {
+    default:{},
+    read:{
+      color: 'grey'
+    }
+  }
+  const handleReadMessage = async (id)=>{
+    try{
+      await axios.put(`http://localhost:80/messages/read/${id}`, {read: true}).then((response)=>{
+          if(response.data !== null && response.data !== undefined){
+            console.log("Read: ", response)
+          }
+      }).catch((error)=>{
+          console.log("Message>handleReadMessage: ", error)
+      })
+    }catch(e){
+        console.log("Message>handleReadMessage: ", e)
+    }
+  }
   return (
     
     <div className={classes.root}>
@@ -438,7 +462,8 @@ export default function Mail() {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  //conditionally applies styling to read/unread message links
+                  const readStyle = row.read? linkStyle.read : linkStyle.default;
                   return (
                     <TableRow
                       hover
@@ -456,7 +481,8 @@ export default function Mail() {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {<Link to={`/mail/message/${row.id}`}>{row.sender}</Link>}
+                        {/* {<Link style={readStyle} to={`/mail/message/${row.id}`}>{row.sender}</Link>} */}
+                        {<Link onClick={()=>{handleReadMessage(row.id)}}style={readStyle} href={`/mail/message/${row.id}`}>{row.sender}</Link>}
                       </TableCell>
                       <TableCell align="right">{row.subject}</TableCell>
                       <TableCell align="right">{row.date}</TableCell>

@@ -64,7 +64,8 @@ const useStyles = makeStyles((theme) => ({
 export default function DrawerWrap2({children}) {
   const classes = useStyles();
   const { userData } = useUserData();
-  const count = userData.messages.length;
+  const messages = userData.messages.filter(message=> message.read !== true);
+  const count = messages.length || userData.messages.length;
 
   const { currentUser, logout, setCurrentUser, setAuthUser } = useAuth();
   const { demoMode, demoLogout, demoUser } = useDemoAuth();
