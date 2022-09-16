@@ -26,6 +26,7 @@ export default function UserList2(props) {
   const [checked, setChecked] = useState([1]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [disabledUsers, setDisabledUsers] = useState([]);
+  const [removeUsers, setRemoveUsers] = useState([]);
   const { userData } = useUserData();
   const {currCollaborators, handleAddUsers} = props;
 
@@ -42,7 +43,8 @@ export default function UserList2(props) {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
     const newSelectedUsers = [...selectedUsers]
-
+    let currRemove = removeUsers.indexOf(value);
+    let newRemove = [...removeUsers];
     if (currentIndex === -1) {
       newChecked.push(value);
       newSelectedUsers.push(value._id);
@@ -52,6 +54,20 @@ export default function UserList2(props) {
       newSelectedUsers.splice(currentIndex -1 , 1);
     }
 
+    /* 
+        this if/else adds a selected user to the newRemove array (function level) if it doesnt already exist
+        but only if it already exists in currCollaborators (component level) and then sets the removeUsers
+        state object (component level). Once this happens a line of code will conditionally set the styling 
+        for the remove btn. If a user that fits this criteria is unchecked and there are no others then 
+        the remove button will dissaper.
+     */
+    if(currRemove === -1 && currCollaborators.includes(value._id)){
+      newRemove.push(value)
+    }else{
+      newRemove.splice(currRemove, 1);
+    }
+
+    setRemoveUsers(newRemove)
     setSelectedUsers(newSelectedUsers);
     setChecked(newChecked);
   };
@@ -60,6 +76,21 @@ export default function UserList2(props) {
     handleAddUsers(selectedUsers)
     setDisabledUsers(selectedUsers)
   }
+  const removeBtn = {
+    default:{
+      width: 0, 
+      height: 0, 
+      padding: 0,  
+      border: 'none',
+      transition: '0.7s'
+    },
+    remove:{
+      transition: '0.7s'
+    }
+  }
+
+  
+  let remove = removeUsers.length > 0? removeBtn.remove : removeBtn.default;
 
   return (
     <div className='user-list-root'>
@@ -82,7 +113,7 @@ export default function UserList2(props) {
                     onChange={handleToggle(value)}
                     checked={checked.indexOf(value) !== -1}
                     inputProps={{ 'aria-labelledby': labelId }}
-                    disabled={disable}
+                    // disabled={disable}
                 />
                 </ListItemSecondaryAction>
             </ListItem>
@@ -90,13 +121,16 @@ export default function UserList2(props) {
         })}
 
         </List>
-        <Button disabled={selectedUsers.length > 0? false:true} className='user-list-btn btn' onClick={handleAdd}>
-            {selectedUsers.length > 1?
-                "Add Users"
-                :
-                "Add User"    
-            }
-        </Button>
+        <div style={{display: 'flex', justifyContent: 'center', width: '80%'}}>
+          <Button disabled={selectedUsers.length > 0? false:true} className='user-list-btn btn' onClick={handleAdd}>
+              {selectedUsers.length > 1?
+                  "Add Users"
+                  :
+                  "Add User"    
+              }
+          </Button>
+          <Button className='user-list-btn btn btn-danger' style={remove}>Remove</Button>
+        </div>
     </div>
   );
 }
