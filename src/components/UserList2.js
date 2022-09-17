@@ -10,6 +10,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { useUserData } from "../contexts/UserDataContext";
 import './UserList2.css'
 import { Button } from 'react-bootstrap';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +29,7 @@ export default function UserList2(props) {
   const [disabledUsers, setDisabledUsers] = useState([]);
   const [removeUsers, setRemoveUsers] = useState([]);
   const { userData } = useUserData();
-  const {currCollaborators, handleAddUsers} = props;
+  const {currCollaborators, handleAddUsers, projectId} = props;
 
   let users = [];
 
@@ -45,6 +46,7 @@ export default function UserList2(props) {
     const newSelectedUsers = [...selectedUsers]
     let currRemove = removeUsers.indexOf(value);
     let newRemove = [...removeUsers];
+
     if (currentIndex === -1) {
       newChecked.push(value);
       newSelectedUsers.push(value._id);
@@ -63,7 +65,7 @@ export default function UserList2(props) {
      */
     if(currRemove === -1 && currCollaborators.includes(value._id)){
       newRemove.push(value)
-    }else{
+    }else if(currRemove !== -1 && currCollaborators.includes(value._id)){
       newRemove.splice(currRemove, 1);
     }
 
@@ -75,7 +77,27 @@ export default function UserList2(props) {
   function handleAdd(){
     handleAddUsers(selectedUsers)
     setDisabledUsers(selectedUsers)
+    window.location.reload(true)
   }
+
+  async function handleRemove(){
+
+      let updatedUsers = currCollaborators.filter(user=> removeUsers.includes(user))
+      let disabled = disabledUsers.filter(user=> removeUsers.includes(user))
+      let port = 80;
+      try{
+          await axios.put(`http://localhost:${port}/projects/update-assigned/${projectId}`, {collaborators: updatedUsers}).then((response)=>{
+              console.log("response: ", response.data)
+              setDisabledUsers(disabled)
+              window.location.reload(true)
+          }).catch((err)=>{
+              console.log("UserList.js>handleRemove>error: ", err)
+          })
+      }catch(err){
+          console.log("UserList.js>handleRemove>error: ", err)
+      }
+  }
+
   const removeBtn = {
     default:{
       width: 0, 
@@ -129,7 +151,7 @@ export default function UserList2(props) {
                   "Add User"    
               }
           </Button>
-          <Button className='user-list-btn btn btn-danger' style={remove}>Remove</Button>
+          <Button className='user-list-btn btn btn-danger' onClick={handleRemove} style={remove}>Remove</Button>
         </div>
     </div>
   );

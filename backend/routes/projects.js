@@ -64,4 +64,17 @@ router.route("/update/:id").put((req, res)=>{
         err => res.status(400).json("Error: " + err)
     )
 })
+
+router.route("/update-assigned/:id").put((req, res)=>{
+    Project.findById(req.params.id).then((project)=>{
+        if(req.body.collaborators){
+            project.collaborators = req.body.collaborators;
+        }
+        project.save();
+        res.header("Access-Control-Allow-Origin", "*");
+        res.json(project._id)
+    }).catch(
+        err => res.status(400).json("Error: " + err)
+    )
+})
 module.exports = router;

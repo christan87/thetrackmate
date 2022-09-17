@@ -121,7 +121,7 @@ export default function Project(){
                                 })}
                             </Col>
                             <Col xs={4}>
-                                <UserList2 currCollaborators={project.collaborators} handleAddUsers={handleAdd}/>
+                                <UserList2 projectId={id} currCollaborators={project.collaborators} handleAddUsers={handleAdd}/>
                             </Col>
                         </Row>
                     </Card.Body>

@@ -95,14 +95,14 @@ export default function NewProject(props){
                                     <FloatingLabel controlId="floatingNameField" label="Project Name" className="mb-3">
                                         <Form.Control type="text" placeholder="Leave Project Name Here" ref={nameRef} />
                                     </FloatingLabel>   
-                                    <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
+                                    {/* <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
                                         <Form.Select aria-label="User Assignment Select" ref={assignedRef} >
                                             <option value="0"></option>
                                             {userData.usersAll&& userData.usersAll.map((user, index)=>{
                                                 return <option value={index+1} key={`${user.name}${index}`}>{user.name}</option>
                                             })}
                                         </Form.Select>
-                                    </FloatingLabel>
+                                    </FloatingLabel> */}
                                     <FloatingLabel controlId="floatingPriorityLevel" label="Priority Level" className="mb-3">
                                         <Form.Select aria-label="Priority Level Select" ref={priorityRef}>
                                             <option value="0"></option>
