@@ -104,10 +104,12 @@ export default function UserList2(props) {
       height: 0, 
       padding: 0,  
       border: 'none',
-      transition: '0.7s'
+      transition: '0.5s'
     },
     remove:{
-      transition: '0.7s'
+      marginLeft: '.5rem',
+      maxHeight:'38px',
+      transition: '0.5s'
     }
   }
 
