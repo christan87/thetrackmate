@@ -105,6 +105,9 @@ export default function NewTicket(props){
                     id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
                     name: userData.projectsAll[assignedProjectRef.current.value - 1].name
                 }
+            }else{
+                setLoading(false)
+                return setError("Must Complete Form...");
             }
             console.log("Ticket: ", newTicket)
             // let newTicket = {
@@ -114,7 +117,8 @@ export default function NewTicket(props){
             //     admin: currentUser.mongoId 
             // }
 
-            if(newTicket.ticketName === ""){
+            if(newTicket.name === ""){
+                setLoading(false)
                 return setError("Must Complete Form...");
             }
             // if(newTicket.assignedTo === "0"){
@@ -123,11 +127,10 @@ export default function NewTicket(props){
             // }else{
             //     newTicket.assignedTo = users[newTicket.assignedTo-1]
             // }
-            if(newTicket.priorityLevel === "0"){
-                newTicket.priorityLevel = ""
+            if(newTicket.priority === "0"){
+                setLoading(false)
                 return setError("Must Complete Form...");
             }
-        
             try{
                 await axios.post('http://localhost:80/tickets/add', newTicket).then(
                     async res=> {

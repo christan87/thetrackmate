@@ -47,6 +47,15 @@ export default function NewProject(props){
                 admin: userData.foundUser._id
             }
 
+            if(newProject.name === ''){
+                setLoading(false)
+                return setError("Must Complete Form...");
+            }
+            if(newProject.priority === '0'){
+                setLoading(false)
+                return setError("Must Complete Form...");
+            }
+
             await axios.post("http://localhost:80/projects/add", newProject).then(async(response)=>{
                 
                 let updateUser = userData.foundUser;
@@ -91,7 +100,7 @@ export default function NewProject(props){
                         <Card>
                             <Card.Body>
                                 <h2 className="text-center mb-4">Add New Project</h2>
-                                {error?? <Alert variant="danger">{error}</Alert>}
+                                {error&& <Alert variant="danger">{error}</Alert>}
                                 <Form onSubmit={handleSubmit}>
                                     <FloatingLabel controlId="floatingNameField" label="Project Name" className="mb-3">
                                         <Form.Control type="text" placeholder="Leave Project Name Here" ref={nameRef} />
