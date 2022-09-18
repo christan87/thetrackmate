@@ -1,5 +1,7 @@
 const router = require("express").Router();
 let Project = require("../models/project.model");
+let Ticket = require("../models/ticket.model");
+let Comment = require("../models/comment.model");
 
 
 router.route("/add").post((req, res)=>{
@@ -79,9 +81,27 @@ router.route("/update-assigned/:id").put((req, res)=>{
 })
 
 router.route('/delete/:projectId').delete((req, res)=>{
-    console.log("IN!")
+    let deleteTickets = null;
+    let deleteComments = null;
     Project.findById(req.params.projectId).then((project)=>{
         if(project){
+            deleteTickets = project.tickets;
+            deleteTickets.forEach(tickets=>{
+                Ticket.findById(tickets).then((ticket)=>{
+                    deleteComments = ticket.comments;
+                    deleteComments.forEach(comments=>{
+                        Comment.findById(comments).then((comment)=>{
+                            console.log("IN!")
+                            comment.remove();
+                        }).catch(err=>{
+                            console.log("Error removing Comment from project delete: ", err)
+                        })
+                    })
+                    ticket.remove();
+                }).catch(err=>{
+                    console.log("Error removing Ticket from project delete: ", err)
+                })
+            })
             project.remove();
             res.send("Project deleted!")
         }

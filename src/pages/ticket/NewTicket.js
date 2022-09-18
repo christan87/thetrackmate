@@ -129,7 +129,7 @@ export default function NewTicket(props){
             }
         
             try{
-                await axios.post('http://localhost:5000/tickets/add', newTicket).then(
+                await axios.post('http://localhost:80/tickets/add', newTicket).then(
                     async res=> {
                         console.log("Ticket Added!: ", res.data)
                         // let updateProject = await (await axios.get(`http://localhost:5000/projects/${newTicket.project.id}`)).data;
@@ -141,8 +141,8 @@ export default function NewTicket(props){
                         // }).catch((err)=>{
                         //     console.log("Project Not Updated: ", err)
                         // })
-                        history(`/ticket/${res.data}`)
-                        
+                        //history(`/ticket/${res.data}`)
+                        window.location.reload(true)
                     }
                 )
             }catch(err){

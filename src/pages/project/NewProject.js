@@ -54,6 +54,7 @@ export default function NewProject(props){
 
                 await axios.post(`http://localhost:80/users/update/${userData.foundUser._id}`, updateUser).then((response)=>{
                     console.log("Update Respons: ", response.data)
+                    window.location.reload(true)
                 }).catch((error)=>{
                     console.log("NewProject>handleSubmit(update user)>error: ", error)
                 })
