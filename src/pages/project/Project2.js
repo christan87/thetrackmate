@@ -27,7 +27,7 @@ export default function Project(){
     let project = findProject(id);
     let projectTickets = [];
     const [addedUsers, setAddedUsers] = useState([]);
-
+    console.log('project: ', project)
     function handleClick(){
         history(`/project/update/${id}`)
     }
@@ -52,6 +52,20 @@ export default function Project(){
         }
 
     }
+
+    async function handleDelete(){
+        let port = 80;
+        try{
+            await axios.delete(`http://localhost:${port}/projects/delete/${id}`).then((response)=>{
+                console.log("response: ", response.data)
+                window.location.href = '/';
+            }).catch((err)=>{
+                console.log("Project2.js>handleDelete>error: ", err)
+            })
+        }catch(err){
+            console.log("Project2.js>handleDelete>error: ", err)
+        }
+    } 
 
 
     if(userData.mode === "demo"){
@@ -126,7 +140,14 @@ export default function Project(){
                         </Row>
                     </Card.Body>
                 </Card>
-                <Button className="my-3" onClick={handleClick}>Update Project</Button>
+                <div>
+                    <Button className="my-3" onClick={handleClick}>Update Project</Button>
+                    {project.admin === userData.foundUser._id?
+                        <Button className='btn btn-danger' style={{marginLeft: '.5rem'}} onClick={handleDelete}>Delete</Button>
+                        :
+                        <></>
+                    }
+                </div>
             </div>
             <Tickets tickets={projectTickets} moreDetails={true} />
         </div>

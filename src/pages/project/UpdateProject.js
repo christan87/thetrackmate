@@ -90,7 +90,7 @@ export default function UpdateProject(){
         //     console.log("Ticket Not Updated: ", err)
         // }
         try{
-            await axios.put(`http://localhost:5000/projects/update/${id}`, updatedProject).then(async(response)=>{
+            await axios.put(`http://localhost:80/projects/update/${id}`, updatedProject).then(async(response)=>{
                 history(`/project/${response.data}`)
             }).catch((error)=>{
                 console.log("Project Not Updated: ", error)
@@ -129,7 +129,7 @@ export default function UpdateProject(){
                                             />
                                         }
                                     </FloatingLabel>
-                                    <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
+                                    {/* <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
                                         {!currentProject?
                                             <Form.Select aria-label="User Assignment Select" ref={assignedRef} >
                                                 <option value="0"></option>
@@ -149,7 +149,7 @@ export default function UpdateProject(){
                                                 })}
                                             </Form.Select>
                                         }
-                                    </FloatingLabel>
+                                    </FloatingLabel> */}
                                     <FloatingLabel controlId="floatingStatusLevel" label="Status" className="mb-3">
                                         {!currentProject?
                                             <Form.Select aria-label="Status Select" ref={statusRef}>

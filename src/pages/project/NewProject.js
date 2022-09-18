@@ -47,12 +47,12 @@ export default function NewProject(props){
                 admin: userData.foundUser._id
             }
 
-            await axios.post("http://localhost:5000/projects/add", newProject).then(async(response)=>{
+            await axios.post("http://localhost:80/projects/add", newProject).then(async(response)=>{
                 
                 let updateUser = userData.foundUser;
                 updateUser.projects = [...userData.foundUser.projects, response.data._id]
 
-                await axios.post(`http://localhost:5000/users/update/${userData.foundUser._id}`, updateUser).then((response)=>{
+                await axios.post(`http://localhost:80/users/update/${userData.foundUser._id}`, updateUser).then((response)=>{
                     console.log("Update Respons: ", response.data)
                 }).catch((error)=>{
                     console.log("NewProject>handleSubmit(update user)>error: ", error)
@@ -114,7 +114,7 @@ export default function NewProject(props){
                                     <FloatingLabel controlId="floatingTextarea" label="Description" className="mb-3">
                                         <Form.Control as="textarea" placeholder="Write Ticket Description here" ref={descriptionRef} />
                                     </FloatingLabel>
-                                    <Button disabled={loading} type="submit" className="w-100">Add Ticket</Button>
+                                    <Button disabled={loading} type="submit" className="w-100">Add Project</Button>
                                 </Form>
                             </Card.Body>
                         </Card>

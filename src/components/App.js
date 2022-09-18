@@ -92,11 +92,11 @@ function App() {
                 <Route exact path="/project/update/:id" element={ 
                     <AuthLoader>
                       <LoadDemoData>
-                        <DrawerWrap>
+                        <DrawerWrap2>
                           <PrivateRoute>  
                             <UpdateProject />                      
                           </PrivateRoute>
-                        </DrawerWrap>
+                        </DrawerWrap2>
                       </LoadDemoData>
                     </AuthLoader>
                   } 

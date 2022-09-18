@@ -77,4 +77,16 @@ router.route("/update-assigned/:id").put((req, res)=>{
         err => res.status(400).json("Error: " + err)
     )
 })
+
+router.route('/delete/:projectId').delete((req, res)=>{
+    console.log("IN!")
+    Project.findById(req.params.projectId).then((project)=>{
+        if(project){
+            project.remove();
+            res.send("Project deleted!")
+        }
+    }).catch(err=>{
+        res.status(400).json('Error: ' + err)
+    })
+})
 module.exports = router;
