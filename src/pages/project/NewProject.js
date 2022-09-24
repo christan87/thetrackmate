@@ -11,6 +11,7 @@ import { Link, useNavigate as useHistory } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
 import { useUserData } from "../../contexts/UserDataContext";
+import { uid } from "uid";
 import axios from "axios";
 // import demoUsers from '../../services/demoUsers';
 
@@ -26,8 +27,13 @@ export default function NewProject(props){
     const descriptionRef = useRef();
 
     function demoSubmit(newProject){
+        newProject.tickets = [];
+        newProject.collaborators = [];
+        newProject.comments = [];
+        newProject._id = uid();
         let demoUserData = getLocalStorageData();
         demoUserData.projectsAll = [...demoUserData.projectsAll, newProject];
+        updateLocalStorageData(demoUserData);
         console.log("DemoUeserData: ", demoUserData);
         //updateLocalStorageData(demoUserData);
     }

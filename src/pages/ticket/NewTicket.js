@@ -10,6 +10,7 @@ import {
 import { Link, useNavigate as useHistory } from 'react-router-dom';
 import { useAuth } from "../../contexts/AuthFirebaseContext";
 import { useDemoAuth } from "../../contexts/AuthDemoContext";
+import { uid } from "uid";
 import axios from "axios";
 // import demoProjects from '../../services/demoProjects';
 // import demoUsers from '../../services/demoUsers';
@@ -44,7 +45,14 @@ export default function NewTicket(props){
                 type: typeRef.current.value,
                 description: descriptionRef.current.value,
                 admin: userData.id,
-                // assignedDevs:[],
+                admin_privilages : [userData.id],
+                assigned:[],
+                collaborator_privilages: [],
+                comments: [],
+                createdAt: new Date(),
+                private: true,
+                status: 'Open',
+                _id: uid()
                 // comments:[],
                 // date: "01/12/22",
                 // private: true,
@@ -54,6 +62,9 @@ export default function NewTicket(props){
                 // } 
             }
             if(assignedProjectRef.current.value > 0){
+                let project = userData.projectsAll[assignedProjectRef.current.value - 1];
+                project.tickets = [...project.tickets, newTicket._id] 
+                demoTrackMateData.projectsAll[assignedProjectRef.current.value - 1] = project;
                 newTicket.project = {
                     id: userData.projectsAll[assignedProjectRef.current.value - 1]._id,
                     name: userData.projectsAll[assignedProjectRef.current.value - 1].name

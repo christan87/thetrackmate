@@ -28,6 +28,9 @@ export default function Project(){
     let projectTickets = [];
     const [addedUsers, setAddedUsers] = useState([]);
     console.log('project: ', project)
+    console.log('userData: ', userData)
+
+    
     function handleClick(){
         history(`/project/update/${id}`)
     }

@@ -11,9 +11,7 @@ import { useUserData } from '../contexts/UserDataContext';
 import { useNavigate as useHistory } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios'
-/*
-    fix Users and Data Analytics
-*/
+
 export default function LoadDemoData({children, page}){
     const { 
         demoMode, 
@@ -32,6 +30,7 @@ export default function LoadDemoData({children, page}){
     const history = useHistory();
 
     let localStorageData = getLocalStorageData() || {
+        foundUser: demoUser,
         name: demoUser.userName,
         mode: "demo",
         messages: [],
@@ -299,6 +298,8 @@ export default function LoadDemoData({children, page}){
         if(demoMode){
             console.log("User Account Type: Demo")
             data.mode = "demo"
+            data.foundUser = demoUser;
+            if(getLocalStorageData() === null || getLocalStorageData() === undefined){            
             setTheDemoMessages()
             setDemoTicketsAll()
             setDemoProjectsAll()
@@ -306,7 +307,10 @@ export default function LoadDemoData({children, page}){
             setDemoProjectCommentsAll()
             setDemoTicketCommentsAll()
             setDemoUserId()
-
+            }else{
+                data = localStorageData;
+            }
+            
         }else if(currentUser){
             console.log("User Account Type: Autheneticated")
             data = {
