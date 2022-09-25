@@ -25,6 +25,7 @@ export default function UpdateProject(){
     const statusRef = useRef();
     const descriptionRef = useRef();
     const { currentUser } = useAuth();
+    const {updateLocalStorageData, getLocalStorageData, removeLocalStorageData} = useDemoAuth();
     const [error, setError] = useState("");
     const [currentProject, setCurrentProject] = useState();
     const [privacy, setPrivacy] = useState(true);
@@ -46,6 +47,7 @@ export default function UpdateProject(){
         setPrivacy(project.private)
         console.log("currentProject: ", currentProject)
     },[]);
+
     //This needs to be updated to update the ticket
     async function handleSubmit(e){
         e.preventDefault();
@@ -89,17 +91,32 @@ export default function UpdateProject(){
         // }catch(err){
         //     console.log("Ticket Not Updated: ", err)
         // }
-        try{
-            await axios.put(`http://localhost:80/projects/update/${id}`, updatedProject).then(async(response)=>{
-                history(`/project/${response.data}`)
-            }).catch((error)=>{
-                console.log("Project Not Updated: ", error)
-            })
-        }catch(error){
-            console.log("UpdateProject>handleSubmit: ", error)
+        if(userData.mode === "live"){
+            try{
+                await axios.put(`http://localhost:80/projects/update/${id}`, updatedProject).then(async(response)=>{
+                    history(`/project/${response.data}`)
+                }).catch((error)=>{
+                    console.log("Project Not Updated: ", error)
+                })
+            }catch(error){
+                console.log("UpdateProject>handleSubmit: ", error)
+            }
+        }else{
+            let localStorageData = getLocalStorageData()
+            let projectIndex;
+            let project = localStorageData.projectsAll.find((element, index) => {
+                if(element._id === id){
+                    projectIndex = index;
+                    return element;
+                }
+            });
+            localStorageData.projectsAll[projectIndex] = updatedProject;
+            updateLocalStorageData(localStorageData);
         }
+
         setLoading(false)
         setError("")
+        history(`/project/${id}`)
     }
     // console.log("Users: ", userData.usersAll)
     return(

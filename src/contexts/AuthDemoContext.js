@@ -21,7 +21,7 @@ export function DemoAuthProvider({ children }) {
     
     let demoUser = {
         userName: "Demo User",
-        email: "user@demo.com",
+        email: `${demoRole}@demo.com`,
         authId: "D123456",
         role: demoRole,
         _id: `${demoRole}-D123456`,
@@ -31,6 +31,7 @@ export function DemoAuthProvider({ children }) {
 
     function adminDemoLogin(){
         setDemoRole("admin");
+        resetUser()
         try{
             window.localStorage.setItem("demoRole", JSON.stringify({demoRole: "admin"}));
             setDemoMode(true)
@@ -41,6 +42,7 @@ export function DemoAuthProvider({ children }) {
 
     function collabDemoLogin(){
         setDemoRole("collaborator");
+        resetUser()
         try{
             window.localStorage.setItem("demoRole", JSON.stringify({demoRole: "collaborator"}));
             setDemoMode(true)
@@ -51,6 +53,7 @@ export function DemoAuthProvider({ children }) {
 
     function userDemoLogin(){
         setDemoRole("user");
+        resetUser()
         try{
             window.localStorage.setItem("demoRole", JSON.stringify({demoRole: "user"}));
             setDemoMode(true)
@@ -61,6 +64,7 @@ export function DemoAuthProvider({ children }) {
 
     function guestDemoLogin(){
         setDemoRole("guest");
+        resetUser()
         try{
             window.localStorage.setItem("demoRole", JSON.stringify({demoRole: "guest"}));
             setDemoMode(true)
@@ -86,7 +90,14 @@ export function DemoAuthProvider({ children }) {
     function removeLocalStorageData(){
         window.localStorage.removeItem("demoTrackMateData");
     }
-
+    function resetUser(){
+        let localStorageData = getLocalStorageData();
+        if(localStorageData !== null && localStorageData !== undefined){
+            localStorageData.foundUser = demoUser;
+            localStorageData.id = demoUser._id;
+            updateLocalStorageData(localStorageData);
+        }
+    }
     useEffect(()=>{
         //Determines if user already logged in under a demo role  
         const demoRole = JSON.parse(window.localStorage.getItem("demoRole"));
@@ -114,7 +125,8 @@ export function DemoAuthProvider({ children }) {
         setMessages,
         updateLocalStorageData,
         getLocalStorageData,
-        removeLocalStorageData
+        removeLocalStorageData,
+        resetUser
     }
     
     return(
