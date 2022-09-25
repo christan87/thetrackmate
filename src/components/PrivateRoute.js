@@ -23,6 +23,15 @@ function PrivateRoute({ children }){
         if(localStorageData.foundUser.role !== demoUser.role){
             localStorageData.foundUser = demoUser;
             localStorageData.id = demoUser._id;
+            if(localStorageData.foundUser.userData.email === ""){
+                localStorageData.foundUser.userData.email = `${demoUser.role}@demo.com`
+            }
+            if(localStorageData.foundUser.userData.website === ""){
+                localStorageData.foundUser.userData.website = `https://www.trackmate.com/${demoUser.role}`
+            }
+            if(localStorageData.foundUser.userData.bio === ""){
+                localStorageData.foundUser.userData.bio = `Tis the bio section for the ${demoUser.role} account...` 
+            }
             updateLocalStorageData(localStorageData)
             return window.location.reload(true);
         }

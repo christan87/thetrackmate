@@ -55,6 +55,7 @@ function UserUpdateForm(props){
     const bioRef = useRef();
     const [userAccountData, setUserAccountData] = useState({})
     const {updateDisplayName, currentUser} = useAuth();
+    const {updateLocalStorageData, getLocalStorageData, removeLocalStorageData} = useDemoAuth();
 
     useEffect(()=>{
         let temp = {}
@@ -78,16 +79,23 @@ function UserUpdateForm(props){
             website: websiteRef.current.value,
             bio: bioRef.current.value
         }
-        axios.post(`http://localhost:80/users/update-data/${userData.foundUser._id}`, accountData).then((response)=>{
-            console.log("Response: ", response.data)
-        }).catch((err)=>{
-            console.log("User2.js>UserUpdateForm>handleSubmit: ", err)
-        })
-        try{
-            let name = `${accountData.firstName} ${accountData.lastName}`
-            updateDisplayName(currentUser, name);
-        }catch(e){
-            console.log("updateDisplayName: ", e)
+        if(userData.mode === "live"){
+            axios.post(`http://localhost:80/users/update-data/${userData.foundUser._id}`, accountData).then((response)=>{
+                console.log("Response: ", response.data)
+            }).catch((err)=>{
+                console.log("User2.js>UserUpdateForm>handleSubmit: ", err)
+            })
+            try{
+                let name = `${accountData.firstName} ${accountData.lastName}`
+                updateDisplayName(currentUser, name);
+            }catch(e){
+                console.log("updateDisplayName: ", e)
+            }
+        }else{
+            let localStorageData = getLocalStorageData();
+            localStorageData.foundUser.userData = accountData;
+            updateLocalStorageData(localStorageData)
+            
         }
         console.log("submitted......", accountData)
     }
@@ -165,6 +173,7 @@ export default function User(){
     const [flName, setFlName] = useState([]); 
     const [formData, setFormData] = useState({});
 
+    console.log("UserData: ", userData)
     useEffect(()=>{
         const fullName = [];
         let myNameArray = []
@@ -176,10 +185,10 @@ export default function User(){
             newFormData.website = userData.website || "";
             newFormData.bio = userData.bio || "";
         }else{
-            myNameArray = userData.id.split("-");
-            newFormData.email = `${myNameArray[0]}@trackmate.com` || "";
-            newFormData.website = `https://www.trackmate.com/${myNameArray[0]}` || "";
-            newFormData.bio = `Tis the bio section for the ${myNameArray[0]} account...` || "";
+            myNameArray = [userData.foundUser.userData.firstName, userData.foundUser.userData.lastName]
+            newFormData.email = userData.foundUser.userData.email || "";
+            newFormData.website = userData.foundUser.userData.website || "";
+            newFormData.bio = userData.foundUser.userData.bio || "";
         }
 
 
@@ -230,8 +239,6 @@ export default function User(){
                     {demoMode? <h2 className="text-center mb-4">{`Demo Role: ${demoUser.role}`}</h2> : <></>}
                     <div className="w-100 text-center mt-3">
                         <UserUpdateForm data={formData} />
-                        <Link to="">Place Holder 1</Link>
-                        <Link className="ms-1" to="">Place Holder 2</Link>
                     </div>
                     </Container>
 

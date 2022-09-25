@@ -26,7 +26,14 @@ export function DemoAuthProvider({ children }) {
         role: demoRole,
         _id: `${demoRole}-D123456`,
         avatar:"",
-        messageCount: messageCount
+        messageCount: messageCount,
+        userData:{
+            firstName: "Demo",
+            lastName: "User",
+            email: "",
+            website: "",
+            bio: ''
+        }
     }
 
     function adminDemoLogin(){
