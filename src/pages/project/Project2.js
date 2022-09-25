@@ -14,6 +14,7 @@ import demoProjectComments from '../../services/demoProjectComments';
 import Tickets from '../dashboard/Tickets2'
 import { Link, useNavigate as useHistory, useParams } from 'react-router-dom';
 import { useUserData } from "../../contexts/UserDataContext";
+import { useDemoAuth } from '../../contexts/AuthDemoContext';
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import UserList2 from '../../components/UserList2';
 import axios from 'axios';
@@ -27,6 +28,7 @@ export default function Project(){
     let project = findProject(id);
     let projectTickets = [];
     const [addedUsers, setAddedUsers] = useState([]);
+    const {updateLocalStorageData, getLocalStorageData, removeLocalStorageData} = useDemoAuth();
     console.log('project: ', project)
     console.log('userData: ', userData)
 
@@ -40,34 +42,46 @@ export default function Project(){
     }
 
     async function handleAdd(newUsers){
-        let updatedUsers = [...project.collaborators, ...newUsers]
-        project.collaborators = updatedUsers;
-        let port = 80;
-        try{
-            await axios.put(`http://localhost:${port}/projects/update/${id}`, project).then((response)=>{
-                console.log("response: ", response.data)
-                setAddedUsers(updatedUsers);
-            }).catch((err)=>{
+        if(userData.mode === 'live'){
+            let updatedUsers = [...project.collaborators, ...newUsers]
+            project.collaborators = updatedUsers;
+            let port = 80;
+            try{
+                await axios.put(`http://localhost:${port}/projects/update/${id}`, project).then((response)=>{
+                    console.log("response: ", response.data)
+                    setAddedUsers(updatedUsers);
+                }).catch((err)=>{
+                    console.log("Project2.js>handleAdd>error: ", err)
+                })
+            }catch(err){
                 console.log("Project2.js>handleAdd>error: ", err)
-            })
-        }catch(err){
-            console.log("Project2.js>handleAdd>error: ", err)
+            }
+        }else{
+
         }
 
     }
 
     async function handleDelete(){
-        let port = 80;
-        try{
-            await axios.delete(`http://localhost:${port}/projects/delete/${id}`).then((response)=>{
-                console.log("response: ", response.data)
-                window.location.href = '/';
-            }).catch((err)=>{
+        if(userData.mode === 'live'){
+            let port = 80;
+            try{
+                await axios.delete(`http://localhost:${port}/projects/delete/${id}`).then((response)=>{
+                    console.log("response: ", response.data)
+                    window.location.href = '/';
+                }).catch((err)=>{
+                    console.log("Project2.js>handleDelete>error: ", err)
+                })
+            }catch(err){
                 console.log("Project2.js>handleDelete>error: ", err)
-            })
-        }catch(err){
-            console.log("Project2.js>handleDelete>error: ", err)
-        }
+            }
+        }else{
+            let localStorageData = getLocalStorageData();
+            let updatedProjects = localStorageData.projectsAll.filter(element => element._id !== id)
+            localStorageData.projectsAll = updatedProjects;
+            updateLocalStorageData(localStorageData);
+            window.location.href = '/';
+        }   
     } 
 
 
