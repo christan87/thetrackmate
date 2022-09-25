@@ -36,7 +36,8 @@ export default function DemoLogin(){
         }catch(e){
             console.log("DemoLogin.jd>handleAdminDemoLogin ", e)
         }
-        history("/")
+        window.location.href = '/';
+        //history("/")
     }
     async function handleCollabDemoLogin(){
         try{
@@ -47,7 +48,8 @@ export default function DemoLogin(){
         }catch(e){
             console.log("DemoLogin.jd>handleCollabDemoLogin ", e)
         }
-        history("/")
+        window.location.href = '/';
+        //history("/")
     }
     async function handleUserDemoLogin(){
         try{
@@ -58,7 +60,8 @@ export default function DemoLogin(){
         }catch(e){
             console.log("DemoLogin.jd>handleUserDemoLogin ", e)
         }
-        history("/")
+        window.location.href = '/';
+        //history("/")
     }
     async function handleGuestDemoLogin(){
         try{
@@ -69,7 +72,8 @@ export default function DemoLogin(){
         }catch(e){
             console.log("DemoLogin.jd>handleGuestDemoLogin ", e)
         }
-        history("/")
+        window.location.href = '/';
+        //history("/")
     }
     return(
         <>

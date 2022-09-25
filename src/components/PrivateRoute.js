@@ -16,12 +16,15 @@ function PrivateRoute({ children }){
     updated during login we can check in this route if that is reflected in demoTrackMateData and if not
     we update it here so when the page loads we have the correct user info.
     */
+
+
     if(demoMode){
         let localStorageData = getLocalStorageData()
         if(localStorageData.foundUser.role !== demoUser.role){
             localStorageData.foundUser = demoUser;
             localStorageData.id = demoUser._id;
             updateLocalStorageData(localStorageData)
+            return window.location.reload(true);
         }
     }
     /*

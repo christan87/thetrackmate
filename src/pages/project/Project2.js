@@ -144,9 +144,12 @@ export default function Project(){
                     </Card.Body>
                 </Card>
                 <div>
-                    <Button className="my-3" onClick={handleClick}>Update Project</Button>
+                    
                     {project.admin === userData.foundUser._id?
-                        <Button className='btn btn-danger' style={{marginLeft: '.5rem'}} onClick={handleDelete}>Delete</Button>
+                        <div>
+                            <Button className="my-3" onClick={handleClick}>Update Project</Button>
+                            <Button className='btn btn-danger' style={{marginLeft: '.5rem'}} onClick={handleDelete}>Delete</Button>
+                        </div>
                         :
                         <></>
                     }
