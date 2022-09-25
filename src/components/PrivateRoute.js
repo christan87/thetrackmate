@@ -20,6 +20,7 @@ function PrivateRoute({ children }){
         let localStorageData = getLocalStorageData()
         if(localStorageData.foundUser.role !== demoUser.role){
             localStorageData.foundUser = demoUser;
+            localStorageData.id = demoUser._id;
             updateLocalStorageData(localStorageData)
         }
     }
