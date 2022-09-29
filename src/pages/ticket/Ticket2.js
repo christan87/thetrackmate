@@ -20,6 +20,9 @@ import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import axios from "axios"
 import DeleteIcon from '@material-ui/icons/Delete';
 
+const api = process.env.REACT_APP_API;
+const apiPort = process.env.REACT_APP_PORT;
+
 function  Comment(props){
     const { userData } = useUserData();
     const {comment, ticketId} = props;
@@ -135,7 +138,7 @@ export default function Ticket(){
         if(userData.mode === 'live'){
             let port = 80;
             try{
-                await axios.delete(`http://localhost:${port}/tickets/delete/${id}`).then((response)=>{
+                await axios.delete(`${api}${port}/tickets/delete/${id}`).then((response)=>{
                     console.log("response: ", response.data)
                     window.location.href = '/';
                 }).catch(err=>{
@@ -144,7 +147,6 @@ export default function Ticket(){
             }catch(err){
 
             }
-            alert("Delete")
         }else{
             let localStorageData = getLocalStorageData()
             localStorageData.ticketCommentsAll = localStorageData.ticketCommentsAll.filter(element=> element.author.id !== userData.foundUser._id)

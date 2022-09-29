@@ -91,6 +91,7 @@ router.route("/delete/:id").delete((req, res)=>{
                 }
             })
         }
+        ticket.remove();
     });
 });
 
