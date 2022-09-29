@@ -15,6 +15,7 @@ import UserList from '../../components/UserList';
 // import demoTicketComments from '../../services/demoTicketComments';
 import {useNavigate as useHistory } from 'react-router-dom';
 import { useUserData } from "../../contexts/UserDataContext";
+import { useDemoAuth } from '../../contexts/AuthDemoContext';
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import axios from "axios"
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -79,12 +80,10 @@ function  Comment(props){
 
     return(
         <div style={{display:"flex", marginBottom:".5rem"}}>
-            {console.log("comment: ", comment)}
             <div>
                 <img src={comment.author.avatar? comment.author.avatar : defaultAvatar} style={commentDisplayStyle.avatar}/>
             </div>
             <div style={{width:"100%"}}>
-                {console.log("Date: ", new Date(comment.createdAt).toLocaleDateString())}
                 <strong>{`${comment.author.name}`}</strong>
                 <span style={commentDisplayStyle.date}> - {date === "Invalid Date"? comment.date : date}</span>
                 <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
@@ -113,7 +112,10 @@ export default function Ticket(){
 
     const { id } = useParams();
     const { userData } = useUserData();
+    const {updateLocalStorageData, getLocalStorageData, removeLocalStorageData} = useDemoAuth(); 
+
     const ticket = userData.ticketsAll.find(element => element._id === id);
+    console.log("ticket: ", ticket)
     let comments = [];
     if(userData.mode === "demo"){
         comments = userData.ticketCommentsAll.filter(element => element.ticketId === String(id));
@@ -129,6 +131,36 @@ export default function Ticket(){
         history(`/ticket/update/${id}`)
     }
 
+    const handleDelete = async ()=>{
+        if(userData.mode === 'live'){
+            let port = 80;
+            try{
+                await axios.delete(`http://localhost:${port}/tickets/delete/${id}`).then((response)=>{
+                    console.log("response: ", response.data)
+                    window.location.href = '/';
+                }).catch(err=>{
+                    console.log("Ticket2.js>handleDelete>error: ", err)
+                })
+            }catch(err){
+
+            }
+            alert("Delete")
+        }else{
+            let localStorageData = getLocalStorageData()
+            localStorageData.ticketCommentsAll = localStorageData.ticketCommentsAll.filter(element=> element.author.id !== userData.foundUser._id)
+            let projects = localStorageData.projectsAll;
+            let project = projects.find(element=> element._id === ticket.project.id)
+            project.tickets = project.tickets.filter(element=> element !== id)
+            let comments = localStorageData.ticketCommentsAll;
+            comments = comments.filter(element=> element.ticketId !== id);
+            localStorageData.ticketsAll = localStorageData.ticketsAll.filter(element=> element._id !== id);
+            console.log(localStorageData)
+            updateLocalStorageData(localStorageData);
+            window.location.href = '/';
+        }
+        
+    }
+
     async function handleComment(){
         setError("")
         setLoading(true)
@@ -141,17 +173,29 @@ export default function Ticket(){
                 avatar: userData.photoURL
             }
         }
-
-        await axios.post(`http://localhost:80/comments/ticket/${id}`, comment).then((response)=>{
-            console.log(response.data)
-            setLoading(false)
-        }).catch((error)=>{
-            console.log("Ticket.js>handleComment: ", error)
-        })
-
+        if(userData.mode === 'live'){
+            await axios.post(`http://localhost:80/comments/ticket/${id}`, comment).then((response)=>{
+                console.log("Comment: ", comment.author)
+                console.log(response.data)
+                setLoading(false)
+            }).catch((error)=>{
+                setLoading(false)
+                console.log("Ticket.js>handleComment: ", error)
+            })
+        }else{
+            comment.author = {
+                id: userData.foundUser._id,
+                name: userData.name
+            }
+            comment.ticketId = id;
+            let localStorageData = getLocalStorageData();
+            localStorageData.ticketCommentsAll = [...localStorageData.ticketCommentsAll, comment];
+            updateLocalStorageData(localStorageData) 
+            window.location.href = `http://localhost:3000/ticket/${id}`
+        }   
         console.log("Comment: ", commentRef.current.value)
         commentRef.current.value = "";
-        window.location.reload(true)
+        //window.location.reload(true)
     }
 
 
@@ -207,7 +251,14 @@ export default function Ticket(){
                             <Card.Text>Status: {ticket.status}</Card.Text>
                             <Card.Text>Created: {new Date(ticket.createdAt).toLocaleDateString()}</Card.Text>
                             <Card.Text>Private: {String(ticket.private)}</Card.Text>
-                            <Button onClick={handleClick}>Update Ticket</Button>
+                            {userData.foundUser._id === ticket.admin?
+                                <div style={{display: 'flex'}}>
+                                    <Button onClick={handleClick}>Update Ticket</Button>
+                                    <Button className='btn btn-danger mx-2' onClick={handleDelete}>Delete</Button>
+                                </div>
+                                :
+                                <></>
+                             }
                         </Col>
                         <Col>
                             {/* <UserList ticket={ticket} /> */}

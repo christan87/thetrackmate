@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Ticket = require("../models/ticket.model");
 const Project = require("../models/project.model");
-// const Comment = require("../models/comment.model");
+const Comment = require("../models/comment.model");
 
 router.route("/add").post((req, res)=>{
     const ticketName = req.body.name;
@@ -77,21 +77,21 @@ router.route("/update/:id").put((req, res)=>{
 })
 
 //Delete Ticket and Comments
-// router.route("/delete/:id").delete((req, res)=>{
-//     Ticket.findByIdAndRemove(req.params.id, (err, ticket)=>{
-//         if(err){
-//             console.log("routes>tickets.js>Delete: ", err)
-//         }else{
-//             Comment.deleteMany({_id: {$in: ticket.comments}}, (err2, comment)=>{
-//                 if(err){
-//                     console.log("routes>tickets.js>Delete: ", err2)
-//                 }
-//                 else{
-//                     res.send("deleted")
-//                 }
-//             })
-//         }
-//     });
-// });
+router.route("/delete/:id").delete((req, res)=>{
+    Ticket.findById(req.params.id, (err, ticket)=>{
+        if(err){
+            console.log("routes>tickets.js>Delete: ", err)
+        }else{
+            Comment.deleteMany({_id: {$in: ticket.comments}}, (err2, comment)=>{
+                if(err){
+                    console.log("routes>tickets.js>Delete: ", err2)
+                }
+                else{
+                    res.send("deleted")
+                }
+            })
+        }
+    });
+});
 
 module.exports = router;
