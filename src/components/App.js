@@ -131,11 +131,11 @@ function App() {
                 <Route exact path="/ticket/update/:id" element={ 
                     <AuthLoader>
                       <LoadDemoData>
-                        <DrawerWrap>
+                        <DrawerWrap2>
                           <PrivateRoute>  
                             <UpdateTicket />                      
                           </PrivateRoute>
-                        </DrawerWrap>
+                        </DrawerWrap2>
                       </LoadDemoData>
                     </AuthLoader>
                   } 
