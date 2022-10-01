@@ -6,6 +6,7 @@ const AuthContext = React.createContext();
 const provider = new GoogleAuthProvider();
 const fbProvider = new FacebookAuthProvider();
 const fbAuth = getAuth();
+const backend = process.env.REACT_APP_API;
 
 export function useAuth() {
     return useContext(AuthContext);
@@ -26,7 +27,7 @@ export function AuthProvider({ children }) {
     
     async function findUserByUID(uid){
         let user;
-        await axios.get(`http://localhost:80/users/auth/${uid}`).then((response)=>{
+        await axios.get(`${backend}/users/auth/${uid}`).then((response)=>{
             user =  response.data
         }).catch((error)=>{
             console.log("LoadDemoData>findUserByUID>error: ", error)
@@ -35,7 +36,7 @@ export function AuthProvider({ children }) {
     }
 
     async function addUserToDatabase(user){
-        await axios.post("http://localhost:80/users/add", user).then((response)=>{
+        await axios.post(`${backend}/users/add`, user).then((response)=>{
             console.log("response: ", response.data)
         }).catch((error)=>{
             console.log("LoadDemoData>addUserToDatabase>error: ", error)
@@ -57,7 +58,7 @@ export function AuthProvider({ children }) {
         if(accessToken !== null && accessToken !== undefined && accessToken !== ""){
             newUser.accessToken = accessToken;
             if(foundUser !== null && foundUser !== undefined && foundUser.accessToken !== newUser.accessToken){
-                await axios.post(`http://localhost:80/users/update/${foundUser._id}`, newUser).then((response)=>{
+                await axios.post(`${backend}/users/update/${foundUser._id}`, newUser).then((response)=>{
                     console.log("response: ", response.data)
                 }).catch((error)=>{
                     console.log("LoadDemoData>checkForUserBeforAdd>error: ", error)

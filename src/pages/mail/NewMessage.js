@@ -15,6 +15,7 @@ import demoUsers from '../../services/demoUsers';
 import { useUserData } from "../../contexts/UserDataContext";
 import Autocomplete from "../../components/AutoComplete";
 import axios from "axios";
+const backend = process.env.REACT_APP_API;
 
 export default function NewMessage(props){
     const subjectRef = useRef();
@@ -58,7 +59,7 @@ export default function NewMessage(props){
             }
             console.log("newMessage: ", newMessage)
     
-            await axios.post(`http://localhost:80/messages/message/${newMessage.recipient}`, newMessage).then((response)=>{
+            await axios.post(`${backend}/messages/message/${newMessage.recipient}`, newMessage).then((response)=>{
                 console.log(response.data)
             }).catch((error)=>{
                 console.log("NewMessage.js>handleSubmit>axios.post> ", error)

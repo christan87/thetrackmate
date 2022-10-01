@@ -15,6 +15,7 @@ import axios from "axios";
 // import demoProjects from '../../services/demoProjects';
 // import demoUsers from '../../services/demoUsers';
 import { useUserData } from "../../contexts/UserDataContext";
+const backend = process.env.REACT_APP_API;
 
 export default function NewTicket(props){
     const nameRef = useRef();
@@ -143,7 +144,7 @@ export default function NewTicket(props){
                 return setError("Must Complete Form...");
             }
             try{
-                await axios.post('http://localhost:80/tickets/add', newTicket).then(
+                await axios.post(`${backend}/tickets/add`, newTicket).then(
                     async res=> {
                         console.log("Ticket Added!: ", res.data)
                         // let updateProject = await (await axios.get(`http://localhost:5000/projects/${newTicket.project.id}`)).data;

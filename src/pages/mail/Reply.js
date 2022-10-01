@@ -14,6 +14,7 @@ import demoProjects from '../../services/demoProjects';
 import demoUsers from '../../services/demoUsers';
 import { useUserData } from "../../contexts/UserDataContext";
 import axios from "axios";
+const backend = process.env.REACT_APP_API;
 
 export default function Reply(props){
     const subjectRef = useRef();
@@ -51,7 +52,7 @@ export default function Reply(props){
             }
             console.log("replyMessage: ", newMessage)
     
-            await axios.post(`http://localhost:80/messages/reply/${newMessage.recipient}`, newMessage).then((response)=>{
+            await axios.post(`${backend}/messages/reply/${newMessage.recipient}`, newMessage).then((response)=>{
                 console.log(response.data)
             }).catch((error)=>{
                 console.log("NewMessage.js>handleSubmit>axios.post> ", error)

@@ -14,6 +14,7 @@ import Reply from './Reply';
 import EnlargeModal from '../analytics/EnlargeModal';
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import axios from 'axios';
+const backend = process.env.REACT_APP_API;
 
 export default function Message(){
 
@@ -39,7 +40,7 @@ export default function Message(){
 
     const deleteUserMessage = async(userId, messageId) =>{
         try{
-            await axios.post(`http://localhost:80/messages/delete/${userId}/${messageId}`, {}).then((response)=>{
+            await axios.post(`${backend}/messages/delete/${userId}/${messageId}`, {}).then((response)=>{
                 if(response.data !== null && response.data !== undefined){
                   console.log("Delete Response: ", response)
                   window.location.href='/mail';

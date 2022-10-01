@@ -16,6 +16,7 @@ import UserList from '../../components/UserList';
 import {useNavigate as useHistory } from 'react-router-dom';
 import { useUserData } from "../../contexts/UserDataContext";
 import axios from "axios"
+const backend = process.env.REACT_APP_API;
 
 export default function Ticket(){
 
@@ -50,7 +51,7 @@ export default function Ticket(){
             }
         }
 
-        await axios.post(`http://localhost:5000/comments/ticket/${id}`, comment).then((response)=>{
+        await axios.post(`${backend}/comments/ticket/${id}`, comment).then((response)=>{
             console.log(response.data)
         }).catch((error)=>{
             console.log("Ticket.js>handleComment: ", error)

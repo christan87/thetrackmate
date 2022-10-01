@@ -13,6 +13,8 @@ import { useDemoAuth } from "../../contexts/AuthDemoContext";
 import { useUserData } from "../../contexts/UserDataContext";
 import { uid } from "uid";
 import axios from "axios";
+const backend = process.env.REACT_APP_API;
+
 // import demoUsers from '../../services/demoUsers';
 
 export default function NewProject(props){
@@ -62,12 +64,12 @@ export default function NewProject(props){
                 return setError("Must Complete Form...");
             }
 
-            await axios.post("http://localhost:80/projects/add", newProject).then(async(response)=>{
+            await axios.post(`${backend}/projects/add`, newProject).then(async(response)=>{
                 
                 let updateUser = userData.foundUser;
                 updateUser.projects = [...userData.foundUser.projects, response.data._id]
 
-                await axios.post(`http://localhost:80/users/update/${userData.foundUser._id}`, updateUser).then((response)=>{
+                await axios.post(`${backend}/users/update/${userData.foundUser._id}`, updateUser).then((response)=>{
                     console.log("Update Respons: ", response.data)
                     window.location.reload(true)
                 }).catch((error)=>{

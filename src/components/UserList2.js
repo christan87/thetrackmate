@@ -12,6 +12,8 @@ import './UserList2.css'
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 
+const backend = process.env.REACT_APP_API;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -84,9 +86,8 @@ export default function UserList2(props) {
 
       let updatedUsers = currCollaborators.filter(user=> removeUsers.includes(user))
       let disabled = disabledUsers.filter(user=> removeUsers.includes(user))
-      let port = 80;
       try{
-          await axios.put(`http://localhost:${port}/projects/update-assigned/${projectId}`, {collaborators: updatedUsers}).then((response)=>{
+          await axios.put(`${backend}/projects/update-assigned/${projectId}`, {collaborators: updatedUsers}).then((response)=>{
               console.log("response: ", response.data)
               setDisabledUsers(disabled)
               window.location.reload(true)

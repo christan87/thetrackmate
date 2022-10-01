@@ -14,6 +14,7 @@ import { useDemoAuth } from "../../contexts/AuthDemoContext";
 // import demoUsers from '../../services/demoUsers';
 import { useUserData } from "../../contexts/UserDataContext";
 import axios from "axios";
+const backend = process.env.REACT_APP_API;
 
 export default function UpdateTicket(){
     
@@ -86,7 +87,7 @@ export default function UpdateTicket(){
         }
         //return console.log("Update:", updatedTicket)
         try{
-            axios.put(`http://localhost:80/tickets/update/${id}`, updatedTicket).then(
+            axios.put(`${backend}/tickets/update/${id}`, updatedTicket).then(
                 res=> {
                     //history(`/ticket/${res.data}`)
                     window.location.href = `/ticket/${id}`;

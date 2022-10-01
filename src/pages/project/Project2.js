@@ -19,6 +19,7 @@ import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import UserList2 from '../../components/UserList2';
 import axios from 'axios';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
+const backend = process.env.REACT_APP_API;
 
 export default function Project(){
 
@@ -45,9 +46,8 @@ export default function Project(){
         if(userData.mode === 'live'){
             let updatedUsers = [...project.collaborators, ...newUsers]
             project.collaborators = updatedUsers;
-            let port = 80;
             try{
-                await axios.put(`http://localhost:${port}/projects/update/${id}`, project).then((response)=>{
+                await axios.put(`${backend}/projects/update/${id}`, project).then((response)=>{
                     console.log("response: ", response.data)
                     setAddedUsers(updatedUsers);
                 }).catch((err)=>{
@@ -64,9 +64,8 @@ export default function Project(){
 
     async function handleDelete(){
         if(userData.mode === 'live'){
-            let port = 80;
             try{
-                await axios.delete(`http://localhost:${port}/projects/delete/${id}`).then((response)=>{
+                await axios.delete(`${backend}/projects/delete/${id}`).then((response)=>{
                     console.log("response: ", response.data)
                     window.location.href = '/';
                 }).catch((err)=>{

@@ -19,10 +19,8 @@ import { useDemoAuth } from '../../contexts/AuthDemoContext';
 import bannerImg from '../../assets/scrum-board-concept-illustration.png';
 import axios from "axios"
 import DeleteIcon from '@material-ui/icons/Delete';
+const backend = process.env.REACT_APP_API;
 
-const api = process.env.REACT_APP_API;
-const apiPort = process.env.REACT_APP_PORT;
-const apiUrl = `${api}${apiPort}`;
 function  Comment(props){
     const { userData } = useUserData();
     const {comment, ticketId} = props;
@@ -73,7 +71,7 @@ function  Comment(props){
     }
     
     async function handleDelete(){
-        await axios.delete(`http://localhost:80/comments/delete/${ticketId}/${comment._id}`).then((response)=>{
+        await axios.delete(`${backend}/comments/delete/${ticketId}/${comment._id}`).then((response)=>{
             console.log(response.data)
             window.location.reload(true);
         }).catch((error)=>{
@@ -136,9 +134,8 @@ export default function Ticket(){
 
     const handleDelete = async ()=>{
         if(userData.mode === 'live'){
-            let port = 80;
             try{
-                await axios.delete(`${apiUrl}/tickets/delete/${id}`).then((response)=>{
+                await axios.delete(`${backend}/tickets/delete/${id}`).then((response)=>{
                     console.log("response: ", response.data)
                     window.location.href = '/';
                 }).catch(err=>{
@@ -176,7 +173,7 @@ export default function Ticket(){
             }
         }
         if(userData.mode === 'live'){
-            await axios.post(`http://localhost:80/comments/ticket/${id}`, comment).then((response)=>{
+            await axios.post(`${backend}/comments/ticket/${id}`, comment).then((response)=>{
                 console.log("Comment: ", comment.author)
                 console.log(response.data)
                 setLoading(false)

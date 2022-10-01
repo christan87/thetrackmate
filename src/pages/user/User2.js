@@ -10,6 +10,8 @@ import banner from '../../assets/user-banner.png'
 import { FreeBreakfastOutlined } from '@material-ui/icons';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios'
+const backend = process.env.REACT_APP_API;
+
 function DisplayName(){
     const { currentUser } = useAuth();
     return(
@@ -80,7 +82,7 @@ function UserUpdateForm(props){
             bio: bioRef.current.value
         }
         if(userData.mode === "live"){
-            axios.post(`http://localhost:80/users/update-data/${userData.foundUser._id}`, accountData).then((response)=>{
+            axios.post(`${backend}/users/update-data/${userData.foundUser._id}`, accountData).then((response)=>{
                 console.log("Response: ", response.data)
             }).catch((err)=>{
                 console.log("User2.js>UserUpdateForm>handleSubmit: ", err)

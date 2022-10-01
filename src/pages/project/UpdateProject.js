@@ -14,7 +14,7 @@ import axios from 'axios'
 import demoTickets from '../../services/demoTickets';
 // import demoProjects from '../../services/demoProjects';
 import { useUserData } from "../../contexts/UserDataContext";
-
+const backend = process.env.REACT_APP_API;
 
 export default function UpdateProject(){
 
@@ -93,7 +93,7 @@ export default function UpdateProject(){
         // }
         if(userData.mode === "live"){
             try{
-                await axios.put(`http://localhost:80/projects/update/${id}`, updatedProject).then(async(response)=>{
+                await axios.put(`${backend}/projects/update/${id}`, updatedProject).then(async(response)=>{
                     history(`/project/${response.data}`)
                 }).catch((error)=>{
                     console.log("Project Not Updated: ", error)

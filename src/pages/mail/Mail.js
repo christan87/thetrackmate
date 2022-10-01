@@ -37,6 +37,7 @@ Better to use a material-ui link when I need a re-render to happen and get most 
 import Link from '@material-ui/core/Link';
 
 import axios from 'axios'
+const backend = process.env.REACT_APP_API;
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -317,7 +318,7 @@ export default function Mail() {
 
   const deleteUserMessage = async(userId, messageId) =>{
     try{
-        await axios.post(`http://localhost:80/messages/delete/${userId}/${messageId}`, {}).then((response)=>{
+        await axios.post(`${backend}/messages/delete/${userId}/${messageId}`, {}).then((response)=>{
             if(response.data !== null && response.data !== undefined){
               console.log("Delete Response: ", response)
             }
@@ -331,7 +332,7 @@ export default function Mail() {
 
   const deleteUserMessages = async(userId, messages) =>{
     try{
-        await axios.post(`http://localhost:80/messages/multidelete/${userId}`, {messages: messages}).then((response)=>{
+        await axios.post(`${backend}/messages/multidelete/${userId}`, {messages: messages}).then((response)=>{
             if(response.data !== null && response.data !== undefined){
               console.log("Delete Response: ", response)
             }
@@ -424,7 +425,7 @@ export default function Mail() {
   }
   const handleReadMessage = async (id)=>{
     try{
-      await axios.put(`http://localhost:80/messages/read/${id}`, {read: true}).then((response)=>{
+      await axios.put(`${backend}/messages/read/${id}`, {read: true}).then((response)=>{
           if(response.data !== null && response.data !== undefined){
             console.log("Read: ", response)
           }
