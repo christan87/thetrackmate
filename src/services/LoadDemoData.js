@@ -12,6 +12,8 @@ import { useNavigate as useHistory } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios'
 
+const backend = process.env.REACT_APP_API;
+
 export default function LoadDemoData({children, page}){
     const { 
         demoMode, 
@@ -130,7 +132,7 @@ export default function LoadDemoData({children, page}){
 
     async function findUserByUID(uid){
         let user;
-        await axios.get(`http://localhost:80/users/auth/${uid}`).then((response)=>{
+        await axios.get(`${backend}/users/auth/${uid}`).then((response)=>{
             user =  response.data
         }).catch((error)=>{
             console.log("LoadDemoData>findUserByUID>error: ", error)
@@ -199,7 +201,7 @@ export default function LoadDemoData({children, page}){
             photoURL: photoURL
         }
         try{
-            await axios.post(`http://localhost:80/users/update/${foundUser._id}`, newUser).then(
+            await axios.post(`${backend}/users/update/${foundUser._id}`, newUser).then(
                 (response)=>{
                     console.log("response: ", response.data)
                 }
@@ -235,7 +237,7 @@ export default function LoadDemoData({children, page}){
             const foundUser = await findUserByUID(currentUser.uid)
             let useId = foundUser._id;  // allows for correct projects to be loaded on the AltUser page
             if(AltUserId && page === 'AltUser'){ useId = AltUserId; console.log("useId:",useId)} 
-            await axios.get(`http://localhost:80/projects/user/${useId}`).then((response)=>{
+            await axios.get(`${backend}/projects/user/${useId}`).then((response)=>{
                 if(response.data !== null && response.data !== undefined){
                     projects = response.data;
                     data.projectsAll = response.data.projects
@@ -256,7 +258,7 @@ export default function LoadDemoData({children, page}){
             
             let useId = foundUser._id; // allows for correct tickets to be loaded on the AltUser page
             if(AltUserId && page === 'AltUser') useId = AltUserId; 
-            await axios.get(`http://localhost:80/tickets/user/${useId}`).then((response)=>{
+            await axios.get(`${backend}/tickets/user/${useId}`).then((response)=>{
                 if(response.data !== null && response.data !== undefined){
                     tickets = response.data;
                     data.ticketsAll = tickets.tickets
@@ -273,7 +275,7 @@ export default function LoadDemoData({children, page}){
     async function setUsers(){
         try{
             let users = [];
-            await axios.get("http://localhost:80/users").then((response)=>{
+            await axios.get(`${backend}/users`).then((response)=>{
               users = response.data;
               data.usersAll = users;
             }).catch((error)=>{
