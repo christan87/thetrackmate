@@ -84,11 +84,12 @@ export default function UpdateTicket(){
             updatedTicket.priorityLevel = ""
             return setError("Must Complete Form...");
         }
-        return console.log("Update:", updatedTicket)
+        //return console.log("Update:", updatedTicket)
         try{
-            axios.put(`http://localhost:5000/tickets/update/${id}`, updatedTicket).then(
+            axios.put(`http://localhost:80/tickets/update/${id}`, updatedTicket).then(
                 res=> {
-                    history(`/ticket/${res.data}`)
+                    //history(`/ticket/${res.data}`)
+                    window.location.href = `/ticket/${id}`;
                 }
             )
         }catch(err){
@@ -165,7 +166,7 @@ export default function UpdateTicket(){
                                             />
                                         }
                                     </FloatingLabel>
-                                    <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
+                                    {/* <FloatingLabel controlId="floatingUserAssignment" label="Assign to..." className="mb-3">
                                         {!currentTicket?
                                             <Form.Select aria-label="User Assignment Select" ref={assignedRef} >
                                                 <option value="0"></option>
@@ -185,7 +186,7 @@ export default function UpdateTicket(){
                                                 })}
                                             </Form.Select>
                                         }
-                                    </FloatingLabel>
+                                    </FloatingLabel> */}
                                     <FloatingLabel controlId="floatingStatusLevel" label="Status" className="mb-3">
                                         {!currentTicket?
                                             <Form.Select aria-label="Status Select" ref={statusRef}>
