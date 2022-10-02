@@ -43,8 +43,8 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-function createData2(sender, subject, date, id, read) {
-    return { sender, subject, date, id, read };
+function createData2(sender, subject, date, id, read, sortDate) {
+    return { sender, subject, date, id, read, sortDate};
   }
 
 const rows2 = [
@@ -226,7 +226,7 @@ const EnhancedTableToolbar = (props) => {
         </Tooltip>
       )}
       <EnlargeModal show={modalShow} onHide={onHide} >
-        <NewMessage />
+        <NewMessage onHide={onHide} />
       </EnlargeModal>
     </Toolbar>
   );
@@ -263,7 +263,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Mail() {
   const classes = useStyles();
   const [order, setOrder] = useState('desc');
-  const [orderBy, setOrderBy] = useState('date');
+  const [orderBy, setOrderBy] = useState('sortDate');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
@@ -281,7 +281,8 @@ export default function Mail() {
   useEffect(()=>{
     messages.forEach((message)=>{
       let date = new Date(message.createdAt).toLocaleDateString()
-      const data = createData2(message.author.name, message.subject, date, message._id, message.read)
+      let sortDate = new Date(message.createdAt)
+      const data = createData2(message.author.name, message.subject, date, message._id, message.read, sortDate)
       tempRows.push(data)
     })
     tempRows = tempRows.reverse()

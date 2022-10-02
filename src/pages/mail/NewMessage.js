@@ -45,25 +45,31 @@ export default function NewMessage(props){
             }
     
             try{
-                newMessage.recipient = userData.usersAll.find((user)=> user.email === userRef.current.value)._id;
+                //newMessage.recipient = userData.usersAll.find((user)=> user.email === userRef.current.value)._id;
+                // newMessage.recipient = autoValue;
             }catch(error){
                 console.log("NewMessage.js>newMessage.recipient> ", error)
             }
     
             if(subjectRef.current.value === ""){
                 return setError("Fill in all fields...")
-            }else if(userRef.current.value === ""){
+            // }else if(userRef.current.value === ""){
+            //     return setError("Fill in all fields...")
+            }else if(autoValue.length === 0){
                 return setError("Fill in all fields...")
             }else if(messageRef.current.value === ""){
                 return setError("Fill in all fields...")
             }
             console.log("newMessage: ", newMessage)
-    
-            await axios.post(`${backend}/messages/message/${newMessage.recipient}`, newMessage).then((response)=>{
-                console.log(response.data)
-            }).catch((error)=>{
-                console.log("NewMessage.js>handleSubmit>axios.post> ", error)
+            autoValue.forEach(async recipient =>{
+                newMessage.recipient = recipient._id;
+                await axios.post(`${backend}/messages/message/${newMessage.recipient}`, newMessage).then((response)=>{
+                    console.log(response.data)
+                }).catch((error)=>{
+                    console.log("NewMessage.js>handleSubmit>axios.post> ", error)
+                })
             })
+
         }else if(userData.mode === "demo"){
             
             let newMessage = {
@@ -120,9 +126,9 @@ export default function NewMessage(props){
                                         <Form.Control type="text" placeholder="Leave Subjecte Here" ref={subjectRef} />
                                     </FloatingLabel>  
                                     <Autocomplete autoCompleteOptions={userData.usersAll} handleAutoCompleteValue={handleAutoCompleteValue} />  
-                                    <FloatingLabel controlId="floatingNameField" label="to" className="mb-3">
+                                    {/* <FloatingLabel controlId="floatingNameField" label="to" className="mb-3">
                                         <Form.Control type="text" placeholder="enter username" ref={userRef} />
-                                    </FloatingLabel>                
+                                    </FloatingLabel>                 */}
                                     <FloatingLabel controlId="floatingTextarea" label="Description" className="mb-3">
                                         <Form.Control as="textarea" placeholder="Write Ticket Description here" ref={messageRef} style={{minHeight: "20rem"}} />
                                     </FloatingLabel>
