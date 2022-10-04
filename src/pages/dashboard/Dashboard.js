@@ -21,8 +21,6 @@ export default function Dashboard(){
     console.log("User Data: ", userData);
     console.log("Current USer: ", currentUser);
 
-    console.log("User First and Last", currentUser.displayName.split(" "))
-
     const [imgURL, setImgURL] = useState("")
     const history = useHistory();
     useEffect(()=>{
