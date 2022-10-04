@@ -1,7 +1,15 @@
 import React, { useContext, useState, useEffect} from "react";
 import axios from "axios";
 import { auth } from '../firebase';
-import { GoogleAuthProvider, FacebookAuthProvider, getAuth, signInWithPopup, updateProfile, createUserWithEmailAndPassword} from "firebase/auth";
+import { 
+    GoogleAuthProvider, 
+    FacebookAuthProvider, 
+    getAuth, 
+    signInWithPopup,
+    updateProfile, 
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail
+} from "firebase/auth";
 const AuthContext = React.createContext();
 const provider = new GoogleAuthProvider();
 const fbProvider = new FacebookAuthProvider();
@@ -199,6 +207,7 @@ export function AuthProvider({ children }) {
         fbSignIn,
         updateProfile,
         createUserWithEmailAndPassword,
+        sendPasswordResetEmail,
         auth
     }
     

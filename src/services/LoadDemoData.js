@@ -205,9 +205,12 @@ export default function LoadDemoData({children, page}){
     async function updateUserPhoto(){
         const foundUser = await findUserByUID(currentUser.uid)
         let photoURL = currentUser.photoURL
-        if(photoURL.includes("facebook")){
-            photoURL = photoURL + `?access_token=${foundUser.accessToken}`;
+        if(photoURL !== null && photoURL !== undefined){
+            if(photoURL.includes("facebook")){
+                photoURL = photoURL + `?access_token=${foundUser.accessToken}`;
+            }
         }
+
         const newUser = {
             email: currentUser.email,
             authId: currentUser.uid,
@@ -234,9 +237,12 @@ export default function LoadDemoData({children, page}){
             const foundUser = await findUserByUID(currentUser.uid)
             console.log("Found User: ", foundUser)
             let photoURL = currentUser.photoURL;
-            if(photoURL.includes("facebook")){
-                photoURL = photoURL + `?access_token=${foundUser.accessToken}`;
+            if(photoURL!== null & photoURL!== undefined){
+                if(photoURL.includes("facebook")){
+                    photoURL = photoURL + `?access_token=${foundUser.accessToken}`;
+                }
             }
+
             data.photoURL = photoURL;
             
         }catch(e){
