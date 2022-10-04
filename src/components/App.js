@@ -7,6 +7,7 @@ import AuthLoader from "./AuthLoader";
 import PrivateRoute from "./PrivateRoute";
 import DrawerWrap from "./DrawerWrap";
 import Login from '../pages/components/Login';
+import SignUp from "../pages/components/SignUp";
 import DemoLogin from '../pages/components/DemoLogin';
 import Dashboard from '../pages/dashboard/Dashboard'
 import Project from '../pages/project/Project2';
@@ -207,6 +208,7 @@ function App() {
                 />
 
                 <Route exact path="/login" element={ <Login /> } />
+                <Route exact path="/signup" element={ <SignUp /> } />
                 <Route exact path="/demo" element={ <DemoLogin /> } />
 
               </Switch>

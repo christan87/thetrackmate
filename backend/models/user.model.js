@@ -19,6 +19,10 @@ const userSchema = new Schema({
         type: String,
         default: ""
     },
+    name:{
+        type: String,
+        default: ""
+    },
     private:{
         type: Boolean,
         default: true

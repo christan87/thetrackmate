@@ -141,53 +141,66 @@ export default function LoadDemoData({children, page}){
         return user;
     }
 
-    // async function addUserToDatabase(user){
-    //     await axios.post("http://localhost:5000/users/add", user).then((response)=>{
-    //         console.log("response: ", response.data)
-    //     }).catch((error)=>{
-    //         console.log("LoadDemoData>addUserToDatabase>error: ", error)
-    //     })
-    // }
+    async function addUserToDatabase(user){
+        await axios.post(`${backend}/users/add`, user).then((response)=>{
+            console.log("response: ", response.data)
+        }).catch((error)=>{
+            console.log("LoadDemoData>addUserToDatabase>error: ", error)
+        })
+    }
 
-    // async function checkForUserBeforAddAndUpdate(uid, email){
-    //     let accessToken = JSON.parse(window.localStorage.getItem("fbAccessToken"))
-    //     if(accessToken !== null && accessToken !== undefined){
-    //         accessToken = accessToken.token
-    //     }
-    //     const foundUser = await findUserByUID(uid);
-    //     const newUser = {
-    //         useremail: email,
-    //         userAuthId: uid
-    //     }
-    //     console.log("found user: ", foundUser)
-    //     if(foundUser === null || foundUser === undefined){
-    //         await addUserToDatabase(newUser)
-    //         await checkForUserBeforAddAndUpdate(uid, email)
-    //     }
-    //     if(accessToken !== null && accessToken !== undefined && accessToken !== ""){
-    //         newUser.accessToken = accessToken;
-    //         window.localStorage.removeItem("fbAccessToken")
-    //         if(foundUser !== null && foundUser !== undefined && foundUser.accessToken !== newUser.accessToken){
-    //             await axios.post(`http://localhost:5000/users/update/${foundUser._id}`, newUser).then((response)=>{
-    //                 console.log("response: ", response.data)
-    //             }).catch((error)=>{
-    //                 console.log("LoadDemoData>checkForUserBeforAdd>error: ", error)
-    //             })
-    //             await checkForUserBeforAddAndUpdate(uid, email)
-    //             //the reload is neccesary for the image to be visible on first login
-    //             window.location.reload()
-    //         }
-    //     }
-    //     try{
-    //         if(foundUser.accessToken !== null && foundUser.accessToken !== undefined){
-    //             setPhotoURL(foundUser.accessToken)
-    //         }
-    //     }catch(e){
-    //         console.log("LoadDemoData>checkForUserBeforAddAndUpdate>: ", e)
-    //     }
+    async function checkForUserBeforAddAndUpdate(uid, email){
+        let accessToken = JSON.parse(window.localStorage.getItem("fbAccessToken"))
+        if(accessToken !== null && accessToken !== undefined){
+            accessToken = accessToken.token
+        }
+        const foundUser = await findUserByUID(uid);
+        const newUser = {
+            useremail: email,
+            userAuthId: uid,
+            name: currentUser.displayName
+        }
+
+        const userName = currentUser.displayName.split(" ");
+                
+        const newUserData = {
+            firstName:userName[0],
+            lastName: userName[1],
+            email: email,
+            website: "",
+            bio: ""
+        }
+        console.log("newUserData: ", newUserData)
+        newUser.userData = newUserData;
+
+        if(foundUser === null || foundUser === undefined){
+            await addUserToDatabase(newUser)
+            await checkForUserBeforAddAndUpdate(uid, email)
+        }
+        if(accessToken !== null && accessToken !== undefined && accessToken !== ""){
+            newUser.accessToken = accessToken;
+            window.localStorage.removeItem("fbAccessToken")
+            if(foundUser !== null && foundUser !== undefined && foundUser.accessToken !== newUser.accessToken){
+                await axios.post(`${backend}/users/update/${foundUser._id}`, newUser).then((response)=>{
+                    console.log("response: ", response.data)
+                }).catch((error)=>{
+                    console.log("LoadDemoData>checkForUserBeforAdd>error: ", error)
+                })
+                await checkForUserBeforAddAndUpdate(uid, email)
+                //the reload is neccesary for the image to be visible on first login
+                window.location.reload()
+            }
+        }
+        try{
+            if(foundUser.accessToken !== null && foundUser.accessToken !== undefined){
+                setPhotoURL(foundUser.accessToken)
+            }
+        }catch(e){
+            console.log("LoadDemoData>checkForUserBeforAddAndUpdate>: ", e)
+        }
 
         
-    // }
+    }
 
     async function updateUserPhoto(){
         const foundUser = await findUserByUID(currentUser.uid)
@@ -327,7 +340,7 @@ export default function LoadDemoData({children, page}){
                 ticketCommentsAll: [],
                 id: currentUser.uid
             }
-            //await checkForUserBeforAddAndUpdate(currentUser.uid, currentUser.email)
+            await checkForUserBeforAddAndUpdate(currentUser.uid, currentUser.email)
             await setPhotoURL();
             await updateUserPhoto();
             await setProjects();
