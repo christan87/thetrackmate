@@ -5,6 +5,7 @@ import { useDemoAuth } from "../contexts/AuthDemoContext";
 import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import MenuOpenIcon from '@material-ui/icons/MenuOpen';
 import PersonIcon from '@material-ui/icons/Person'; //user
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import { useUserData } from '../contexts/UserDataContext';
@@ -28,7 +29,38 @@ function AppNavbar(props){
     const { demoMode, demoLogout, demoUser } = useDemoAuth();
     const { classes, open, handleDrawerOpen, count } = props;
     const { userData } = useUserData();
+    const [drawerOpen, setDrawerOpen] = React.useState(true);
+    const [drawerIcon, setDrawerIcon] = React.useState(false);
     const history = useHistory();
+
+    let size = window.innerWidth;
+    React.useEffect(()=>{
+        if(size < 600){
+            size = window.innerWidth;
+            setDrawerOpen(false)
+            if(drawerIcon === false){
+                setDrawerIcon(true)
+            }
+            
+        }else{
+            setDrawerOpen(true)
+            if(drawerIcon === true){
+                setDrawerIcon(false)
+            }
+            
+        }
+    },[])
+    window.onresize = ()=>{
+        size = window.innerWidth;
+        console.log(size, drawerOpen)
+        if(size < 600 ){
+            setDrawerOpen(false) 
+            setDrawerIcon(true)
+        }else if(size >= 600 ){
+            setDrawerOpen(true)
+            setDrawerIcon(false)
+        }
+    }
 
     async function handleLogout() {
         try{
@@ -51,20 +83,23 @@ function AppNavbar(props){
         history("/user")
     }
 
+    function handleDrawerToggle(){
+        if(drawerOpen === false){
+            props.handleDrawerToggle()
+        }
+    }
+
     return(
         //minHeight stops the height change when the drawer opens
         <Navbar className="appNavbar" expand="lg" style={{minHeight: "64px", padding: 0}} > 
-            <Container fluid>
-                <Navbar.Toggle aria-controls="navbarScroll" />
+            <Container fluid style={{display: 'flex'}}>
+                <Navbar.Toggle aria-controls="navbarScroll"/>
                 <Navbar.Collapse id="navbarScroll">
                 <Nav
                     className="appNavbar-nav me-auto my-2 my-lg-0"
-                    style={{ maxHeight: '100px' }}
+                    style={{ maxHeight: '150px' }}
                     navbarScroll
                 >
-                    {/* <Link to="/" className="nav-link">Home</Link>
-                    <Link to="/project/new" className="nav-link">New Project</Link>
-                    <Link to="/ticket/new" className="nav-link">New Ticket</Link> */}
                 </Nav>
                 <IconButton className="appNavbar-notification">
                     <NotificationsNoneIcon style={{color: "grey"}} fontSize="large" />
@@ -77,7 +112,13 @@ function AppNavbar(props){
                         <PersonIcon style={{color: "grey"}} fontSize="large" />
                     }
                 </IconButton>
-                {/* {(currentUser || demoMode) && <Button onClick={handleLogout} className="mx-2">Log Out</Button>} */}
+                <IconButton style={{display:'block'}} className="appNavbar-btn">
+                    {drawerIcon?
+                        <MenuOpenIcon style={{color: "grey"}} fontSize="large" onClick={handleDrawerToggle}/>
+                        :
+                        <></>
+                    }
+                </IconButton>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

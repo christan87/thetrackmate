@@ -30,7 +30,7 @@ export default function Messages(props) {
       <div className={classes.inner}>
         <Badge color="secondary" badgeContent={count}>
           <Link style={{color: "black"}} to="/mail">
-            <MailIcon fontSize="large" />
+            <MailIcon fontSize="large" style={{color: "grey"}}/>
           </Link>
         </Badge>
       </div>
