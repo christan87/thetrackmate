@@ -33,34 +33,65 @@ function AppNavbar(props){
     const [drawerIcon, setDrawerIcon] = React.useState(false);
     const history = useHistory();
 
-    let size = window.innerWidth;
-    React.useEffect(()=>{
-        if(size < 600){
-            size = window.innerWidth;
-            setDrawerOpen(false)
-            if(drawerIcon === false){
-                setDrawerIcon(true)
-            }
+    // let size = window.innerWidth;
+    // React.useEffect(()=>{
+    //     if(size < 600){
+    //         size = window.innerWidth;
+    //         setDrawerOpen(false)
+    //         if(drawerIcon === false){
+    //             setDrawerIcon(true)
+    //         }
             
-        }else{
-            setDrawerOpen(true)
+    //     }else{
+    //         setDrawerOpen(true)
+    //         if(drawerIcon === true){
+    //             setDrawerIcon(false)
+    //         }
+            
+    //     }
+    // },[])
+
+    // window.onresize = ()=>{
+    //     size = window.innerWidth;
+    //     if(size < 600 ){
+    //         setDrawerOpen(false) 
+    //         setDrawerIcon(true)
+    //     }else if(size >= 600 ){
+    //         setDrawerOpen(true)
+    //         setDrawerIcon(false)
+    //     }
+    // }
+
+    //better than using window.onresize
+    const layoutChangedCallback = (matches) => {
+        //console.log(matches ? "I'm on desktop!" : "I'm on mobile!");
+        //if matches = true you're above 600px else you're bellow
+        if(matches){
+            if(drawerOpen === false){
+                setDrawerOpen(true)
+            }
             if(drawerIcon === true){
                 setDrawerIcon(false)
             }
             
+        }else{
+            if(drawerOpen === true){
+                setDrawerOpen(false)
+            }
+            if(drawerIcon === false){
+                setDrawerIcon(true)
+            }
         }
-    },[])
-    window.onresize = ()=>{
-        size = window.innerWidth;
-        console.log(size, drawerOpen)
-        if(size < 600 ){
-            setDrawerOpen(false) 
-            setDrawerIcon(true)
-        }else if(size >= 600 ){
-            setDrawerOpen(true)
-            setDrawerIcon(false)
-        }
-    }
+      }
+       
+      // set media query
+      const mql = window.matchMedia('(min-width: 600px)');
+      
+      // set listener to run callback
+      mql.addEventListener('change', (e) => layoutChangedCallback(e.matches));
+      
+      // the callback doesn't run immediately, so we run it manually once
+      layoutChangedCallback(mql.matches);
 
     async function handleLogout() {
         try{
