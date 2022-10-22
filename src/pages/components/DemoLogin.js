@@ -132,13 +132,13 @@ export default function DemoLogin(){
                                     </div>
                                 </div>
                                 <div className="w-100 text-center mt-3">
-                                    <Link to="">Place Holder 1</Link>
-                                    <Link className="ms-1" to="">Place Holder 2</Link>
+                                    {/* <Link to="">Place Holder 1</Link>
+                                    <Link className="ms-1" to="">Place Holder 2</Link> */}
                                 </div>
                             </Card.Body>
                         </Card>
                         <div className="w-100 text-center mt-2">
-                            <Link to="">Place Holder 3</Link>
+                            {/* <Link to="">Place Holder 3</Link> */}
                         </div>
                     </div>
                 </div>

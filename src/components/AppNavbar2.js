@@ -101,9 +101,9 @@ function AppNavbar(props){
                     navbarScroll
                 >
                 </Nav>
-                <IconButton className="appNavbar-notification">
+                {/* <IconButton className="appNavbar-notification">
                     <NotificationsNoneIcon style={{color: "grey"}} fontSize="large" />
-                </IconButton>
+                </IconButton> */}
                 <Messages count={count} />
                 <IconButton className="appNavbar-btn" onClick={handleUserAccount}>
                     {currentUser?
