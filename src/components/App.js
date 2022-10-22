@@ -28,9 +28,9 @@ import Users2 from '../pages/user/Users2';
 import LoadDemoData from "../services/LoadDemoData";
 import './App.css';
 
-import DrawerWrap2 from "./DrawerWrap2";
+import DrawerWrap2 from "./DrawerWrap3";
 
-import DrawerWrap3 from "./DrawerWrap3";
+//import DrawerWrap3 from "./DrawerWrap3";
 
 function App() {
   return (
@@ -44,11 +44,11 @@ function App() {
                 <Route exact path="/" element={ 
                     <AuthLoader>
                       <LoadDemoData>
-                        <DrawerWrap3>
+                        <DrawerWrap2>
                           <PrivateRoute>  
                             <Dashboard />                      
                           </PrivateRoute>
-                        </DrawerWrap3>
+                        </DrawerWrap2>
                       </LoadDemoData>
                     </AuthLoader>
                   } 
